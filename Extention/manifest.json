@@ -1,0 +1,28 @@
+
+{
+    "name": "Name",
+    "version": "1.0",
+    "description": "Extension for SplitBill",
+    "manifest_version": 2,
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": true
+    },
+    "content_scripts": [
+        {
+            "matches": ["*://misteram.com.ua/*"],
+            "js": ["content.js"]
+        }
+    ],
+    "browser_action": {
+        "default_popup": "popup.html",
+        "default_title": "Extension"
+    },
+    "permissions": [
+        "activeTab",
+        "<all_urls>",
+        "tabs",
+        "webRequestBlocking",
+        "webRequest"
+    ]
+}
