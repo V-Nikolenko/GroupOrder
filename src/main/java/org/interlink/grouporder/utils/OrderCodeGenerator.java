@@ -1,4 +1,4 @@
-package org.interlink.grouporder.order;
+package org.interlink.grouporder.utils;
 
 import java.security.SecureRandom;
 import java.util.Base64;
