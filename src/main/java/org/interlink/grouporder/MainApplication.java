@@ -9,6 +9,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 public class MainApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
+
         final SpringApplication application = new SpringApplication(MainApplication.class);
         application.addListeners(new ApplicationPidFileWriter("./app.pid"));
         application.run(args);
