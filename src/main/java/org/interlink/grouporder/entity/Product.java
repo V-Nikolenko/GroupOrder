@@ -1,21 +1,26 @@
 package org.interlink.grouporder.entity;
 
-import java.math.BigDecimal;
-
 public class Product {
-    private String name;
-    private BigDecimal price;
+    private boolean force = false;
+    private String action = "add";
+    private int dishId;
+    private Object optionValue;
+    private int optionId;
+    private String measure;
+    private String measureType;
+    private int packagePrice;
+    private int maxCountPositionInPackage;
 
-    public Product(String name, BigDecimal price) {
-        this.name = name;
-        this.price = price;
-    }
+    public Product(String id, String name, String price, String image, String count, String key, String optionId,
+                   String optionValue, String priceExpirationTime, String measure, String measureType,
+                   String standardPrice, String packagePrice, String maxCountPositionInPackage) {
 
-    public String getName() {
-        return name;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
+        this.dishId = Integer.parseInt(id);
+        this.optionValue = optionValue;
+        this.optionId = Integer.parseInt(optionId);
+        this.measure = measure;
+        this.measureType = measureType;
+        this.packagePrice = 0;
+        this.maxCountPositionInPackage = Integer.parseInt(maxCountPositionInPackage);
     }
 }
