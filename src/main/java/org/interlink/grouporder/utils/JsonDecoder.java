@@ -8,18 +8,19 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class JsonDecoder {
-    private JsonObject jsonObject;
     private List<Product> memberOrder;
     private BigDecimal fullPrice;
+    private String memberName;
 
-    public JsonDecoder(String json) {
-        jsonObject = new Gson().fromJson(json, JsonObject.class);
+    public void decode(String json) {
+        JsonObject jsonObject = new Gson().fromJson(json, JsonObject.class);
 
-        this.fullPrice = new BigDecimal(jsonObject.get("fullPrice").toString());
-        this.memberOrder = rebaseJsonToProduct();
+        this.fullPrice = new BigDecimal(jsonObject.get("fullPrice").getAsString());
+        this.memberName = jsonObject.get("name").getAsString();
+        this.memberOrder = rebaseJsonToProduct(jsonObject);
     }
 
-    private List<Product> rebaseJsonToProduct() {
+    private List<Product> rebaseJsonToProduct(JsonObject jsonObject) {
         JsonArray items = jsonObject.getAsJsonArray("items");
         memberOrder = new LinkedList<>();
 
@@ -39,15 +40,18 @@ public class JsonDecoder {
 
             memberOrder.add(product);
         }
-
         return memberOrder;
     }
 
-    public BigDecimal getOrderPrice() {
+    public BigDecimal getPrice() {
         return fullPrice;
     }
 
-    public List<Product> getMemberOrderList() {
+    public String getName() {
+        return memberName;
+    }
+
+    public List<Product> getProducts() {
         return memberOrder;
     }
 }
