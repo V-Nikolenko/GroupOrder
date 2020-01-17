@@ -4,23 +4,23 @@ import org.interlink.grouporder.entity.Order;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class OrderStorage {
-    private Map<String, Order> orderStorage = new LinkedHashMap<>();
+    private static Map<String, Order> orders = new LinkedHashMap<>();
 
     public void addOrder(String keyOrder, Order order) {
-        getOrderStorage().put(keyOrder, order);
+        orders.put(keyOrder, order);
     }
 
     public void removeOrder(String keyOrder) {
-        getOrderStorage().remove(keyOrder);
+        orders.remove(keyOrder);
     }
 
-    public Order getOrder(String keyOrder) {
-        return getOrderStorage().get(keyOrder);
+    public Order getOrder(String code) {
+        return Optional.ofNullable(orders.get(code)).orElseThrow(
+                () -> new IllegalArgumentException("No such key in the database [" + code + "]"));
     }
-    public Map<String, Order> getOrderStorage() {
-        return orderStorage;
-    }
+
 
 }
