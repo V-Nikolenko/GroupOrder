@@ -14,7 +14,7 @@
             "js": ["content.js"]
         }
     ],
-    "browser_action": {
+    "page_action": {
         "default_popup": "popUp.html",
         "default_title": "Extension"
     },
