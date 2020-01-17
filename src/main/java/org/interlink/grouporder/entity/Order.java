@@ -4,13 +4,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Order {
-    private List<Product> items = new LinkedList<>();
+    private List<OrderMember> orderMembers = new LinkedList<>();
+    private List<Product> completeOrder = new LinkedList<>();
 
-    public void addProductsToList(List<Product> products) {
-        items.addAll(products);
+    public void addMemberToList(OrderMember member) {
+        orderMembers.add(member);
     }
 
-    public List<Product> getItems() {
-        return items;
+    public List<Product> getAllProducts() {
+        for (OrderMember member : orderMembers) {
+            completeOrder.addAll(member.getProducts());
+        }
+        return completeOrder;
     }
 }

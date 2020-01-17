@@ -11,6 +11,6 @@ public class OrderCodeGenerator {
         byte[] bytes = new byte[6];
         RANDOM.nextBytes(bytes);
 
-        return ENCODER.encodeToString(bytes).toLowerCase().trim();
+        return ENCODER.encodeToString(bytes).toLowerCase().replaceAll("[^a-zA-Z0-9]","");
     }
 }
