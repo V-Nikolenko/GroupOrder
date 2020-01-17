@@ -9,7 +9,7 @@ import java.util.List;
 public class JsonEncoder {
     private static final Gson GSON = new GsonBuilder().create();
 
-    public String encode(List<Product> products) {
-        return GSON.toJson(products).replace("\"null\"","null");
+    public String encode(List<Product> order) {
+        return GSON.toJson(order).replace("\"null\"","null");
     }
 }

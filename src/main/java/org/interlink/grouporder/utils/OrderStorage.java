@@ -21,6 +21,4 @@ public class OrderStorage {
         return Optional.ofNullable(orders.get(code)).orElseThrow(
                 () -> new IllegalArgumentException("No such key in the database [" + code + "]"));
     }
-
-
 }

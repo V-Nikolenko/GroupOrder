@@ -1,6 +1,7 @@
 package org.interlink.grouporder.order;
 
 
+import com.google.gson.GsonBuilder;
 import org.interlink.grouporder.entity.Order;
 import org.interlink.grouporder.utils.OrderCodeGenerator;
 import org.interlink.grouporder.utils.OrderStorage;
@@ -23,7 +24,7 @@ public class OrderController {
 
         orderStorage.addOrder(key, order);
 
-        return key;
+        return new GsonBuilder().create().toJson(key);
     }
 }
 
