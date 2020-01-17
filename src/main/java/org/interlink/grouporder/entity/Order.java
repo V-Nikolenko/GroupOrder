@@ -1,33 +1,16 @@
 package org.interlink.grouporder.entity;
 
-import java.math.BigDecimal;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Order {
-    private List<Product> items;
-    private String name;
-    private BigDecimal fullPrice;
+    private List<Product> items = new LinkedList<>();
 
-    public Order(List<Product> items, String name, BigDecimal fullPrice) {
-        this.items = items;
-        this.name = name;
-        this.fullPrice = fullPrice;
+    public void addProductsToList(List<Product> products) {
+        items.addAll(products);
     }
 
-    public List<Product> getAllProducts() {
+    public List<Product> getItems() {
         return items;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public BigDecimal getFullPrice() {
-        return fullPrice;
-    }
-
-    public void addNewProduct(Product product) {
-        this.items.add(product);
-    }
-
 }
