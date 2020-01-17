@@ -16,6 +16,9 @@ public class OrderStorage {
         getOrderStorage().remove(keyOrder);
     }
 
+    public Order getOrder(String keyOrder) {
+        return getOrderStorage().get(keyOrder);
+    }
     public Map<String, Order> getOrderStorage() {
         return orderStorage;
     }
