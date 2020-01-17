@@ -1,26 +1,28 @@
 package org.interlink.grouporder.entity;
 
+import com.google.gson.JsonNull;
+
 public class Product {
     private boolean force = false;
     private String action = "add";
+
     private int dishId;
-    private Object optionValue;
     private int optionId;
+    private String optionValue;
     private String measure;
     private String measureType;
-    private int packagePrice;
+    private String packagePrice;
     private int maxCountPositionInPackage;
 
-    public Product(String id, String name, String price, String image, String count, String key, String optionId,
-                   String optionValue, String priceExpirationTime, String measure, String measureType,
-                   String standardPrice, String packagePrice, String maxCountPositionInPackage) {
+    public Product(int id, int optionId, String optionValue, String measure,
+                   String measureType, JsonNull packagePrice, int maxCountPositionInPackage) {
 
-        this.dishId = Integer.parseInt(id);
+        this.dishId = id;
+        this.optionId = optionId;
         this.optionValue = optionValue;
-        this.optionId = Integer.parseInt(optionId);
         this.measure = measure;
         this.measureType = measureType;
-        this.packagePrice = 0;
-        this.maxCountPositionInPackage = Integer.parseInt(maxCountPositionInPackage);
+        this.packagePrice = packagePrice.toString();
+        this.maxCountPositionInPackage = maxCountPositionInPackage;
     }
 }
