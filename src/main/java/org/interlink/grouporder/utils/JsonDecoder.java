@@ -8,21 +8,25 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class JsonDecoder {
-    private List<Product> memberOrder;
-    private BigDecimal fullPrice;
     private String memberName;
+    private String memberRestaurant;
+    private List<Product> memberProducts;
+    private BigDecimal fullPrice;
 
-    public void decode(String json) {
+    public JsonDecoder(String json) {
         JsonObject jsonObject = new Gson().fromJson(json, JsonObject.class);
 
-        this.fullPrice = new BigDecimal(jsonObject.get("fullPrice").getAsString());
         this.memberName = jsonObject.get("name").getAsString();
-        this.memberOrder = rebaseJsonToProduct(jsonObject);
+        this.memberRestaurant = jsonObject.get("restaurant").getAsString();
+        JsonObject memberOrder = jsonObject.getAsJsonObject("order");
+
+        this.fullPrice = memberOrder.get("fullPrice").getAsBigDecimal();
+        this.memberProducts = rebaseJsonToProduct(memberOrder.get("items").getAsJsonArray());
+
     }
 
-    private List<Product> rebaseJsonToProduct(JsonObject jsonObject) {
-        JsonArray items = jsonObject.getAsJsonArray("items");
-        memberOrder = new LinkedList<>();
+    private List<Product> rebaseJsonToProduct(JsonArray items) {
+        List<Product> products = new LinkedList<>();
 
         for (JsonElement element : items) {
             JsonObject object = element.getAsJsonObject();
@@ -38,20 +42,24 @@ public class JsonDecoder {
             Product product = new Product(id, optionId, optionValue, measure, measureType, packagePrice,
                     maxCountPositionInPackage);
 
-            memberOrder.add(product);
+            products.add(product);
         }
-        return memberOrder;
-    }
-
-    public BigDecimal getPrice() {
-        return fullPrice;
+        return products;
     }
 
     public String getName() {
         return memberName;
     }
 
+    public String getRestaurant() {
+        return memberRestaurant;
+    }
+
     public List<Product> getProducts() {
-        return memberOrder;
+        return memberProducts;
+    }
+
+    public BigDecimal getPrice() {
+        return fullPrice;
     }
 }
