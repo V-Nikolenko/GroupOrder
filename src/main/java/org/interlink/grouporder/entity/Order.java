@@ -6,9 +6,22 @@ import java.util.List;
 public class Order {
     private List<OrderMember> orderMembers = new LinkedList<>();
     private List<Product> completeOrder = new LinkedList<>();
+    private String restaurant;
+
+    public Order(String restaurant) {
+        this.restaurant = restaurant;
+    }
 
     public void addMemberToList(OrderMember member) {
-        orderMembers.add(member);
+        if (member.getRestaurant().equals(restaurant)) {
+            orderMembers.add(member);
+        } else {
+            throw new IllegalArgumentException("Invalid restaurant");
+        }
+    }
+
+    public List<OrderMember> getOrderMembers() {
+        return orderMembers;
     }
 
     public List<Product> getAllProducts() {
@@ -17,4 +30,5 @@ public class Order {
         }
         return completeOrder;
     }
+
 }
