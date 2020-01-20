@@ -19,5 +19,10 @@ public class OrderStorage {
     public static Order getOrder(String code) {
         return Optional.ofNullable(orders.get(code)).orElseThrow(
                 () -> new IllegalArgumentException("No such key in the database [" + code + "]"));
+
+    }
+
+    public static boolean isContains(String key) {
+        return orders.containsKey(key);
     }
 }
