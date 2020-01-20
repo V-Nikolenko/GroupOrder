@@ -1,5 +1,7 @@
 package org.interlink.grouporder.entity;
 
+import org.interlink.grouporder.exceptions.IncorrectRestaurantException;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,7 +18,7 @@ public class Order {
         if (member.getRestaurant().equals(restaurant)) {
             orderMembers.add(member);
         } else {
-            throw new IllegalArgumentException("Invalid restaurant");
+            throw new IncorrectRestaurantException("Invalid restaurant");
         }
     }
 
