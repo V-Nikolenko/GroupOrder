@@ -5,11 +5,11 @@ import java.util.List;
 
 public class OrderMember {
     private String name;
-    private String restaurant;
+    private int restaurant;
     private List<Product> products;
     private BigDecimal price;
 
-    public OrderMember(String name, String restaurant, List<Product> products, BigDecimal price) {
+    public OrderMember(String name, int restaurant, List<Product> products, BigDecimal price) {
         this.name = name;
         this.restaurant = restaurant;
         this.products = products;
@@ -20,7 +20,7 @@ public class OrderMember {
         return name;
     }
 
-    public String getRestaurant() {
+    public int getRestaurant() {
         return restaurant;
     }
 
