@@ -8,14 +8,14 @@ import java.util.List;
 public class Order {
     private List<OrderMember> orderMembers = new LinkedList<>();
     private List<Product> completeOrder = new LinkedList<>();
-    private String restaurant;
+    private int restaurant;
 
-    public Order(String restaurant) {
+    public Order(int restaurant) {
         this.restaurant = restaurant;
     }
 
     public void addMemberToList(OrderMember member) {
-        if (member.getRestaurant().equals(restaurant)) {
+        if (member.getRestaurant() == restaurant) {
             orderMembers.add(member);
         } else {
             throw new IncorrectRestaurantException("Invalid restaurant");

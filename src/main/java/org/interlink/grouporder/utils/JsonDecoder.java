@@ -9,7 +9,7 @@ import java.util.List;
 
 public class JsonDecoder {
     private String memberName;
-    private String memberRestaurant;
+    private int memberRestaurant;
     private List<Product> memberProducts;
     private BigDecimal fullPrice;
 
@@ -17,9 +17,9 @@ public class JsonDecoder {
         JsonObject jsonObject = new Gson().fromJson(json, JsonObject.class);
 
         this.memberName = jsonObject.get("name").getAsString();
-        this.memberRestaurant = jsonObject.get("restaurant").getAsString();
         JsonObject memberOrder = jsonObject.getAsJsonObject("order");
 
+        this.memberRestaurant = memberOrder.get("companyId").getAsInt();
         this.fullPrice = memberOrder.get("fullPrice").getAsBigDecimal();
         this.memberProducts = rebaseJsonToProduct(memberOrder.get("items").getAsJsonArray());
 
@@ -51,7 +51,7 @@ public class JsonDecoder {
         return memberName;
     }
 
-    public String getRestaurant() {
+    public int getRestaurant() {
         return memberRestaurant;
     }
 
