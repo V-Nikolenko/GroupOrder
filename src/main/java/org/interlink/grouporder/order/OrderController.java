@@ -14,8 +14,8 @@ public class OrderController {
 
 
     @PostMapping
-    public ResponseEntity createNewOrder(@RequestHeader Integer restaurant) {
-        Order order = new Order(restaurant);
+    public ResponseEntity createNewOrder() {
+        Order order = new Order();
 
         OrderCodeGenerator orderCodeGenerator = new OrderCodeGenerator();
         String key = orderCodeGenerator.generateOrderCode();
