@@ -1,25 +1,15 @@
 package org.interlink.grouporder.entity;
 
-import org.interlink.grouporder.exceptions.IncorrectRestaurantException;
-
 import java.util.LinkedList;
 import java.util.List;
 
 public class Order {
     private List<OrderMember> orderMembers = new LinkedList<>();
     private List<Product> completeOrder = new LinkedList<>();
-    private int restaurant;
 
-    public Order(int restaurant) {
-        this.restaurant = restaurant;
-    }
 
     public void addMemberToList(OrderMember member) {
-        if (member.getRestaurant() == restaurant) {
-            orderMembers.add(member);
-        } else {
-            throw new IncorrectRestaurantException("Invalid restaurant");
-        }
+        orderMembers.add(member);
     }
 
     public List<OrderMember> getOrderMembers() {
