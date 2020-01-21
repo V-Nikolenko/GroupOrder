@@ -5,6 +5,7 @@ import org.interlink.grouporder.entity.Order;
 import org.interlink.grouporder.entity.OrderStorage;
 import org.interlink.grouporder.utils.JsonEncoder;
 import org.interlink.grouporder.utils.OrderCodeGenerator;
+import org.interlink.grouporder.utils.TimerOrder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,6 +21,8 @@ public class OrderController {
 
         String key = orderCodeGenerator.generateOrderCode();
 
+        TimerOrder.runTimer(key);
+
         OrderStorage.addOrder(key, order);
 
         return JsonEncoder.encode(key);
@@ -27,7 +30,7 @@ public class OrderController {
 
     @PostMapping("/{key}")
     public String connectToOrder(@PathVariable("key") String key) {
-       return JsonEncoder.encode(OrderStorage.isContains(key));
+        return JsonEncoder.encode(OrderStorage.isContains(key));
     }
 
 }
