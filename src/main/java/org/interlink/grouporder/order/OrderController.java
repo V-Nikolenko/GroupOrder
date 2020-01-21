@@ -4,9 +4,15 @@ package org.interlink.grouporder.order;
 import org.interlink.grouporder.entity.Order;
 import org.interlink.grouporder.entity.OrderStorage;
 import org.interlink.grouporder.utils.OrderCodeGenerator;
-import org.interlink.grouporder.utils.TimerOrder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/orders")
@@ -19,9 +25,9 @@ public class OrderController {
 
         OrderCodeGenerator orderCodeGenerator = new OrderCodeGenerator();
         String key = orderCodeGenerator.generateOrderCode();
-        TimerOrder.runTimer(key);
         OrderStorage.addOrder(key, order);
-
+        ScheduledExecutorService schedule = new ScheduledThreadPoolExecutor(1);
+        schedule.schedule(() -> OrderStorage.removeOrder(key), 2, TimeUnit.HOURS);
         return ResponseEntity.ok(key);
     }
 

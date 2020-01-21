@@ -1,5 +1,7 @@
 package org.interlink.grouporder.entity;
 
+import org.interlink.grouporder.exceptions.IncorrectRestaurantException;
+
 import java.util.LinkedList;
 import java.util.List;
 
