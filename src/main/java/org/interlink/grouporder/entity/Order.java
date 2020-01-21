@@ -7,9 +7,12 @@ public class Order {
     private List<OrderMember> orderMembers = new LinkedList<>();
     private List<Product> completeOrder = new LinkedList<>();
 
-
     public void addMemberToList(OrderMember member) {
-        orderMembers.add(member);
+        if (orderMembers.isEmpty() || member.getRestaurant() == orderMembers.get(0).getRestaurant()) {
+            orderMembers.add(member);
+        } else {
+            throw new IncorrectRestaurantException("Invalid restaurant");
+        }
     }
 
     public List<OrderMember> getOrderMembers() {
@@ -22,5 +25,4 @@ public class Order {
         }
         return completeOrder;
     }
-
 }
