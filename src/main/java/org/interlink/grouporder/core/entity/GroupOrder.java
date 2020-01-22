@@ -1,5 +1,6 @@
 package org.interlink.grouporder.core.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GroupOrder {
@@ -13,4 +14,16 @@ public class GroupOrder {
         this.members = members;
     }
 
+    public void addMemberToGroupOrder(MemberOrder member) {
+        members.add(member);
+    }
+
+    public List<Product> getAllProducts() {
+        List<Product> products = new ArrayList<>();
+
+        for (MemberOrder member : members) {
+            products.addAll(member.getProducts());
+        }
+        return products;
+    }
 }
