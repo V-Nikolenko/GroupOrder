@@ -2,19 +2,20 @@ chrome.runtime.onMessage.addListener(
     function(message, sender, sendResponse) {
         switch(message.type) {
             case 'getOrders':
-                console.log('get')
-                GetOrders()
-                .then(sendResponse);  
+                console.log('get');
+                SendGetOrdersRequest().then(sendResponse);  
                 break;
-            case 'addOrder':
-                console.log('add')
-                 
+            case 'formOrder':
+                console.log('form');
+                console.log(message);
+                FormOrder(message.code);
+                break;
         }
         return true;
     }
 )
 
-async function GetOrders() {
+async function SendGetOrdersRequest() {
     return await fetch("https://misteram.com.ua/api/cart/get?lang=ua")
     .then((resp) => {
         if (resp.status === 200) {
@@ -28,18 +29,18 @@ async function GetOrders() {
 
 async function SendAddDishRequest(dish) {
     let bodyoObj = {
-        force: false,
+        // force: false,
         action: "add",
-        dishId: dish.id,
-        optionValue: dish.optionValue,
-        optionId: dish.optionId,
-        measure: dish.measure,
-        measureType: dish.measureType,
-        packagePrice: dish.packagePrice,
-        maxCountPositionInPackage: dish.maxCountPositionInPackage
+        dishId: dish.dishId,
+        // optionValue: dish.optionValue,
+        // optionId: dish.optionId,
+        // measure: dish.measure,
+        // measureType: dish.measureType,
+        // packagePrice: dish.packagePrice,
+        // maxCountPositionInPackage: dish.maxCountPositionInPackage
     }
 
-    await fetch("https://misteram.com.ua/api/cart/add?lang=ua", {
+    return fetch("https://misteram.com.ua/api/cart/add?lang=ua", {
         headers: {
             "content-type": "application/json;charset=UTF-8"
         },
@@ -48,34 +49,15 @@ async function SendAddDishRequest(dish) {
     });
 }
 
-// SendAddDishRequest()
 
-async function ClearCurrentOrder() {
- 
-    GetOrders()
-    .then((resp) => {
-        resp.items.forEach(element => {
-            
-            setTimeout(function request() {
-                if (element.count !== 0){
-                    element.count--;
-                    setTimeout(request, 50);
-                }
-                RemoveDish(element)
-            }, 50);
-        });
-    })
-}
-
-async function RemoveDish(dish) {
+async function SendRemoveDishRequest(dish) {
     let obj = {
         action: "remove",
         dishId: dish.id,
         optionId: dish.optionId,
         optionValue: dish.optionValue
     }
-
-    return await fetch('https://misteram.com.ua/api/cart/remove?lang=ua', {
+    return fetch('https://misteram.com.ua/api/cart/remove?lang=ua', {
         headers: {
             "content-type": "application/json;charset=UTF-8",  
         },
@@ -91,4 +73,40 @@ async function RemoveDish(dish) {
     .catch((error)=> { console.log(error) })
 }
 
-// ClearCurrentOrder()
+async function ClearCurrentOrder() {
+    let order = await SendGetOrdersRequest()
+    for (let i = 0; i < order.items.length; i++) {
+        let item = order.items[i];
+        for(let j = 0; j < item.count; j++) {
+            await SendRemoveDishRequest(item);
+        }
+    }
+}
+
+
+async function GetAllDishes(code) {
+    // fetch('', {})
+    return [
+        {
+            dishId: 89162,
+            count:5
+        }
+    ]
+
+}
+
+async function FormOrder(code) {
+    await ClearCurrentOrder()
+        
+    GetAllDishes(code)
+    .then((items) => {
+        items.forEach(async (element) => {
+    
+            for(let i = 0; i < element.count; i++) {
+                await SendAddDishRequest(element).then((resp) => resp);
+            }
+            window.location.reload();
+        })
+    })
+    
+}
