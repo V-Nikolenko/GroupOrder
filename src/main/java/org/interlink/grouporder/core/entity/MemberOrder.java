@@ -12,4 +12,8 @@ public class MemberOrder {
         this.internetShopURL = internetShopURL;
         this.products = products;
     }
+
+    public List<Product> getProducts() {
+        return products;
+    }
 }
