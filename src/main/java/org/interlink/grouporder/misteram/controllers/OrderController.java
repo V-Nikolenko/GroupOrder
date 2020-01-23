@@ -53,4 +53,15 @@ public class OrderController {
             return ExceptionsHandler.handleException(e);
         }
     }
+
+    @GetMapping("{code}/show-group-order")
+    public ResponseEntity showGroupOrder(@PathVariable("code") String code) {
+        try {
+            GroupOrder groupOrder = DataStorage.getGroupOrder(code);
+            return ResponseEntity.ok(groupOrder);
+        } catch (Exception e) {
+            return ExceptionsHandler.handleException(e);
+        }
+    }
+
 }
