@@ -2,8 +2,8 @@ body {
     margin: 0;
     padding: 0;
     /* background-color: #717171; */
-    width: 150px;
-    height: 150px;
+    height: 200px;
+    width: 180px;
     font-family: Arial, Helvetica, sans-serif;
     /* border: none; */
     box-sizing: border-box;
@@ -11,7 +11,7 @@ body {
 
 .container {
     width: 100%;
-    height: 100%;
+    height: 70%;
     justify-content: space-around;
     display: flex;
     flex-direction: column;
@@ -23,6 +23,9 @@ body {
     width: 80%;
 }
 
+.input_invalid {
+    border: 1px solid red;
+}
 
 .text {
     text-align: center;
@@ -41,70 +44,25 @@ body {
     display: none;
 }
 
-/*
 .heading {
-    color: #fa9a10;
-    margin: 0;
-}
-
-.input {
-    padding: 5px;
-    width: 90%;
-    border: 1px solid #ca8015;
-}
-
-.input:focus {
-    border-width: 2px;
-    outline: none;
-}
-
-#text {
-    color: #fa9a10;
-    font-size: 1.1em;
-}
-
-.btn,
-.input {
     text-align: center;
+    margin: 5px;
+}
+
+.confirmation {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    position: absolute;
+    top: 0;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+}
+
+.confirmation__window {
+    display: flex;
+    justify-content: space-around;
     align-items: center;
-    min-height: 32px;
-    background:linear-gradient(to bottom, #f89f20 5%, #ca8015 100%);
-    box-shadow: inset 0px 1px 0px 0px #cf8112;
-    background-color:#fa9a10;
-    color: #717171;
-    border-radius:3px;
-    border:1px solid #d08923;
-    text-shadow:0px 1px 0px #e08c12; 
-    box-sizing: border-box;
+    align-self: stretch;
+    flex: 1;
 }
-
-.btn {
-    width: 65% ;
-    cursor: pointer;
-    border: none;
-	font-size: 1.1em;
-	padding: 6px 1em;
-	text-decoration: none;
-}
-
-.btn:hover {
-	background:linear-gradient(to bottom, #ca8015 5%, #f89f20 100%);
-	background-color:#ed9a22;
-}
-
-.btn:active {
-	position:relative;
-	top:1px;
-}
-
-.home {
-    display: inline-block;
-    background-size: 24px;
-    background-image: url("/home.png");
-    height: 24px;
-    width: 24px;
-
-} */
-
