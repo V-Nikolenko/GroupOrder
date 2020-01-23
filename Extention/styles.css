@@ -2,8 +2,10 @@ body {
     margin: 0;
     padding: 0;
     /* background-color: #717171; */
+
     height: 200px;
     width: 180px;
+
     font-family: Arial, Helvetica, sans-serif;
     /* border: none; */
     box-sizing: border-box;
@@ -47,6 +49,7 @@ body {
 .heading {
     text-align: center;
     margin: 5px;
+
 }
 
 .confirmation {
