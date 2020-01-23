@@ -22,7 +22,10 @@ async function SendGetOrdersRequest() {
             return resp.json();
         } else throw new Error("bad response from get orders")
     })
-    .then((resp) => resp)
+    .then((resp) => {
+        resp.url = window.location.href;
+        return resp
+    })
     .catch((error) => { console.log(error) })
 };
 
