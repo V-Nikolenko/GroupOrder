@@ -40,4 +40,27 @@ public class OrderController {
             return ExceptionsHandler.handleException(e);
         }
     }
+
+    @PostMapping("{code}/connect")
+    public ResponseEntity connectToGroupOrder(@PathVariable("code") String code) {
+        try {
+            if (DataStorage.isContains(code)) {
+                return ResponseEntity.ok("Success!");
+            } else{
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ExceptionsHandler.handleException(e);
+        }
+    }
+
+    @GetMapping("{code}/show-group-order")
+    public ResponseEntity showGroupOrder(@PathVariable("code") String code) {
+        try {
+            GroupOrder groupOrder = DataStorage.getGroupOrder(code);
+            return ResponseEntity.ok(groupOrder);
+        } catch (Exception e) {
+            return ExceptionsHandler.handleException(e);
+        }
+    }
 }
