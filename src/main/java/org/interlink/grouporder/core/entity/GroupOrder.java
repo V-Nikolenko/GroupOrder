@@ -34,6 +34,15 @@ public class GroupOrder {
         }
     }
 
+    public List<Product> getAllProducts() {
+        List<Product> products = new ArrayList<>();
+
+        for (MemberOrder member : members) {
+            products.addAll(member.getProducts());
+        }
+        return products;
+    }
+
     public String getCode() {
         return code;
     }
