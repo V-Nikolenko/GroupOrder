@@ -12,7 +12,7 @@ public class GroupOrder {
     @JsonView(GroupOrderView.Extended.class)
     private String internetShopURL;
     @JsonView(GroupOrderView.Extended.class)
-    private List<MemberOrder> members;
+    private List<MemberOrder> members = new ArrayList<>();
 
     public GroupOrder(String code) {
         this.code = code;
@@ -23,15 +23,6 @@ public class GroupOrder {
         if (member != null) {
             members.add(member);
         }
-    }
-
-    public List<Product> getAllProducts() {
-        List<Product> products = new ArrayList<>();
-
-        for (MemberOrder member : members) {
-            products.addAll(member.getProducts());
-        }
-        return products;
     }
 
     public String getCode() {
