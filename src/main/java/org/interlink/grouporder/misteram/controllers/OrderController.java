@@ -40,11 +40,21 @@ public class OrderController {
     }
 
 
-    @GetMapping("{code}/show-group-order")
+    @GetMapping("/{code}/show-group-order")
     public ResponseEntity showGroupOrder(@PathVariable("code") String code) {
         try {
             GroupOrder groupOrder = DataStorage.getGroupOrder(code);
             return ResponseEntity.ok(groupOrder);
+        } catch (Exception e) {
+            return ExceptionsHandler.handleException(e);
+        }
+    }
+
+    @GetMapping("/{code}/form-group-order")
+    public ResponseEntity formGroupOrder(@PathVariable("code") String code) {
+        try {
+            GroupOrder groupOrder = DataStorage.getGroupOrder(code);
+            return ResponseEntity.ok(MisterAmMapper.map(groupOrder, new Order()));
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
