@@ -10,6 +10,9 @@ import java.util.stream.Collectors;
 
 public class MisterAmMapper {
 
+    private MisterAmMapper() {
+    }
+
     private static final ModelMapper mapper = new ModelMapper();
 
     public static <T> T map(Object object, Class<T> objectClass) {
