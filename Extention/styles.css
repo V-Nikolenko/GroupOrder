@@ -1,70 +1,102 @@
 body {
-    background-color: #717171;
-    width: 150px;
-    min-height: 100px;
+    margin: 0;
+    padding: 0;
+    /* background-color: #717171; */
+    height: 180px;
+    width: 170px;
     font-family: Arial, Helvetica, sans-serif;
-    border: none;
+    /* border: none; */
     box-sizing: border-box;
 }
 
 .container {
+    width: 100%;
+    min-height: 70%;
     justify-content: space-around;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.heading {
-    color: #fa9a10;
-    margin: 0;
-}
-
-.input {
-    padding: 5px;
-    width: 90%;
-}
-
-.btn,
 .input {
     text-align: center;
+    width: 80%;
+}
+
+
+.input_invalid {
+    border: 1px solid red;
+}
+
+.text {
+    text-align: center;
+}
+
+.bad-response {
+    color: red;
+}
+
+.menu-list {
+    padding: 20px;
+    margin: 0px;
+}
+
+.display_none {
+    display: none;
+}
+
+.heading {
+    text-align: center;
+    margin: 5px;
+}
+
+.confirmation {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 0;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+}
+
+.confirmation__window {
+    border: 1px solid black;
+    border-radius: 3px;
+    margin: auto;
+    width: 90%;
+    background-color: white;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
     align-items: center;
-    min-height: 32px;
-    /* background:linear-gradient(to bottom, #f89f20 5%, #ca8015 100%);
-    box-shadow: inset 0px 1px 0px 0px #cf8112; */
-    background-color:#fa9a10;
-    color: #717171;
-    border: none;
-    border-radius:3px;
-    /* border:1px solid #d08923;
-    text-shadow:0px 1px 0px #e08c12; */
-    box-sizing: border-box;
+    align-self: stretch;
+    /* flex: 1; */
 }
 
 .btn {
-    width: 65% ;
+    text-align: center;
+    max-width: 80%;
+    margin: 5px 0;
+	box-shadow: inset 0px 1px 0px 0px #ffffff;
+	background: linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
+	background-color:#ededed;
+	border-radius: 6px;
+	border: 1px solid #dcdcdc;
 	cursor: pointer;
-	font-size: 1.1em;
-	padding: 6px 1em;
+	color: #777777;
+	font-weight:bold;
+	padding: 5px 8px;
 	text-decoration: none;
+	text-shadow: 0px 1px 0px #ffffff;
 }
-
 .btn:hover {
-	background:linear-gradient(to bottom, #ca8015 5%, #f89f20 100%);
-	background-color:#ed9a22;
+	background: linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
+	background-color: #dfdfdf;
 }
-
 .btn:active {
-	position:relative;
-	top:1px;
+	position: relative;
+	top: 1px;
 }
 
-.home {
-    display: inline-block;
-    background-size: 24px;
-    background-image: url("/home.png");
-    height: 24px;
-    width: 24px;
-
-}
+ 
