@@ -5,15 +5,23 @@
     <link rel="stylesheet" href="./styles.css">
     </head>
 <body>
-    <h1 class="heading">Меню</h1>
-    <div class="container">
-        <p>Ваш код: <span id="menu-code"></span></p>
-        <button id="menu-addOrder" class="btn">Добавити заказ</button>
-        <button id="menu-showOrder" class="btn">Показати заказ</button>
-        <button id="menu-formOrder" class="btn">Сформувати заказ</button>
+    <div class="container" id="menu-content">
+        <h1 class="heading">Меню</h1>
+
+        <div class="wrapper">
+            <p>Ваш код: <span id="menu-code"></span></p>
+            <button id="menu-addOrder" class="btn">Добавити заказ</button>
+            <button id="menu-showOrder" class="btn">Показати заказ</button>
+            <button id="menu-formOrder" class="btn">Сформувати заказ</button>
+        </div>
+
+        <div id="menu-responseContainer"></div>
     </div>
 
-    <div id="menu-responseContainer"></div>
+    <div class="display_none container" id="loader">
+        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    </div>
+
     <script src="menu.js"></script>
 </body>
 </html>

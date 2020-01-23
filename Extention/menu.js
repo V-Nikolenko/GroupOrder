@@ -19,7 +19,6 @@ addOrder.addEventListener('click', () => {
                 let info = document.createElement('div');
                 info.textContent = resp.message //'заказ (не) добавлено'//resp
                 respContainer.append(info);
-                document.body.append(respContainer)
             })
             .catch((error)=> { console.log(error) })
         });
@@ -59,7 +58,7 @@ showOrders.addEventListener('click', () => {
 
             header.addEventListener('click', () => {
                 body.classList.toggle('display_none');
-            })
+            });
             item.append(header, body);
             list.append(item);    
         })
@@ -92,11 +91,19 @@ formOrder.addEventListener('click', () => {
 
 
     confirmationConfirm.addEventListener('click', () => {
+        Clear(confirmation, true);
+        let menuContent = document.getElementById('menu-content');
+        menuContent.classList.add('display_none');
+
+        let loader = document.getElementById('loader');
+        loader.classList.remove('display_none');
+
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             chrome.tabs.sendMessage(tabs[0].id, {type: 'formOrder', code: localStorage.code}, function(response){
+                window.close();
             });
         });
-        Clear(confirmation, true);
+
     });    
 
     confirmationCancel.addEventListener('click', () => {
@@ -106,6 +113,7 @@ formOrder.addEventListener('click', () => {
     confirmationWindow.append(title, confirmationConfirm, confirmationCancel)
     confirmation.append(confirmationWindow)
     document.body.append(confirmation);
+
 });
 
 
@@ -136,7 +144,10 @@ async function GetOrdersList() {
 }
 
 async function SendOrders(resp, code) {
-    return await fetch('http://localhost:8080/orders/'+code+'/add-order', {//add-orders
+    return await fetch('http://localhost:8080/orders/'+code+'/add-order', {
+        headers: {
+            'Content-Type': 'application/json'
+        },
         method: 'POST',
         body: JSON.stringify(resp)
     }).then((resp) => resp);
