@@ -20,7 +20,9 @@ public class GroupOrder {
 
 
     public void addMemberToGroupOrder(MemberOrder member) {
-        members.add(member);
+        if (member != null) {
+            members.add(member);
+        }
     }
 
     public List<Product> getAllProducts() {

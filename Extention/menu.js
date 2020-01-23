@@ -8,16 +8,21 @@ code.textContent = localStorage.code
 addOrder.addEventListener('click', () => {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, {type: "getOrders"}, function(response){
-            // SendOrders(response)
-            // .then((resp) => resp.json())
-            // .then((resp) => {
-                ClearContainer(respContainer);
+
+            
+            SendOrders(response, localStorage.code)
+            .then((resp) => resp.json())
+            .then((resp) => {
+                console.log(resp)
+                Clear(respContainer, false);
+
                 let info = document.createElement('div');
                 info.textContent = 'заказ (не) добавлено'//resp
                 respContainer.append(info);
                 document.body.append(respContainer)
-            // })
-            // .catch((error)=> { console.log(error) })
+
+            })
+            .catch((error)=> { console.log(error) })
         });
     });
 });
@@ -27,7 +32,8 @@ showOrders.addEventListener('click', () => {
     .then((resp) => {
         // if (resp.status)
         
-        ClearContainer(respContainer);
+
+        Clear(respContainer, false);
         let list = document.createElement('ol');
         list.classList.add('menu-list')
 
@@ -67,10 +73,39 @@ showOrders.addEventListener('click', () => {
 
 
 formOrder.addEventListener('click', () => {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {type: 'formOrder', code: localStorage.code}, function(response){
+
+
+    let confirmation = document.createElement('div');
+    confirmation.classList.add('confirmation');
+
+    let confirmationWindow = document.createElement('div');
+    confirmationWindow.classList.add('confirmation__window');
+
+    let title = document.createElement('h2');
+    title.classList.add('heading');
+    title.textContent = 'Ви дійсно бажаєте сформувати заказ?'
+
+    let confirmationConfirm = document.createElement('button');
+    confirmationConfirm.textContent = 'Так';
+    
+    let confirmationCancel = document.createElement('button');
+    confirmationCancel.textContent = 'Ні';
+
+    confirmationConfirm.addEventListener('click', () => {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, {type: 'formOrder', code: localStorage.code}, function(response){
+            });
         });
-    });
+        Clear(confirmation, true);
+    });    
+
+    confirmationCancel.addEventListener('click', () => {
+        Clear(confirmation, true);
+    })
+
+    confirmationWindow.append(confirmationConfirm, confirmationCancel)
+    confirmation.append(title, confirmationWindow)
+    document.body.append(confirmation);
 });
 
 
@@ -100,17 +135,20 @@ async function GetOrdersList() {
     ]
 }
 
-async function SendOrders(resp) {
-    return await fetch('http://localhost:8080/orders', {//add-orders
+
+async function SendOrders(resp, code) {
+    return await fetch('http://localhost:8080/orders/'+code+'/add-order', {//add-orders
+
         method: 'post',
         body: JSON.stringify(resp)
     }).then((resp) => resp);
 }
 
-function ClearContainer(container) {
-    while (container.firstChild) {
-        container.removeChild(container.firstChild);
+function Clear(root, includeItself) {
+    while (root.firstChild) {
+        root.removeChild(root.firstChild);
+    }
+    if (includeItself) {
+        root.parentNode.removeChild(root)
     }
 }
-
-
