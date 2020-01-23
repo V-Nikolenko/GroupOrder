@@ -9,11 +9,8 @@ newOrderBtn.addEventListener('click', () => {
 
                 if (isValidInp(newOrderNameInput, 3)) {
                     SendOrders(response).then((resp) => {
-                        if (resp.ok) {
+                        if (resp.status === 200) {
                             return resp.json();
-                        }
-                        else {
-        
                         }
                     }).then((resp) => {
                         localStorage.code = resp.code

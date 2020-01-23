@@ -8,19 +8,18 @@ code.textContent = localStorage.code
 addOrder.addEventListener('click', () => {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, {type: "getOrders"}, function(response){
+            response.name = localStorage.name;
 
-            
+            console.log(response)
             SendOrders(response, localStorage.code)
             .then((resp) => resp.json())
             .then((resp) => {
                 console.log(resp)
                 Clear(respContainer, false);
-
                 let info = document.createElement('div');
-                info.textContent = 'заказ (не) добавлено'//resp
+                info.textContent = resp.message //'заказ (не) добавлено'//resp
                 respContainer.append(info);
                 document.body.append(respContainer)
-
             })
             .catch((error)=> { console.log(error) })
         });
@@ -32,7 +31,6 @@ showOrders.addEventListener('click', () => {
     .then((resp) => {
         // if (resp.status)
         
-
         Clear(respContainer, false);
         let list = document.createElement('ol');
         list.classList.add('menu-list')
@@ -74,7 +72,6 @@ showOrders.addEventListener('click', () => {
 
 formOrder.addEventListener('click', () => {
 
-
     let confirmation = document.createElement('div');
     confirmation.classList.add('confirmation');
 
@@ -86,10 +83,13 @@ formOrder.addEventListener('click', () => {
     title.textContent = 'Ви дійсно бажаєте сформувати заказ?'
 
     let confirmationConfirm = document.createElement('button');
+    confirmationConfirm.classList.add('btn');
     confirmationConfirm.textContent = 'Так';
-    
+
     let confirmationCancel = document.createElement('button');
+    confirmationCancel.classList.add('btn');
     confirmationCancel.textContent = 'Ні';
+
 
     confirmationConfirm.addEventListener('click', () => {
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -103,8 +103,8 @@ formOrder.addEventListener('click', () => {
         Clear(confirmation, true);
     })
 
-    confirmationWindow.append(confirmationConfirm, confirmationCancel)
-    confirmation.append(title, confirmationWindow)
+    confirmationWindow.append(title, confirmationConfirm, confirmationCancel)
+    confirmation.append(confirmationWindow)
     document.body.append(confirmation);
 });
 
@@ -135,11 +135,9 @@ async function GetOrdersList() {
     ]
 }
 
-
 async function SendOrders(resp, code) {
     return await fetch('http://localhost:8080/orders/'+code+'/add-order', {//add-orders
-
-        method: 'post',
+        method: 'POST',
         body: JSON.stringify(resp)
     }).then((resp) => resp);
 }
@@ -152,3 +150,4 @@ function Clear(root, includeItself) {
         root.parentNode.removeChild(root)
     }
 }
+

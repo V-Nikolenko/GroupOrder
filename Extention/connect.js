@@ -23,18 +23,18 @@ connectBtn.addEventListener('click', () => {
             let warnings = document.getElementsByClassName('bad-response')
             if (warnings) {
                 for (let i = 0; i < warnings.length; i++ ) {
-                    warnings[i].remove()
+                    warnings[i].remove();
                 }
             } 
             document.body.append(result);
-            console.log(error) 
+            console.log(error);
         })
     } else {
         if (!isValidInp(connectName, 3)) {
-            ShowWarning(connectName, 'Ім\'я має бути більше 3 символів')
+            ShowWarning(connectName, 'Ім\'я має бути більше 3 символів');
         }
         if (!isValidInp(connectCode, 4)) {
-            ShowWarning(connectCode, 'Код має бути більше 4 букв')
+            ShowWarning(connectCode, 'Код має бути більше 4 букв');
         }
     }
 })
@@ -53,7 +53,7 @@ connectName.addEventListener('blur', () => {
 
 connectCode.addEventListener('blur', () => {
     if (!isValidInp(connectCode, 4)) {
-        ShowWarning(connectCode, 'Код має бути більше 4 символів')
+        ShowWarning(connectCode, 'Код має бути більше 4 символів');
     } 
     else {
         if(connectCode.classList.contains('input_invalid')) {
