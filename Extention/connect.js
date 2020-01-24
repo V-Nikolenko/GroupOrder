@@ -13,7 +13,8 @@ connectBtn.addEventListener('click', () => {
             // else throw new Error('bad response');
         })
         .then((resp) => {
-            localStorage.code = connectCode.value; 
+            localStorage.code = connectCode.value;
+            localStorage.name = connectName.value;
             window.location.href = './menu.html';
         })
         .catch((error) => { 
@@ -63,11 +64,9 @@ connectCode.addEventListener('blur', () => {
 })
 
 
-async function ConnectWithCode(name, code) {
-    return fetch ('http://localhost:8080/orders/' + code, {
-        method: 'POST',
-        body: JSON.stringify({
-        })
+async function ConnectWithCode(code) {
+    return fetch ('http://localhost:8080/orders/' + code + '/connect', {
+        method: 'POST'
     })
     .then((resp) => resp);
 }

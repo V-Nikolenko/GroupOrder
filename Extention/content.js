@@ -8,7 +8,7 @@ chrome.runtime.onMessage.addListener(
             case 'formOrder':
                 console.log('form');
                 console.log(message);
-                FormOrder(message.code);
+                FormOrder(message.allDishes.items);
                 break;
         }
         return true;
@@ -34,7 +34,7 @@ async function SendAddDishRequest(dish) {
     let bodyoObj = {
         // force: false,
         action: "add",
-        dishId: dish.dishId,
+        dishId: dish.id
         // optionValue: dish.optionValue,
         // optionId: dish.optionId,
         // measure: dish.measure,
@@ -87,29 +87,16 @@ async function ClearCurrentOrder() {
 }
 
 
-async function GetAllDishes(code) {
-    // fetch('', {})
-    return [
-        {
-            dishId: 89162,
-            count:5
-        }
-    ]
 
-}
-
-async function FormOrder(code) {
+async function FormOrder(items) {
     await ClearCurrentOrder()
-        
-    GetAllDishes(code)
-    .then((items) => {
-        items.forEach(async (element) => {
-    
-            for(let i = 0; i < element.count; i++) {
-                await SendAddDishRequest(element).then((resp) => resp);
-            }
-            window.location.reload();
-        })
-    })
-    
+
+    for (let i = 0; i < items.length; i++) { 
+        let item =  items[i];
+        for (let j = 0; j < item.count; j++) {
+            await SendAddDishRequest(item);
+        }
+    }
+
+    window.location.reload();    
 }

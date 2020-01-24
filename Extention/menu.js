@@ -28,15 +28,16 @@ addOrder.addEventListener('click', () => {
 });
 
 showOrders.addEventListener('click', () => {
-    GetOrdersList()
+    GetOrdersList(localStorage.code)
     .then((resp) => {
-        // if (resp.status)
-        
+        return resp.json();
+    }).then((resp)=> {    
         Clear(respContainer, false);
         let list = document.createElement('ol');
         list.classList.add('menu-list')
-
-        resp.forEach((order)=> {
+        
+        resp.members.forEach((order)=> {
+            // console.log(order)
             let item = document.createElement('li');
 
             let header = document.createElement('div');
@@ -44,13 +45,13 @@ showOrders.addEventListener('click', () => {
             let bill = document.createElement('span');
 
             name.textContent = order.name;
-            bill.textContent = order.bill;
-            header.append(name, bill);
+            // bill.textContent = order.bill;
+            header.append(name/*, bill*/);
 
             let body = document.createElement('ol');
             body.classList.add('menu-list')
 
-            order.items.forEach((item) => {
+            order.products.forEach((item) => {
                 let dish = document.createElement('li');
                 dish.textContent = item.name;
                 body.append(dish);
@@ -92,16 +93,17 @@ formOrder.addEventListener('click', () => {
     confirmationCancel.textContent = 'Ні';
 
 
-    confirmationConfirm.addEventListener('click', () => {
+    confirmationConfirm.addEventListener('click', async () => {
         Clear(confirmation, true);
         let menuContent = document.getElementById('menu-content');
         menuContent.classList.add('display_none');
 
         let loader = document.getElementById('loader');
         loader.classList.remove('display_none');
-
+        let allDishes = await GetAllDishes(localStorage.code).then((resp) => resp.json())
+        
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, {type: 'formOrder', code: localStorage.code}, function(response){
+            chrome.tabs.sendMessage(tabs[0].id, {type: 'formOrder', allDishes}, function(response){
                 window.close();
             });
         });
@@ -119,32 +121,6 @@ formOrder.addEventListener('click', () => {
 });
 
 
-async function GetOrdersList() {
-    // return fetch('', {
-
-    // })
-    // .then((resp) => resp)
-    // .catch((error) => { console.log(error) })
-    return [
-        {
-            name:'name1',
-            bill: '2154',
-            items: [
-                {name: 'item0'}
-            ] 
-        },
-        {
-            name:'name2',
-            bill: '2154',
-            items: [
-                {name: 'item1'},
-                {name: 'item2'},
-                {name: 'item3'}
-            ]
-        }
-    ]
-}
-
 async function SendOrders(resp, code) {
     return await fetch('http://localhost:8080/orders/'+code+'/add-order', {
         headers: {
@@ -154,6 +130,17 @@ async function SendOrders(resp, code) {
         body: JSON.stringify(resp)
     }).then((resp) => resp);
 }
+
+
+async function GetOrdersList(code) {
+    return fetch('http://localhost:8080/orders/' + code + '/show-group-order', {})
+}
+
+
+async function GetAllDishes(code) {
+    return fetch('http://localhost:8080/orders/' + code + '/form-group-order', {})
+}
+
 
 function Clear(root, includeItself) {
     while (root.firstChild) {
