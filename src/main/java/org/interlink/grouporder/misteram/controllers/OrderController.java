@@ -46,7 +46,6 @@ public class OrderController {
     public ResponseEntity addMemberToOrder(@PathVariable("code") String code, @RequestBody Order newOrder) {
         try {
             MemberOrder memberOrder = MisterAmMapper.map(newOrder, new MemberOrder());
-
             DataStorage.getGroupOrder(code).addMemberToGroupOrder(memberOrder);
             return ResponseEntity.ok("Success");
         } catch (Exception e) {

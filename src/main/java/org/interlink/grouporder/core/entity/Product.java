@@ -12,13 +12,6 @@ public class Product {
     private BigDecimal price;
     private int count;
 
-    public Product(int id, String name, BigDecimal price, int count) {
-        this.setId(id);
-        this.setName(name);
-        this.setPrice(price);
-        this.setCount(count);
-    }
-
     public int getId() {
         return id;
     }
