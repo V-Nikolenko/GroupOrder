@@ -13,6 +13,10 @@ import org.interlink.grouporder.misteram.entity.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
@@ -24,6 +28,9 @@ public class OrderController {
         String code = OrderCodeGenerator.generateCode();
         GroupOrder groupOrder = new GroupOrder(code);
         DataStorage.addGroupOrder(code, groupOrder);
+
+        ScheduledExecutorService schedule = new ScheduledThreadPoolExecutor(1);
+        schedule.schedule(() -> DataStorage.removeGroupOrder(code), 2, TimeUnit.HOURS);
 
         return groupOrder;
     }
