@@ -21,7 +21,9 @@ newOrderBtn.addEventListener('click', () => {
             });
         });
     } else {
-        ShowWarning(newOrderNameInput, 'Ім\'я повинно містити більше 3 букв');
+        if (!isValidInp(newOrderNameInput, 3)) {
+            ShowWarning(newOrderNameInput, 'Ім\'я має бути більше 3 символів');
+        }
     }
 });
 
@@ -32,27 +34,41 @@ async function SendOrders(resp) {
     }).then((resp) => resp);
 }
 
-function validateInp(inp) {
-    if (!inp.value) {
-        
+
+newOrderNameInput.addEventListener('blur', () => {
+    if (!isValidInp(newOrderNameInput, 3)) {
+        ShowWarning(newOrderNameInput, 'Ім\'я має бути більше 3 символів');
+    } 
+    else {
+        if(newOrderNameInput.classList.contains('input_invalid')) {
+            DeleteWarning(newOrderNameInput);
+        }
     }
-}
+})
+
 
 function isValidInp(inp, min) {
-    if (inp.value.length < min) {
-        return false
+    console.log(inp);
+    console.log(inp.value);
+    if (inp.value.length > min) {
+        return true;
     }
-    return true
+    return false;
 }
 
 function ShowWarning(inp, text) {
     if (inp.classList.contains('input_invalid')) {
-        inp.classList.remove('input_invalid');
-        inp.nextSibling.remove()
+        DeleteWarning(inp);
     }
     
     inp.classList.add('input_invalid');
     let warning = document.createElement('span');
-    warning.textContent = text//"Ім'я повино бути більше 3 букв";
+    warning.classList.add('text', 'text_color_red')
+    warning.textContent = text;
     inp.after(warning);
+}
+
+function DeleteWarning(inp) {
+    inp.classList.remove('input_invalid')
+    inp.nextSibling.remove();
 }

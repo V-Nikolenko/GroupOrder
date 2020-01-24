@@ -31,7 +31,7 @@ connectBtn.addEventListener('click', () => {
         })
     } else {
         if (!isValidInp(connectName, 3)) {
-            ShowWarning(connectName, 'Ім\'я має бути більше 3 символів');
+            ShowWarning(connectName, 'Ім\'я має бути більше 3 букв');
         }
         if (!isValidInp(connectCode, 4)) {
             ShowWarning(connectCode, 'Код має бути більше 4 букв');
@@ -41,8 +41,8 @@ connectBtn.addEventListener('click', () => {
 
 
 connectName.addEventListener('blur', () => {
-    if (!isValidInp(connectName, 4)) {
-        ShowWarning(connectName, 'Ім\'я має бути більше 3 символів')
+    if (!isValidInp(connectName, 3)) {
+        ShowWarning(connectName, 'Ім\'я має бути більше 3 букв')
     } 
     else {
         if(connectName.classList.contains('input_invalid')) {
@@ -53,7 +53,7 @@ connectName.addEventListener('blur', () => {
 
 connectCode.addEventListener('blur', () => {
     if (!isValidInp(connectCode, 4)) {
-        ShowWarning(connectCode, 'Код має бути більше 4 символів');
+        ShowWarning(connectCode, 'Код має бути більше 4 букв');
     } 
     else {
         if(connectCode.classList.contains('input_invalid')) {
@@ -90,6 +90,7 @@ function ShowWarning(inp, text) {
     
     inp.classList.add('input_invalid');
     let warning = document.createElement('span');
+    warning.classList.add('text', 'text_color_red');
     warning.textContent = text;
     inp.after(warning);
 }
