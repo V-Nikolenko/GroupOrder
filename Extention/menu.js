@@ -12,12 +12,14 @@ addOrder.addEventListener('click', () => {
 
             console.log(response)
             SendOrders(response, localStorage.code)
-            .then((resp) => resp.json())
             .then((resp) => {
-                console.log(resp)
                 Clear(respContainer, false);
                 let info = document.createElement('div');
-                info.textContent = resp.message //'заказ (не) добавлено'//resp
+                if (resp.status === 200) {
+                    info.textContent = 'Заказ добавлено!';    
+                } else {
+                    info.textContent = 'Виникла помилка!'
+                }
                 respContainer.append(info);
             })
             .catch((error)=> { console.log(error) })
