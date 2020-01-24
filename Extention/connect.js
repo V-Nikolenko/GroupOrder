@@ -4,13 +4,13 @@ let connectCode = document.getElementById('connectCode')
 
 connectBtn.addEventListener('click', () => {
     if(isValidInp(connectCode, 4) && isValidInp(connectName, 3)) {
-        ConnectWithCode(connectName.value, connectCode.value)
+        ConnectWithCode(connectCode.value)
         .then((resp) => {
             console.log(resp);
-            // if (resp.status === 200) {
-            //     return resp.json();
-            // }
-            // else throw new Error('bad response');
+            if (resp.status === 200) {
+                return resp.text()
+            }
+            else throw new Error('bad response');
         })
         .then((resp) => {
             localStorage.code = connectCode.value;

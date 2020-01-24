@@ -14,9 +14,10 @@ addOrder.addEventListener('click', () => {
             SendOrders(response, localStorage.code)
             .then((resp) => {
                 Clear(respContainer, false);
-                let info = document.createElement('div');
+                let info = document.createElement('p');
+                info.classList.add('text');
                 if (resp.status === 200) {
-                    info.textContent = 'Заказ добавлено!';    
+                    info.textContent = 'Заказ додано!';    
                 } else {
                     info.textContent = 'Виникла помилка!'
                 }
@@ -39,6 +40,7 @@ showOrders.addEventListener('click', () => {
         resp.members.forEach((order)=> {
             // console.log(order)
             let item = document.createElement('li');
+            item.classList.add('show-order__user')
 
             let header = document.createElement('div');
             let name = document.createElement('span');
@@ -81,8 +83,16 @@ formOrder.addEventListener('click', () => {
     confirmationWindow.classList.add('confirmation__window');
 
     let title = document.createElement('h2');
-    title.classList.add('heading');
+    title.classList.add('heading', 'confirm__heading');
     title.textContent = 'Ви дійсно бажаєте сформувати заказ?'
+    
+    let exit = document.createElement('span');
+    exit.innerHTML = '&#10006';
+    exit.classList.add('confirm__exit')
+    
+    let btnsContainer = document.createElement('div');
+    btnsContainer.classList.add('confirm__btns-container');
+
 
     let confirmationConfirm = document.createElement('button');
     confirmationConfirm.classList.add('btn');
@@ -96,6 +106,7 @@ formOrder.addEventListener('click', () => {
     confirmationConfirm.addEventListener('click', async () => {
         Clear(confirmation, true);
         let menuContent = document.getElementById('menu-content');
+        respContainer.classList.add('display_none');
         menuContent.classList.add('display_none');
 
         let loader = document.getElementById('loader');
@@ -112,10 +123,15 @@ formOrder.addEventListener('click', () => {
 
     confirmationCancel.addEventListener('click', () => {
         Clear(confirmation, true);
-    })
+    });
 
-    confirmationWindow.append(title, confirmationConfirm, confirmationCancel)
-    confirmation.append(confirmationWindow)
+    exit.addEventListener('click', () => {
+        Clear(confirmation, true);
+    });
+
+    btnsContainer.append(confirmationConfirm, confirmationCancel)
+    confirmationWindow.append(title, exit, btnsContainer);
+    confirmation.append(confirmationWindow);
     document.body.append(confirmation);
 
 });
