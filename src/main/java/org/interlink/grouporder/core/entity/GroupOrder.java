@@ -2,6 +2,7 @@ package org.interlink.grouporder.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import org.interlink.grouporder.core.entity.view.GroupOrderView;
+import org.interlink.grouporder.core.utils.ProductsCounter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,20 +19,28 @@ public class GroupOrder {
         this.code = code;
     }
 
+    public boolean isMemberInGroupOrder(MemberOrder member) {
+            return members.stream()
+                    .anyMatch(oldMember -> oldMember.getName().equals(member.getName()));
+    }
 
     public void addMemberToGroupOrder(MemberOrder member) {
-        if (member != null) {
+        if (isMemberInGroupOrder(member)) {
+            members.stream()
+                    .filter(oldMember -> oldMember.getName().equals(member.getName()))
+                    .findFirst()
+                    .ifPresent(oldMember -> oldMember = member);
+        } else {
             members.add(member);
         }
     }
 
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
-
         for (MemberOrder member : members) {
             products.addAll(member.getProducts());
         }
-        return products;
+        return new ProductsCounter().getAllGroupingProducts(products);
     }
 
     public String getCode() {

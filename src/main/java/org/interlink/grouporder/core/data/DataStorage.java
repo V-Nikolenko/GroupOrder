@@ -9,31 +9,30 @@ import java.util.Optional;
 
 public class DataStorage {
 
+    private DataStorage() {
+    }
+
     private static Map<String, GroupOrder> orders = new LinkedHashMap<>();
 
     public static void addGroupOrder(String code, GroupOrder groupOrder) {
-        orders.put(code, groupOrder);
+        getOrders().put(code, groupOrder);
     }
 
     public static void removeGroupOrder(String code) {
-        orders.remove(code);
+        getOrders().remove(code);
     }
 
     public static GroupOrder getGroupOrder(String code) {
-        return Optional.ofNullable(orders.get(code)).orElseThrow(
+        return Optional.ofNullable(getOrders().get(code)).orElseThrow(
                 () -> new IllegalArgumentException("No such key in the database [" + code + "]"));
     }
 
-    public static void addMemberToOrder(String code, MemberOrder memberOrder) {
-        if (orders.containsKey(code) && memberOrder != null) {
-            GroupOrder groupOrder = orders.get(code);
-            groupOrder.addMemberToGroupOrder(memberOrder);
-
-            orders.replace(code, groupOrder);
-        }
-    }
-
     public static boolean isContains(String code) {
-        return orders.containsKey(code);
+        return getOrders().containsKey(code);
     }
+
+    public static Map<String, GroupOrder> getOrders() {
+        return orders;
+    }
+
 }

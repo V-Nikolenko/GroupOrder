@@ -39,6 +39,7 @@ public class MisterAmMapper {
         destination.setName(source.getName());
         destination.setProducts(products);
         destination.setUrl(source.getUrl());
+        destination.setFullPrice(source.getFullPrice());
 
         return destination;
     }

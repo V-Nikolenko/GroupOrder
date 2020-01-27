@@ -7,6 +7,7 @@ public class Order {
     private String name;
     private String url;
     private List<Item> items;
+    private int fullPrice;
 
     public String getName() {
         return name;
@@ -30,5 +31,13 @@ public class Order {
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    public int getFullPrice() {
+        return fullPrice;
+    }
+
+    public void setFullPrice(int fullPrice) {
+        this.fullPrice = fullPrice;
     }
 }
