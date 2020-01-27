@@ -19,9 +19,18 @@ public class GroupOrder {
         this.code = code;
     }
 
+    public boolean isMemberInGroupOrder(MemberOrder member) {
+            return members.stream()
+                    .anyMatch(oldMember -> oldMember.getName().equals(member.getName()));
+    }
 
     public void addMemberToGroupOrder(MemberOrder member) {
-        if (member != null) {
+        if (isMemberInGroupOrder(member)) {
+            members.stream()
+                    .filter(oldMember -> oldMember.getName().equals(member.getName()))
+                    .findFirst()
+                    .ifPresent(oldMember -> oldMember = member);
+        } else {
             members.add(member);
         }
     }

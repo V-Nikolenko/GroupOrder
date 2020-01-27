@@ -9,6 +9,9 @@ import java.util.Optional;
 
 public class DataStorage {
 
+    private DataStorage() {
+    }
+
     private static Map<String, GroupOrder> orders = new LinkedHashMap<>();
 
     public static void addGroupOrder(String code, GroupOrder groupOrder) {
@@ -22,15 +25,6 @@ public class DataStorage {
     public static GroupOrder getGroupOrder(String code) {
         return Optional.ofNullable(getOrders().get(code)).orElseThrow(
                 () -> new IllegalArgumentException("No such key in the database [" + code + "]"));
-    }
-
-    public static void addMemberToOrder(String code, MemberOrder memberOrder) {
-        if (getOrders().containsKey(code) && memberOrder != null) {
-            GroupOrder groupOrder = getOrders().get(code);
-            groupOrder.addMemberToGroupOrder(memberOrder);
-
-            getOrders().replace(code, groupOrder);
-        }
     }
 
     public static boolean isContains(String code) {
