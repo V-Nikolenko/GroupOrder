@@ -13,6 +13,7 @@ public class MemberOrder {
     private String name;
     private String url;
     private List<Product> products = new ArrayList<>();
+    private int fullPrice;
 
     public List<Product> getProducts() {
         return products;
@@ -36,5 +37,13 @@ public class MemberOrder {
 
     public String getUrl() {
         return url;
+    }
+
+    public int getFullPrice() {
+        return fullPrice;
+    }
+
+    public void setFullPrice(int fullPrice) {
+        this.fullPrice = fullPrice;
     }
 }
