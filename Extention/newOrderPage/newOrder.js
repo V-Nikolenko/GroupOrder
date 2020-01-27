@@ -15,7 +15,7 @@ newOrderBtn.addEventListener('click', () => {
                     }).then((resp) => {
                         localStorage.code = resp.code
                         localStorage.name = newOrderNameInput.value;
-                        window.location.href = './menu.html';
+                        window.location.href = '../menuPage/menu.html';
                     }).catch((error)=> { console.log(error) });
                 }
             });
@@ -63,7 +63,7 @@ function ShowWarning(inp, text) {
     
     inp.classList.add('input_invalid');
     let warning = document.createElement('span');
-    warning.classList.add('text', 'text_color_red')
+    warning.classList.add('warning-text')
     warning.textContent = text;
     inp.after(warning);
 }

@@ -32,15 +32,8 @@ async function SendGetOrdersRequest() {
 
 async function SendAddDishRequest(dish) {
     let bodyoObj = {
-        // force: false,
         action: "add",
         dishId: dish.id
-        // optionValue: dish.optionValue,
-        // optionId: dish.optionId,
-        // measure: dish.measure,
-        // measureType: dish.measureType,
-        // packagePrice: dish.packagePrice,
-        // maxCountPositionInPackage: dish.maxCountPositionInPackage
     }
 
     return fetch("https://misteram.com.ua/api/cart/add?lang=ua", {
@@ -51,7 +44,6 @@ async function SendAddDishRequest(dish) {
         body: JSON.stringify(bodyoObj)
     });
 }
-
 
 async function SendRemoveDishRequest(dish) {
     let obj = {
@@ -86,8 +78,6 @@ async function ClearCurrentOrder() {
     }
 }
 
-
-
 async function FormOrder(items) {
     await ClearCurrentOrder()
 
@@ -97,6 +87,5 @@ async function FormOrder(items) {
             await SendAddDishRequest(item);
         }
     }
-
     window.location.reload();    
 }

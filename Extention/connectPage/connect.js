@@ -1,3 +1,4 @@
+
 let connectBtn = document.getElementById('connectTransfer');
 let connectName = document.getElementById('connectName');
 let connectCode = document.getElementById('connectCode')
@@ -15,7 +16,7 @@ connectBtn.addEventListener('click', () => {
         .then((resp) => {
             localStorage.code = connectCode.value;
             localStorage.name = connectName.value;
-            window.location.href = './menu.html';
+            window.location.href = '../menuPage/menu.html';
         })
         .catch((error) => { 
             let result = document.createElement('p');
@@ -89,9 +90,10 @@ function ShowWarning(inp, text) {
     
     inp.classList.add('input_invalid');
     let warning = document.createElement('span');
-    warning.classList.add('text', 'text_color_red');
+    warning.classList.add('warning-text');
     warning.textContent = text;
     inp.after(warning);
+    
 }
 
 function DeleteWarning(inp) {

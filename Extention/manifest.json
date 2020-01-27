@@ -1,8 +1,7 @@
-
 {
-    "name": "Name",
+    "name": "Group Order",
     "version": "1.0",
-    "description": "Extension for SplitBill",
+    "description": "This extension can help you make group order",
     "manifest_version": 2,
     "background": {
         "scripts": ["background.js"],
@@ -15,8 +14,8 @@
         }
     ],
     "page_action": {
-        "default_popup": "popUp.html",
-        "default_title": "Extension"
+        "default_popup": "./homePage/home.html",
+        "default_title": "GroupOrder"
     },
     "permissions": [
         "activeTab",
