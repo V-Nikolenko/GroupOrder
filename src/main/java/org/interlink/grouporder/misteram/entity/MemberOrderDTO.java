@@ -2,11 +2,11 @@ package org.interlink.grouporder.misteram.entity;
 
 import java.util.List;
 
-public class Order {
+public class MemberOrderDTO {
 
     private String name;
     private String url;
-    private List<Item> items;
+    private List<ItemDTO> items;
     private int fullPrice;
 
     public String getName() {
@@ -25,11 +25,11 @@ public class Order {
         this.url = url;
     }
 
-    public List<Item> getItems() {
+    public List<ItemDTO> getItems() {
         return items;
     }
 
-    public void setItems(List<Item> items) {
+    public void setItems(List<ItemDTO> items) {
         this.items = items;
     }
 

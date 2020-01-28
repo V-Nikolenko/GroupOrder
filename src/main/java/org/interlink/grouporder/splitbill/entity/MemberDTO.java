@@ -1,6 +1,6 @@
 package org.interlink.grouporder.splitbill.entity;
 
-public class Item {
+public class MemberDTO {
     private String name;
     private int price;
     private int count = 1;
