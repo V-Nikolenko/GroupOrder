@@ -1,17 +1,71 @@
 package org.interlink.grouporder.core.entity;
 
+import org.interlink.grouporder.core.data.DataStorage;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.testng.Assert.*;
 
 public class GroupOrderTest {
+    private static final Product ITEM_FIRST = new Product(1, "pizza", new BigDecimal("200.0"), 1);
+    private static final Product ITEM_SECOND = new Product(2, "burger", new BigDecimal("50.0"), 2);
+
+    private void fillGroupOrder(List<Product> products, MemberOrder memberOrder, GroupOrder groupOrder) {
+        memberOrder.setName("Vasya");
+        memberOrder.setUrl("misterAm");
+        memberOrder.setProducts(products);
+        List<MemberOrder> memberOrdersList = new ArrayList<>();
+        memberOrdersList.add(memberOrder);
+        groupOrder.setMembers(memberOrdersList);
+    }
+
 
     @Test
-    public void getAllProductsTest() {
+    public void When_MemberNotExistInInGroupOrder_Expect_AddInGroupOrder() {
+        List<Product> productsVasya = new ArrayList<>();
+        Map<String, GroupOrder> expectedResult = new LinkedHashMap<>();
+        MemberOrder memberOrder1 = new MemberOrder();
+        MemberOrder memberOrder2 = new MemberOrder();
+        GroupOrder groupOrder = new GroupOrder("12345");
+
+        fillGroupOrder(productsVasya, memberOrder1, groupOrder);
+
+        DataStorage.getOrders().put("12345", groupOrder);
+        expectedResult.put("12345", groupOrder);
+        groupOrder.addMemberToGroupOrder(memberOrder2);
+
+        assertEquals(DataStorage.getOrders(), expectedResult);
+    }
+
+    @Test
+    public void When_MemberExistInInGroupOrder_Expect_AddInGroupOrder() {
+        List<Product> productsVasya = new ArrayList<>();
+        Map<String, GroupOrder> expectedResult = new LinkedHashMap<>();
+        MemberOrder memberOrder1 = new MemberOrder();
+        MemberOrder memberOrder2 = new MemberOrder();
+        GroupOrder groupOrder = new GroupOrder("12345");
+
+        fillGroupOrder(productsVasya, memberOrder1, groupOrder);
+        fillGroupOrder(productsVasya, memberOrder2, groupOrder);
+
+        DataStorage.getOrders().put("12345", groupOrder);
+        expectedResult.put("12345", groupOrder);
+        groupOrder.addMemberToGroupOrder(memberOrder2);
+
+        assertEquals(DataStorage.getOrders(), expectedResult);
+    }
+
+    @Test
+    public void When_MembersIsEmpty_Expect_ReturnEmptyListProducts() {
+
+    }
+    @Test
+    public void When_MembersIsNotEmpty_Expect_ReturnEmptyListProducts() {
         GroupOrder groupOrder = new GroupOrder("12345");
         List<Product> listProductsAct = new ArrayList<>();
         List<Product> expectedResult = new ArrayList<>();

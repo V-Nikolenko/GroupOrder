@@ -19,7 +19,7 @@ public class GroupOrder {
         this.code = code;
     }
 
-    public boolean isMemberInGroupOrder(MemberOrder member) {
+    private boolean isMemberInGroupOrder(MemberOrder member) {
             return members.stream()
                     .anyMatch(oldMember -> oldMember.getName().equals(member.getName()));
     }
