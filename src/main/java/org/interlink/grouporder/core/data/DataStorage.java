@@ -1,7 +1,7 @@
 package org.interlink.grouporder.core.data;
 
 import org.interlink.grouporder.core.entity.GroupOrder;
-import org.interlink.grouporder.core.entity.MemberOrder;
+import org.interlink.grouporder.core.exceptions.BadRequestException;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -15,11 +15,19 @@ public class DataStorage {
     private static Map<String, GroupOrder> orders = new LinkedHashMap<>();
 
     public static void addGroupOrder(String code, GroupOrder groupOrder) {
-        getOrders().put(code, groupOrder);
+        if (groupOrder != null) {
+            getOrders().put(code, groupOrder);
+        } else {
+            throw new BadRequestException("Group order is invalid");
+        }
     }
 
     public static void removeGroupOrder(String code) {
-        getOrders().remove(code);
+        if (code != null) {
+            getOrders().remove(code);
+        } else {
+            throw new BadRequestException("Key is invalid");
+        }
     }
 
     public static GroupOrder getGroupOrder(String code) {

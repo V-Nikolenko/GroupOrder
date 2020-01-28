@@ -12,7 +12,7 @@ import static org.testng.Assert.assertEquals;
 public class ExceptionsHandlerTest {
 
     @Test
-    public void Except_HttpStatusBADREQUEST_When_ThrowBadRequestException() {
+    public void When_HttpStatusBADREQUEST_Except_ThrowBadRequestException() {
         ResponseEntity actualResult = ExceptionsHandler.handleException(new BadRequestException("Exception BAD_REQUEST"));
         ResponseEntity expectedResult = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exception BAD_REQUEST");
 
@@ -20,7 +20,7 @@ public class ExceptionsHandlerTest {
     }
 
     @Test
-    public void Except_HttpStatusFORBIDDEN_When_ThrowForbiddenException() {
+    public void When_HttpStatusFORBIDDEN_Except_ThrowForbiddenException() {
         ResponseEntity actualResult = ExceptionsHandler.handleException(new ForbiddenException("Exception FORBIDDEN"));
         ResponseEntity expectedResult = ResponseEntity.status(HttpStatus.FORBIDDEN).body("Exception FORBIDDEN");
 
@@ -28,7 +28,7 @@ public class ExceptionsHandlerTest {
     }
 
     @Test
-    public void Except_HttpStatusNOTFOUND_When_ClassNotFoundException() {
+    public void When_HttpStatusNOTFOUND_Except_ClassNotFoundException() {
         ResponseEntity actualResult = ExceptionsHandler.handleException(new ClassNotFoundException("Exception NOT_FOUND"));
         ResponseEntity expectedResult = ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exception NOT_FOUND");
 
@@ -36,7 +36,7 @@ public class ExceptionsHandlerTest {
     }
 
     @Test
-    public void Except_HttpStatusUNPROCESSABLEENTITY_When_ThrowUnprocessableEntityException() {
+    public void When_HttpStatusUNPROCESSABLEENTITY_Except_ThrowUnprocessableEntityException() {
         ResponseEntity actualResult = ExceptionsHandler.handleException(new UnprocessableEntityException("Exception UNPROCESSABLE_ENTITY"));
         ResponseEntity expectedResult = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Exception UNPROCESSABLE_ENTITY");
 
@@ -44,7 +44,7 @@ public class ExceptionsHandlerTest {
     }
 
     @Test
-    public void Except_HttpStatusINTERNAL_SERVER_ERROR_When_IndexOutOfBoundsException() {
+    public void When_HttpStatusINTERNAL_SERVER_ERROR_Except_IndexOutOfBoundsException() {
         ResponseEntity actualResult = ExceptionsHandler.handleException(new IndexOutOfBoundsException("Exception INTERNAL_SERVER_ERROR"));
         ResponseEntity expectedResult = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception INTERNAL_SERVER_ERROR");
 
@@ -52,7 +52,7 @@ public class ExceptionsHandlerTest {
     }
 
     @Test
-    public void Except_HttpStatusINTERNAL_SERVER_ERROR_When_Exception() {
+    public void When_HttpStatusINTERNAL_SERVER_ERROR_Except_Exception() {
         ResponseEntity actualResult = ExceptionsHandler.handleException(new Exception("Exception INTERNAL_SERVER_ERROR"));
         ResponseEntity expectedResult = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Exception INTERNAL_SERVER_ERROR");
 
