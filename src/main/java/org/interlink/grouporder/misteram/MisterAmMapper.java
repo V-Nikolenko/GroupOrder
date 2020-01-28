@@ -1,10 +1,8 @@
 package org.interlink.grouporder.misteram;
 
-import org.interlink.grouporder.core.entity.GroupOrder;
 import org.interlink.grouporder.core.entity.MemberOrder;
 import org.interlink.grouporder.core.entity.Product;
-import org.interlink.grouporder.misteram.entity.Item;
-import org.interlink.grouporder.misteram.entity.Order;
+import org.interlink.grouporder.misteram.entity.MemberOrderDTO;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
@@ -21,21 +19,11 @@ public class MisterAmMapper {
         return mapper.map(object, objectClass);
     }
 
-    public static Order map(GroupOrder source, Order destination) {
-        List<Item> items = source.getAllProducts().stream()
-                .map(product -> map(product, Item.class))
-                .collect(Collectors.toList());
-        destination.setItems(items);
-        destination.setName(source.getCode());
-        destination.setUrl(source.getInternetShopURL());
-
-        return destination;
-    }
-
-    public static MemberOrder map(Order source, MemberOrder destination) {
+    public static MemberOrder map(MemberOrderDTO source, MemberOrder destination) {
         List<Product> products = source.getItems().stream()
                 .map(item -> map(item, Product.class))
                 .collect(Collectors.toList());
+
         destination.setName(source.getName());
         destination.setProducts(products);
         destination.setUrl(source.getUrl());

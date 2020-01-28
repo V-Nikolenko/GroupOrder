@@ -9,7 +9,7 @@ import org.interlink.grouporder.core.entity.view.GroupOrderView;
 import org.interlink.grouporder.core.handler.ExceptionsHandler;
 import org.interlink.grouporder.core.utils.OrderCodeGenerator;
 import org.interlink.grouporder.misteram.MisterAmMapper;
-import org.interlink.grouporder.misteram.entity.Order;
+import org.interlink.grouporder.misteram.entity.MemberOrderDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,9 +50,9 @@ public class OrderController {
 
     @JsonView(GroupOrderView.Basic.class)
     @PostMapping("/{code}/add-order")
-    public ResponseEntity addMemberToOrder(@PathVariable("code") String code, @RequestBody Order newOrder) {
+    public ResponseEntity addMemberToOrder(@PathVariable("code") String code, @RequestBody MemberOrderDTO newMemberOrderDTO) {
         try {
-            MemberOrder memberOrder = MisterAmMapper.map(newOrder, new MemberOrder());
+            MemberOrder memberOrder = MisterAmMapper.map(newMemberOrderDTO, new MemberOrder());
             DataStorage.getGroupOrder(code).addMemberToGroupOrder(memberOrder);
             return ResponseEntity.ok("Success");
         } catch (Exception e) {
@@ -74,7 +74,7 @@ public class OrderController {
     public ResponseEntity formGroupOrder(@PathVariable("code") String code) {
         try {
             GroupOrder groupOrder = DataStorage.getGroupOrder(code);
-            return ResponseEntity.ok(MisterAmMapper.map(groupOrder, new Order()));
+            return ResponseEntity.ok(groupOrder);
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
