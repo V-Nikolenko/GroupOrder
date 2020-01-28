@@ -59,8 +59,6 @@ public class OrderController {
         try {
             MemberOrder memberOrder = map(newMemberOrderDTO, new MemberOrder());
 
-            MemberOrder memberOrder = MisterAmMapper.map(newMemberOrderDTO, new MemberOrder());
-
             DataStorage.getGroupOrder(code).addMemberToGroupOrder(memberOrder);
             return ResponseEntity.ok("Success");
         } catch (Exception e) {
@@ -82,9 +80,7 @@ public class OrderController {
     public ResponseEntity formGroupOrder(@PathVariable("code") String code) {
         try {
             GroupOrder groupOrder = DataStorage.getGroupOrder(code);
-
             return ResponseEntity.ok(map(groupOrder, new FullOrderItemsDTO()));
-
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
