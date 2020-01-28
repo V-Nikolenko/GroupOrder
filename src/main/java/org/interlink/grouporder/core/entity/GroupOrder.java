@@ -40,7 +40,7 @@ public class GroupOrder {
         for (MemberOrder member : members) {
             products.addAll(member.getProducts());
         }
-        return new ProductsCounter().getAllGroupingProducts(products);
+        return ProductsCounter.getAllGroupingProducts(products);
     }
 
     public String getCode() {
