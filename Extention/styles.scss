@@ -1,0 +1,282 @@
+$mainColor: rgba(48, 180, 184, 0.85);
+$mainColor2: #FFFFFF;
+$mainColor3: #DCDCDC;
+
+
+//General----------
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    min-width: 190px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex: 1;
+    margin: 5px;
+}
+
+.heading {
+    text-align: center;
+    color: $mainColor;
+
+    &_size_md {
+        font-size: 1.3em;
+    }
+
+    &_size_lg {
+        font-size: 1.7em;
+    }
+}
+
+.btn {
+    cursor: pointer;
+    background: none;
+    text-decoration: none;
+    border: 1px solid $mainColor;
+    border-radius: 3px;
+    text-align: center;
+    display: block;
+    color:  $mainColor;
+    font-weight: 600;
+    
+    &_mg_5 {
+        margin: 5px;
+    }
+
+    &:hover {
+        background-color:  $mainColor;
+        color:  $mainColor2;
+    }
+    &_pd_3 {
+        padding: 3px;
+    }
+}
+
+.input {
+    border-radius: 3px;
+    border: 1px solid $mainColor3;
+
+    &:focus {
+        border-color: $mainColor3;
+        outline: 0;
+        box-shadow: 0 0 1px 2px rgba(48, 180, 184, 0.85);
+    }
+
+    &_invalid {
+        border-color: red;
+    }
+}
+
+.warning-text {
+    color: red;
+    font-size: 0.9em;
+    transition: 1s ease-in-out;
+}
+
+.display_none {
+    display: none;
+}
+
+//Heading---------------
+
+.home {
+    &__btn {
+        width: 70%; 
+    }
+
+}
+
+// New order ------------
+
+.newOrder {
+    &__input {
+       margin: 10px 5px 15px;
+       padding: 5px;
+    }
+
+    &__btn {
+        width: 70%;
+    }
+
+}
+
+//Connect -----------------
+
+.connect {
+    &__input {
+        margin: 10px 5px 15px;
+        padding: 5px;
+    }
+
+    &__btn {
+        width: 70%;
+    }
+}
+
+//Menu -----------------
+
+.menu {
+    &__text {
+        color: $mainColor;
+    }
+
+    &__text-success {
+        color: $mainColor;
+        text-align: center;
+        &::after {
+            content: ' \2713';
+        }
+    }
+
+    &__text-error{
+        color: red;
+        text-align: center;
+        &::after {
+        content: '\26A0'; 
+        }
+    }
+
+    &__btn {
+        display: flex;
+        width: 70%;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    &__orders-container {
+    width: 90%;
+    }
+
+    &__list {
+        margin: 0;
+        padding-left: 5px;
+    }
+}
+
+
+//Popup
+
+.confirmation {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+
+    &__btn {
+        margin: 10px 5px;
+        padding: 3px;
+        min-width: 45px;
+    }
+}
+  
+.confirm__exit {
+    color: $mainColor;
+    position: absolute;
+    top: 0px;
+    right: 3px;
+    font-size: 1.3em;
+    cursor: pointer;
+}
+  
+.confirm__btns-container {
+    display: flex;
+    justify-content: space-around;
+    width: 90%;
+}
+  
+.confirmation__window {
+    position: relative;
+    border: 1px solid $mainColor;
+    border-radius: 3px;
+    margin: auto;
+    width: 90%;
+    background-color: white;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+}
+
+//Loader --------------
+
+.lds-ellipsis {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: auto;
+
+    &_display_none {
+        display: none;
+    }
+}
+  
+.lds-ellipsis div {
+    position: absolute;
+    top: 33px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: $mainColor;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.lds-ellipsis div:nth-child(1) {
+    left: 8px;
+    animation: lds-ellipsis1 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(2) {
+    left: 8px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(3) {
+    left: 32px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(4) {
+    left: 56px;
+    animation: lds-ellipsis3 0.6s infinite;
+}
+  
+@keyframes lds-ellipsis1 {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes lds-ellipsis3 {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0);
+    }
+}
+@keyframes lds-ellipsis2 {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(24px, 0);
+    }
+}
+  
