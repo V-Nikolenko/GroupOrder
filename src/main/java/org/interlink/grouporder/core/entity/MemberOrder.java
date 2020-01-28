@@ -8,42 +8,12 @@ import org.interlink.grouporder.core.entity.view.GroupOrderView;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 public class MemberOrder {
     @JsonView(GroupOrderView.Basic.class)
     private String name;
     private String url;
     private List<Product> products = new ArrayList<>();
     private int fullPrice;
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public int getFullPrice() {
-        return fullPrice;
-    }
-
-    public void setFullPrice(int fullPrice) {
-        this.fullPrice = fullPrice;
-    }
 }

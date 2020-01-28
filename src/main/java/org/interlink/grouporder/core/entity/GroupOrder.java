@@ -1,17 +1,26 @@
 package org.interlink.grouporder.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.Getter;
+import lombok.Setter;
 import org.interlink.grouporder.core.entity.view.GroupOrderView;
 import org.interlink.grouporder.core.utils.ProductsCounter;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 public class GroupOrder {
+
     @JsonView(GroupOrderView.Basic.class)
     private String code;
     @JsonView(GroupOrderView.Extended.class)
     private String internetShopURL;
+    @JsonView(GroupOrderView.Extended.class)
+    private String fullPrice;
     @JsonView(GroupOrderView.Extended.class)
     private List<MemberOrder> members = new ArrayList<>();
 
@@ -20,8 +29,8 @@ public class GroupOrder {
     }
 
     private boolean isMemberInGroupOrder(MemberOrder member) {
-            return members.stream()
-                    .anyMatch(oldMember -> oldMember.getName().equals(member.getName()));
+        return members.stream()
+                .anyMatch(oldMember -> oldMember.getName().equals(member.getName()));
     }
 
     public void addMemberToGroupOrder(MemberOrder member) {
@@ -33,6 +42,8 @@ public class GroupOrder {
         } else {
             members.add(member);
         }
+
+        this.fullPrice = orderFullPrice();
     }
 
     public List<Product> getAllProducts() {
@@ -43,27 +54,13 @@ public class GroupOrder {
         return ProductsCounter.getAllGroupingProducts(products);
     }
 
-    public String getCode() {
-        return code;
-    }
+    private String orderFullPrice() {
+        DecimalFormat df = new DecimalFormat("#0.00");
+        BigDecimal fullOrderPrice = new BigDecimal("0");
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getInternetShopURL() {
-        return internetShopURL;
-    }
-
-    public void setInternetShopURL(String internetShopURL) {
-        this.internetShopURL = internetShopURL;
-    }
-
-    public List<MemberOrder> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<MemberOrder> members) {
-        this.members = members;
+        for (MemberOrder member : members) {
+            fullOrderPrice.add(new BigDecimal(member.getFullPrice()));
+        }
+        return df.format(fullOrderPrice);
     }
 }
