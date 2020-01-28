@@ -1,6 +1,6 @@
 package org.interlink.grouporder.misteram.entity;
 
-public class Item {
+public class ItemDTO {
     private int id;
     private String name;
     private int count;
