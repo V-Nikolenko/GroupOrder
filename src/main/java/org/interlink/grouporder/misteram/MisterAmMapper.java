@@ -1,7 +1,11 @@
 package org.interlink.grouporder.misteram;
 
+import org.interlink.grouporder.core.entity.GroupOrder;
 import org.interlink.grouporder.core.entity.MemberOrder;
 import org.interlink.grouporder.core.entity.Product;
+import org.interlink.grouporder.misteram.entity.FullOrderItemsDTO;
+import org.interlink.grouporder.misteram.entity.ItemDTO;
+
 import org.interlink.grouporder.misteram.entity.MemberOrderDTO;
 import org.modelmapper.ModelMapper;
 
@@ -31,4 +35,15 @@ public class MisterAmMapper {
 
         return destination;
     }
+
+    public static FullOrderItemsDTO map(GroupOrder source, FullOrderItemsDTO destination) {
+        List<ItemDTO> items = source.getAllProducts().stream()
+                .map(product -> map(product, ItemDTO.class))
+                .collect(Collectors.toList());
+
+        destination.setItems(items);
+
+        return destination;
+    }
+
 }
