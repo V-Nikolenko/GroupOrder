@@ -1,7 +1,6 @@
-package ord.interlink.grouporder.core.utils;
+package org.interlink.grouporder.core.utils;
 
 import org.interlink.grouporder.core.entity.Product;
-import org.interlink.grouporder.core.utils.ProductsCounter;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
@@ -14,7 +13,6 @@ public class ProductsCounterTest {
 
     @Test
     public void getAllGroupingProductsTest() {
-        ProductsCounter productsCounter = new ProductsCounter();
         List<Product> listProductsAct = new ArrayList<>();
         List<Product> expectedResult = new ArrayList<>();
 
@@ -44,7 +42,7 @@ public class ProductsCounterTest {
         expectedResult.add(item3Exp);
         expectedResult.add(item5Exp);
 
-        List<Product> actualResult = productsCounter.getAllGroupingProducts(listProductsAct);
+        List<Product> actualResult = ProductsCounter.getAllGroupingProducts(listProductsAct);
         int i = 0;
         for (Product prod1 : actualResult) {
             for (i = i; i < expectedResult.size(); i++) {

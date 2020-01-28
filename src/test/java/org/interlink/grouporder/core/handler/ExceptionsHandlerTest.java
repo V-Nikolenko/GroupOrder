@@ -1,9 +1,8 @@
-package ord.interlink.grouporder.core.handler;
+package org.interlink.grouporder.core.handler;
 
 import org.interlink.grouporder.core.exceptions.BadRequestException;
 import org.interlink.grouporder.core.exceptions.ForbiddenException;
 import org.interlink.grouporder.core.exceptions.UnprocessableEntityException;
-import org.interlink.grouporder.core.handler.ExceptionsHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.testng.annotations.Test;
