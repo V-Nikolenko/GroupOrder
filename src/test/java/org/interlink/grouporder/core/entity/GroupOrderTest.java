@@ -1,8 +1,5 @@
-package ord.interlink.grouporder.core.entity;
+package org.interlink.grouporder.core.entity;
 
-import org.interlink.grouporder.core.entity.GroupOrder;
-import org.interlink.grouporder.core.entity.MemberOrder;
-import org.interlink.grouporder.core.entity.Product;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;

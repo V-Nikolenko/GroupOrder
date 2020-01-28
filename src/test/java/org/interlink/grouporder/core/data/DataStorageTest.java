@@ -1,6 +1,5 @@
-package ord.interlink.grouporder.core.data;
+package org.interlink.grouporder.core.data;
 
-import org.interlink.grouporder.core.data.DataStorage;
 import org.interlink.grouporder.core.entity.GroupOrder;
 import org.interlink.grouporder.core.entity.MemberOrder;
 import org.interlink.grouporder.core.entity.Product;
@@ -87,7 +86,7 @@ public class DataStorageTest {
         DataStorage.getOrders().put("12345", groupOrder);
 
         expectedResult.put("12345", groupOrder);
-        DataStorage.addMemberToOrder("12345", memberOrder);
+        DataStorage.getGroupOrder("12345").addMemberToGroupOrder(memberOrder);
 
         assertEquals(DataStorage.getOrders(), expectedResult);
     }
