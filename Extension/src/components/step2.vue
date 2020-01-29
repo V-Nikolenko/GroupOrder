@@ -1,9 +1,10 @@
 <template>
     <div class="step2">
-        <h2
-                v-bind:class="['extension__step-heading', {'extension__step-heading_disabled': (!step.isDone && !step.isActive)}]">
-            Крок 2. Доповнити замовленная
-        </h2>
+        <step-header
+                v-bind:title="step.title"
+                v-bind:isDone="step.isDone"
+                v-bind:isActive="step.isActive"
+        ></step-header>
 
         <div v-if="step.isActive" class="step2__active-block">
 
@@ -23,9 +24,14 @@
 </template>
 
 <script>
+import stepHeader from './stepHeader.vue'
+
 export default {
     name: 'step2',
     props: ['step'],
+    components: {
+        stepHeader
+    },
     data() {
         return {
 

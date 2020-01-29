@@ -1,16 +1,18 @@
 <template>
     <div class="step3">
-        <h2
-                v-bind:class="['extension__step-heading', {'extension__step-heading_disabled': (!step.isDone && !step.isActive)}]">
-            Крок 3. Зібрати замовлення
-        </h2>
+        <step-header
+                v-bind:title="step.title"
+                v-bind:isDone="step.isDone"
+                v-bind:isActive="step.isActive"
+        ></step-header>
 
-        <div v-if="!step.isActive" class="step3__active-block">
+        <div v-if="step.isActive" class="step3__active-block">
 
             <a href="#" v-on:click="showCheck = !showCheck">{{showCheckButton}}</a>
             <div class="step3__container">
 
                 <button class="step3__btn">Зібрати</button>
+
             </div>
 
         </div>
@@ -21,23 +23,27 @@
 </template>
 
 <script>
-    export default {
-        name: 'step3',
-        props: ['step'],
+import stepHeader from "./stepHeader";
 
-        data() {
-            return {
-                showCheck: true,
-            }
-        },
-        computed: {
-            showCheckButton : function () {
-                return this.showCheck ? 'Показати' : 'Сховати';
-            }
-        },
-        methods: {
+export default {
+    name: 'step3',
+    props: ['step'],
+    components: {
+        stepHeader
+    },
+    data() {
+        return {
+            showCheck: true,
         }
+    },
+    computed: {
+        showCheckButton : function () {
+            return this.showCheck ? 'Показати' : 'Сховати';
+        }
+    },
+    methods: {
     }
+}
 </script>
 
 <style lang="scss" scoped>
