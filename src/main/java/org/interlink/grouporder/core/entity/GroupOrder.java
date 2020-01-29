@@ -23,6 +23,7 @@ public class GroupOrder {
     private String fullPrice;
     @JsonView(GroupOrderView.Extended.class)
     private List<MemberOrder> members = new ArrayList<>();
+    private boolean activeOrderStatus = true;
 
     public GroupOrder(String code) {
         this.code = code;
