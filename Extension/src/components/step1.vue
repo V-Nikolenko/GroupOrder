@@ -1,11 +1,11 @@
 <template>
     <div class="step1">
         <h2 
-            v-bind:class="['extension__step-heading', {'extension__step-heading_disabled': step.done && !step.active}]">
+            v-bind:class="['extension__step-heading', {'extension__step-heading_disabled': (!step.isDone && !step.isActive)}]">
             Крок 1. Обрати замовлення
         </h2>
-<!--         
-        <div v-bind="step.isActive" class="step1__active-block">
+        
+        <div v-show="step.isActive" class="step1__active-block">
             
             <ol class="step1__list">
                 <li v-for="(subStep, index) in subSteps" v-bind:key="index">{{ '1.' + (index + 1) + ". " + subStep }}</li>
@@ -21,7 +21,7 @@
                 <button class="step1__btn">Приєднатися до існуючого замовлення</button>
             </div>
 
-        </div> -->
+        </div>
     </div>
 </template>
 
@@ -35,12 +35,6 @@ export default {
         }
     },
     computed: {
-        headingClasses: function() {
-            return {
-                'extension__step-heading_disabled': step.done,
-                'extension__step-heading': true
-            }
-        }
     },
     methods: {
 
