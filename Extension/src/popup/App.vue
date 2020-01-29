@@ -1,12 +1,12 @@
 <template>
   <div>
-    <step1 v-bind:step=steps[0]></step1>    
+    <step1 v-bind:step=steps[0] v-on:next='nextStep(steps[0])'></step1>    
     
-    <step2 v-bind:step=steps[1]></step2> 
+    <step2 v-bind:step=steps[1] v-on:next='nextStep(steps[1])'></step2> 
 
-    <step3 v-bind:step=steps[2]></step3>    
+    <step3 v-bind:step=steps[2] v-on:next='nextStep(steps[2])'></step3>    
 
-    <step4 v-bind:step=steps[3]></step4>    
+    <step4 v-bind:step=steps[3] v-on:next='nextStep(steps[3])'></step4>    
     
   </div>
 </template>
@@ -53,6 +53,20 @@ export default {
           title: '4. Показати борги'
         }
       ]
+    }
+  },
+  methods: {
+    nextStep: function(step) {
+      let currentId =  this.steps.indexOf(step)
+
+      if (currentId === (this.steps.length-1)) {
+        return
+      } else {
+        step.isActive = !step.isActive;
+        step.isDone = !step.isDone;
+        this.steps[currentId+1].isActive = true;
+      }
+
     }
   }
 }

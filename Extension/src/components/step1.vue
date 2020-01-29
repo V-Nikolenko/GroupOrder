@@ -13,7 +13,7 @@
             </ol>
 
             <div class="step1__container">
-                <button class="step1__btn">Створити замовлення</button>
+                <button class="step1__btn" v-on:click="newOrder()">Створити замовлення</button>
 
                 <span class="step1__delimeter">або</span>
 
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import {SendConnectWithCodeRequest} from './requests.js';
+import {sendConnectWithCodeRequest, sendCreateNewOrderRequest} from './requests.js';
 import stepHeader from './stepHeader.vue'
 
 export default {
@@ -53,11 +53,35 @@ export default {
 
     },
     methods: {
+        newOrder: function() {
+            // chrome.storage.sync.set({'sss': 884})
+            // chrome.storage.sync.get('sss', function(result) {
+                // console.log(result.sss)
+            // })
+            sendCreateNewOrderRequest()
+            .then((resp) => {
+                console.log(resp)
+                if(resp.status === 200) {
+                    return resp.json()
+                } else {
+                    throw new Error(resp.text)
+                }
+            }).then((resp) => {
+                chrome.storage.sync.set({'code': resp.code})
+                this.$emit('next');
+            })
+            .catch((error)=> {
+                //TODO: try again
+                console.log(error)
+            })
+        },
+
         connectWithCode: function() {
-            SendConnectWithCodeRequest(this.code).then((resp) => {
+            sendConnectWithCodeRequest(this.code)
+            .then((resp) => {
                 if(resp.status === 200) {
                     //TODO: call next step function
-                    
+                    this.$emit('next');
                 } else {
                     //TODO: make borders red
                 }

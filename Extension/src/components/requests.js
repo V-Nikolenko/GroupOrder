@@ -1,22 +1,55 @@
-let path = 'http://localhost:8080/orders/'
+let path = 'http://localhost:8080/orders'
 
-export async function SendAllUsersDishesRequest(data) {
+export async function sendCreateNewOrderRequest(data) {
     return await fetch(path, {
         method: 'POST',
         body: JSON.stringify(data)
     });
 }
 
-export async function SendGetOrdersListRequest(code) {
-    return fetch(path + code + '/show-group-order', {});
-}
 
-export async function SendGetAllDishesRequest(code) {
-    return fetch(path + code + '/form-group-order', {});
-}
-
-export async function SendConnectWithCodeRequest(code) {
-    return fetch (path + code + '/connect', {
+export async function sendConnectWithCodeRequest(code) {
+    return fetch (path + '/' + code + '/connect', {
         method: 'POST'
     });
+}
+
+
+export async function sendMemberOrder(code, body) {
+    return fetch(path + '/' + code + '/add-member-order', {
+        method: "POST",
+        body: JSON.stringify({
+          // ORder: name, email, url,           
+        })
+    });
+}
+
+
+export async function sendGetOrdersListRequest(code) {
+    return fetch(path + '/' + code + '/show-group-order');
+}
+
+
+export async function sendGetAllDishesRequest(code) {
+    return fetch(path + '/' + code + '/form-group-order');
+}
+
+
+export async function sendRemoveMemberFromOrder(code) {
+    return fetch (path + '/' + code + '/remove-from-order', {
+        method: 'POST',
+        body: {} //Name, email, url
+    })
+}
+
+
+export async function sendLockOrderRequest() {
+   return fetch (path + '/' + code +'/lock-group-order', {
+       method: 'POST'
+   });
+}
+
+
+export async function sendGetSplitBillData(code) {
+    return fetch (path + '/' + code + '/group-order-debt');
 }
