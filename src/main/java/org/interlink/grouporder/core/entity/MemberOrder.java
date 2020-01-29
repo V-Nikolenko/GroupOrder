@@ -13,6 +13,7 @@ import java.util.List;
 public class MemberOrder {
     @JsonView(GroupOrderView.Basic.class)
     private String name;
+    private String email;
     private String url;
     private List<Product> products = new ArrayList<>();
     private int fullPrice;
