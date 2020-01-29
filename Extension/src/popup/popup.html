@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700,900&display=swap&subset=cyrillic" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css">
+  <% if (NODE_ENV === 'development') { %>
+  <!-- Load some resources only in development environment -->
+  <% } %>
+</head>
+<body class="extension">
+  <header>
+    <h1 class="extension__title">Group Order</h1>
+  </header>
+
+  <main>
+    <div id="app"></div>
+  </main>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

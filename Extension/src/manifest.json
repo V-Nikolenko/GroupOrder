@@ -1,0 +1,36 @@
+{
+  "name": "Group Order-extension",
+  "description": "Extension to make a group order",
+  "version": null,
+  "manifest_version": 2,
+  "icons": {
+    "48": "icons/icon_48.png",
+    "128": "icons/icon_128.png"
+  },
+
+  "page_action": {
+    "default_title": "Group Grder extension",
+    "default_popup": "popup/popup.html"
+  },
+
+  "content_scripts": [
+    {
+        "matches": ["*://misteram.com.ua/*"],
+        "js": ["content.js"]
+    }
+  ],
+
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+
+  "permissions": [
+    "activeTab",
+    "<all_urls>",
+    "tabs",
+    "webRequestBlocking",
+    "webRequest"
+]
+}
