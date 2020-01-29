@@ -29,6 +29,7 @@ public class MisterAmMapper {
                 .collect(Collectors.toList());
 
         destination.setName(source.getName());
+        destination.setEmail(source.getEmail());
         destination.setProducts(products);
         destination.setUrl(source.getUrl());
         destination.setFullPrice(source.getFullPrice());

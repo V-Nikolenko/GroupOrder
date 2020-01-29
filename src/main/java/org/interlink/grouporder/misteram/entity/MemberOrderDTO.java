@@ -9,6 +9,7 @@ import java.util.List;
 @Setter
 public class MemberOrderDTO {
     private String name;
+    private String email;
     private String url;
     private List<ItemDTO> items;
     private int fullPrice;

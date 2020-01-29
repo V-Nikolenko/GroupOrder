@@ -31,6 +31,7 @@ public class SplitBillMapper {
 
     public static MemberDTO map(MemberOrder source, MemberDTO destination) {
         destination.setName(source.getName());
+        destination.setEmail(source.getEmail());
         destination.setPrice(source.getFullPrice());
         destination.setCount(1);
 
