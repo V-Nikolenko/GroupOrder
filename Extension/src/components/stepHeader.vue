@@ -1,7 +1,5 @@
 <template>
-   <h1 v-bind:class="['step-heading', {'step-heading_disabled': (!isDone && !isActive)}]"> 
-       {{ title }}
-   </h1>
+    <h1 v-bind:class="classes">{{ title }}</h1>
 </template>
 
 <script>
@@ -10,11 +8,19 @@ export default {
     props: ['title', 'isDone', 'isActive'],
     data() {
         return {
-            classes: {
 
+        }
+    },
+    computed: {
+        classes: function() {
+            return {
+                'step-heading': true,
+                'step': true,
+                'step-heading_disabled': (!this.isActive && !this.isDone)
             }
         }
     }
+
 }
 </script> 
 
@@ -24,13 +30,9 @@ $color2: gray;
 
 .step-heading {
     margin: 0;
-    width: 100%;
     display: flex;
     align-items: center;
-    padding: 3px;
     border: 1px solid $color2;
-    box-sizing: border-box;
-    min-height: 35px;
     font-size: 18px;
     border-top: none;
     background-color: $color1;

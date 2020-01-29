@@ -92,29 +92,27 @@ body {
     width: 100%;
     display: flex;
     align-items: center;
-    padding: 3px;
     border: 1px solid $color2;
     box-sizing: border-box;
-  }
-
-  &__title {
     min-height: 40px;
     font-size: 22px;
   }
 }
 
 .doneStep {
-  box-sizing: border-box;
-  width: 100%;
   font-size: 16px;
-  min-height: 35px;
   border: 1px solid $color2;
   border-top: none;
 }
 
-h1 {
-  width: 300px
+.step {
+  padding: 3px;
+  min-height: 35px;
+  width: 100%;
+  box-sizing: border-box;
+
 }
+
 
 </style>
 

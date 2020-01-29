@@ -18,9 +18,10 @@ export async function sendConnectWithCodeRequest(code) {
 export async function sendMemberOrder(code, body) {
     return fetch(path + '/' + code + '/add-member-order', {
         method: "POST",
-        body: JSON.stringify({
-          // ORder: name, email, url,           
-        })
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
     });
 }
 

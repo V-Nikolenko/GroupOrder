@@ -15,8 +15,10 @@ chrome.runtime.onMessage.addListener(
     }
 )
 
+let misteramPath = 'https://misteram.com.ua';
+
 async function SendGetOrdersRequest() {
-    return await fetch("https://misteram.com.ua/api/cart/get?lang=ua")
+    return await fetch(misteramPath + '/api/cart/get?lang=ua')
     .then((resp) => {
         if (resp.status === 200) {
             return resp.json();
@@ -36,7 +38,7 @@ async function SendAddDishRequest(dish) {
         dishId: dish.id
     }
 
-    return fetch("https://misteram.com.ua/api/cart/add?lang=ua", {
+    return fetch( misteramPath + '/api/cart/add?lang=ua', {
         headers: {
             "content-type": "application/json;charset=UTF-8"
         },
@@ -52,7 +54,7 @@ async function SendRemoveDishRequest(dish) {
         optionId: dish.optionId,
         optionValue: dish.optionValue
     }
-    return fetch('https://misteram.com.ua/api/cart/remove?lang=ua', {
+    return fetch(misteramPath + '/api/cart/remove?lang=ua', {
         headers: {
             "content-type": "application/json;charset=UTF-8",  
         },

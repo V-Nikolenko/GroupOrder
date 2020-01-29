@@ -10,10 +10,10 @@
 
             <div class="step2__container">
 
-                <input type="text" name="name" class="step2__input" placeholder="Ваше ім'я">
-                <input type="text" name="email" class="step2__input" placeholder="Ваша почта">
+                <input v-model="name" type="text" name="name" class="step2__input" placeholder="Ваше ім'я">
+                <input v-model="email" type="text" name="email" class="step2__input" placeholder="Ваша почта">
 
-                <button class="step2__btn">Доповнити групове замовлення</button>
+                <button class="step2__btn" v-on:click="sendOrder()">Доповнити групове замовлення</button>
             </div>
 
         </div>
@@ -24,7 +24,8 @@
 </template>
 
 <script>
-import stepHeader from './stepHeader.vue'
+import stepHeader from './stepHeader.vue';
+import {sendMemberOrder} from './requests.js';
 
 export default {
     name: 'step2',
@@ -34,14 +35,32 @@ export default {
     },
     data() {
         return {
-
+            name: '',
+            email: ''
         }
     },
     computed: {
 
     },
     methods: {
+        sendOrder: function() {
 
+
+            chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+                chrome.tabs.sendMessage(tabs[0].id, {type: 'getOrders'}, (response) => {
+                    chrome.storage.sync.get(['user'], (result) => {
+                    
+                        Object.assign(result.user, {'name': this.name, 'email': this.email})
+                        chrome.storage.sync.set({'user': result.user});
+
+                        response.email = this.email;
+                        response.name = this.name;
+
+                        sendMemberOrder(result.user.code, response).then((resp)=>{})
+                    })
+                })
+            })
+        }
     }
 }
 </script>

@@ -3,8 +3,8 @@
         <step-header 
             v-bind:title="step.title"
             v-bind:isDone="step.isDone"
-            v-bind:isActive="step.isActive"
-        ></step-header>
+            v-bind:isActive="step.isActive">
+        </step-header>
 
         <section v-show="step.isActive" class="step1__active-block">
             
@@ -24,10 +24,11 @@
 
         </section>
         
-        <section v-show="step.isDone" class="doneStep doneStep-step1">
-            <a href="#">Restaurant</a>
+        <section v-show="step.isDone" class="doneStep doneStep-step1 step">
+            <a href="#" id="link">{{getCode}}</a>
             <!-- TODO: add restaurat -->
-            <img src="/images/logout.png" alt="Вийти" title="Вийти" class="logout"> 
+            <img src="/images/copy.png" alt="Копіювати" title="Копіювати" class="img copy-img">
+            <img src="/images/logout.png" alt="Вийти" title="Вийти" class="img logout-img"> 
         </section>
         
     </div>
@@ -50,14 +51,15 @@ export default {
         }
     },
     computed: {
-
+        getCode: function() {
+            chrome.storage.sync.get(['user'], function(result) {
+                link.textContent =  result.user.code;
+            })
+        }
     },
+
     methods: {
         newOrder: function() {
-            // chrome.storage.sync.set({'sss': 884})
-            // chrome.storage.sync.get('sss', function(result) {
-                // console.log(result.sss)
-            // })
             sendCreateNewOrderRequest()
             .then((resp) => {
                 console.log(resp)
@@ -67,7 +69,7 @@ export default {
                     throw new Error(resp.text)
                 }
             }).then((resp) => {
-                chrome.storage.sync.set({'code': resp.code})
+                chrome.storage.sync.set({'user': {'code': resp.code}})
                 this.$emit('next');
             })
             .catch((error)=> {
@@ -86,7 +88,6 @@ export default {
                     //TODO: make borders red
                 }
             })
-
             this.code = '';
         }
     }
@@ -183,12 +184,24 @@ $color4: white;
 
 }
 
-.logout {
+.img {
     width: 25px;
     height: 25px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
+.copy-img {
+    position: absolute;
+    right: 45px;
+}
+
+.logout-img {
+    position: absolute;
+    right: 5px
+}
 .doneStep-step1 {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
