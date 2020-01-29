@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Getter;
 import lombok.Setter;
 import org.interlink.grouporder.core.entity.view.GroupOrderView;
+import org.interlink.grouporder.core.exceptions.BadRequestException;
 import org.interlink.grouporder.core.utils.ProductsCounter;
 
 import java.math.BigDecimal;
@@ -35,16 +36,20 @@ public class GroupOrder {
     }
 
     public void addMemberToGroupOrder(MemberOrder member) {
-        if (isMemberInGroupOrder(member)) {
-            members.stream()
-                    .filter(oldMember -> oldMember.getName().equals(member.getName()))
-                    .findFirst()
-                    .ifPresent(oldMember -> oldMember = member);
+        if (!(member.getUrl().equals(getInternetShopURL()))) {
+            throw new BadRequestException("Internet shop url bad");
         } else {
-            members.add(member);
-        }
+            if (isMemberInGroupOrder(member)) {
+                members.stream()
+                        .filter(oldMember -> oldMember.getName().equals(member.getName()))
+                        .findFirst()
+                        .ifPresent(oldMember -> oldMember = member);
+            } else {
+                members.add(member);
+            }
 
-        this.fullPrice = orderFullPrice();
+            this.fullPrice = orderFullPrice();
+        }
     }
 
     public List<Product> getAllProducts() {

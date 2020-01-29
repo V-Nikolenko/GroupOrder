@@ -16,7 +16,7 @@ public class OrderCodeGenerator {
         String code;
         do {
             code = OrderCodeGenerator.generateCode();
-        } while (DataStorage.getOrders().containsKey(code));
+        } while (DataStorage.isContains(code));
 
         return code;
     }
