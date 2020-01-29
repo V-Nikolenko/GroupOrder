@@ -6,9 +6,11 @@
                 v-bind:isActive="step.isActive"
         ></step-header>
 
-        <div v-if="step.isActive" class="step4__active-block">
-
+        <div v-if="!step.isActive" class="step4__active-block">
             <div class="step4__container">
+                <ul>
+                    <li v-for="member in members">{{member.name}} + "  ыаыааыыа  " + {{member.fullPrice}}</li>
+                </ul>
             </div>
         </div>
         <div v-else-if="step.isDone">
