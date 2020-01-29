@@ -1,6 +1,7 @@
 package org.interlink.grouporder.core.entity;
 
 import org.interlink.grouporder.core.data.DataStorage;
+import org.interlink.grouporder.core.exceptions.BadRequestException;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
@@ -32,14 +33,36 @@ public class GroupOrderTest {
         MemberOrder memberOrder1 = new MemberOrder();
         MemberOrder memberOrder2 = new MemberOrder();
         GroupOrder groupOrder = new GroupOrder("12345");
-
+        memberOrder2.setUrl("Fugu");
+        groupOrder.setInternetShopURL("misterAm");
         fillGroupOrder(productsVasya, memberOrder1, groupOrder);
 
+        DataStorage.getOrders().put("12345", groupOrder);
+        expectedResult.put("12345", groupOrder);
+        groupOrder.addMemberToGroupOrder(memberOrder1);
+
+        assertEquals(DataStorage.getOrders(), expectedResult);
+    }
+
+    @Test(expectedExceptions = BadRequestException.class)
+    public void When_RestaurantFromMemberOrderNotCoincideInGroupOrder_Expect_BadRequestException() {
+        List<Product> productsVasya = new ArrayList<>();
+        Map<String, GroupOrder> expectedResult = new LinkedHashMap<>();
+        MemberOrder memberOrder1 = new MemberOrder();
+        MemberOrder memberOrder2 = new MemberOrder();
+
+        GroupOrder groupOrder = new GroupOrder("12345");
+        memberOrder1.setUrl("Fugu");
+        memberOrder2.setUrl("Fugu");
+        groupOrder.setInternetShopURL("misterAm");
+
+        fillGroupOrder(productsVasya, memberOrder1, groupOrder);
         DataStorage.getOrders().put("12345", groupOrder);
         expectedResult.put("12345", groupOrder);
         groupOrder.addMemberToGroupOrder(memberOrder2);
 
         assertEquals(DataStorage.getOrders(), expectedResult);
+
     }
 
     @Test
@@ -49,21 +72,19 @@ public class GroupOrderTest {
         MemberOrder memberOrder1 = new MemberOrder();
         MemberOrder memberOrder2 = new MemberOrder();
         GroupOrder groupOrder = new GroupOrder("12345");
+        memberOrder1.setUrl("misterAm");
+        memberOrder2.setUrl("misterAm");
+        groupOrder.setInternetShopURL("misterAm");
 
         fillGroupOrder(productsVasya, memberOrder1, groupOrder);
         fillGroupOrder(productsVasya, memberOrder2, groupOrder);
-
         DataStorage.getOrders().put("12345", groupOrder);
         expectedResult.put("12345", groupOrder);
-        groupOrder.addMemberToGroupOrder(memberOrder2);
+        groupOrder.addMemberToGroupOrder(memberOrder1);
 
         assertEquals(DataStorage.getOrders(), expectedResult);
     }
 
-    @Test
-    public void When_MembersIsEmpty_Expect_ReturnEmptyListProducts() {
-
-    }
     @Test
     public void When_MembersIsNotEmpty_Expect_ReturnEmptyListProducts() {
         GroupOrder groupOrder = new GroupOrder("12345");
