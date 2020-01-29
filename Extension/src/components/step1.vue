@@ -109,9 +109,6 @@ $color3: white;
             color: $color3;
             background-color: $color2;
         }
-        // &:focus {
-        //     outline: none;
-        // }
     }
     &__btn,
     &__input {
