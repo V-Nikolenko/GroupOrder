@@ -26,13 +26,11 @@ public class OrderController {
     @PostMapping
     @JsonView(GroupOrderView.Basic.class)
     public GroupOrder createGroupOrder() {
-
-        String code = OrderCodeGenerator.generateCode();
+        String code = OrderCodeGenerator.generateUniqueCode();
         GroupOrder groupOrder = new GroupOrder(code);
         DataStorage.addGroupOrder(code, groupOrder);
-
-        ScheduledExecutorService schedule = new ScheduledThreadPoolExecutor(1);
-        schedule.schedule(() -> DataStorage.removeGroupOrder(code), 2, TimeUnit.HOURS);
+//        ScheduledExecutorService schedule = new ScheduledThreadPoolExecutor(1);
+//        schedule.schedule(() -> DataStorage.removeGroupOrder(code), 2, TimeUnit.HOURS);
 
         return groupOrder;
     }
@@ -40,7 +38,7 @@ public class OrderController {
     @PostMapping("{code}/connect")
     public ResponseEntity connectToGroupOrder(@PathVariable("code") String code) {
         try {
-            if (DataStorage.isContains(code)) {
+            if (DataStorage.isContains(code) && DataStorage.getOrders().get(code).isActiveOrderStatus()) {
                 return ResponseEntity.ok("Success!");
             } else {
                 return ResponseEntity.notFound().build();
@@ -77,6 +75,7 @@ public class OrderController {
     public ResponseEntity formGroupOrder(@PathVariable("code") String code) {
         try {
             GroupOrder groupOrder = DataStorage.getGroupOrder(code);
+            groupOrder.setActiveOrderStatus(false);
             return ResponseEntity.ok(map(groupOrder, new FullOrderItemsDTO()));
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
