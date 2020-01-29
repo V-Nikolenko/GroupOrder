@@ -1,10 +1,11 @@
 <template>
     <div class="step1">
-        <h2 
-            v-bind:class="['extension__step-heading', {'extension__step-heading_disabled': (!step.isDone && !step.isActive)}]">
-            Крок 1. Обрати замовлення
-        </h2>
-        
+        <step-header 
+            v-bind:title="step.title"
+            v-bind:isDone="step.isDone"
+            v-bind:isActive="step.isActive"
+        ></step-header>
+
         <section v-show="step.isActive" class="step1__active-block">
             
             <ol class="step1__list">
@@ -34,10 +35,14 @@
 
 <script>
 import {SendConnectWithCodeRequest} from './requests.js';
+import stepHeader from './stepHeader.vue'
 
 export default {
     name: 'step1',
     props: ['step'],
+    components: {
+        stepHeader
+    },
     data() {
         return {
             code: null,
@@ -52,6 +57,7 @@ export default {
             SendConnectWithCodeRequest(this.code).then((resp) => {
                 if(resp.status === 200) {
                     //TODO: call next step function
+                    
                 } else {
                     //TODO: make borders red
                 }

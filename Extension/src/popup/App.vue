@@ -31,22 +31,26 @@ export default {
       steps: [
         {
           isActive: true,
-          isDone: false
+          isDone: false,
+          title: '1. Обрати заклад'
         },
         
         {
           isActive: false,
-          isDone: false
+          isDone: false,
+          title: '2. Доповнити замовлення'
         },
         
         {
           isActive: false,
-          isDone: false
+          isDone: false,
+          title: '3. Зібрати замовлення'
         },
 
         {
           isActive: false,
-          isDone: false
+          isDone: false,
+          title: '4. Показати борги'
         }
       ]
     }
@@ -69,7 +73,6 @@ body {
   flex-direction: column;
   width: 400px;
 
-  &__step-heading,
   &__title {
     margin: 0;
     width: 100%;
@@ -84,19 +87,6 @@ body {
     min-height: 40px;
     font-size: 22px;
   }
-
-  &__step-heading {
-    min-height: 35px;
-    font-size: 18px;
-    border-top: none;
-    background-color: $color1;
-
-    &_disabled {
-      color: $color2;
-    }
-  }
-   
-  
 }
 
 .doneStep {
