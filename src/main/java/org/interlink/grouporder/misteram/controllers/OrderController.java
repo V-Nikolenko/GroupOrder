@@ -49,7 +49,7 @@ public class OrderController {
     }
 
     @JsonView(GroupOrderView.Basic.class)
-    @PostMapping("/{code}/add-order")
+    @PostMapping("/{code}/add-member-order")
     public ResponseEntity addMemberToOrder(@PathVariable("code") String code, @RequestBody MemberOrderDTO newMemberOrderDTO) {
         try {
             MemberOrder memberOrder = map(newMemberOrderDTO, new MemberOrder());
