@@ -7,7 +7,6 @@
     <step3 v-bind:step=steps[2]></step3>    
 
     <step4 v-bind:step=steps[3]></step4>    
-
     
   </div>
 </template>
@@ -57,6 +56,7 @@ export default {
 
 <style lang="scss">
 $color1: silver;
+$color2: gray;
 
 body {
   margin: 0;
@@ -76,7 +76,7 @@ body {
     display: flex;
     align-items: center;
     padding: 3px;
-    border: 1px solid $color1;
+    border: 1px solid $color2;
     box-sizing: border-box;
   }
 
@@ -89,21 +89,27 @@ body {
     min-height: 35px;
     font-size: 18px;
     border-top: none;
+    background-color: $color1;
 
     &_disabled {
-      color: $color1;
+      color: $color2;
     }
   }
    
   
 }
 
-h1 {
-  width: 300px
+.doneStep {
+  box-sizing: border-box;
+  width: 100%;
+  font-size: 16px;
+  min-height: 35px;
+  border: 1px solid $color2;
+  border-top: none;
 }
 
-p {
-  font-size: 20px;
+h1 {
+  width: 300px
 }
 
 </style>

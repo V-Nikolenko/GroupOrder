@@ -5,7 +5,7 @@
             Крок 1. Обрати замовлення
         </h2>
         
-        <div v-show="step.isActive" class="step1__active-block">
+        <section v-show="step.isActive" class="step1__active-block">
             
             <ol class="step1__list">
                 <li v-for="(subStep, index) in subSteps" v-bind:key="index">{{ '1.' + (index + 1) + ". " + subStep }}</li>
@@ -16,36 +16,58 @@
 
                 <span class="step1__delimeter">або</span>
 
-                <input type="text" name="code" class="step1__input" placeholder="Код замовлення">
+                <input v-model="code" type="text" name="code" class="step1__input" placeholder="Код замовлення">
 
-                <button class="step1__btn">Приєднатися до існуючого замовлення</button>
+                <button class="step1__btn" v-on:click="connectWithCode()">Приєднатися до існуючого замовлення</button>
             </div>
 
-        </div>
+        </section>
+        
+        <section v-show="step.isDone" class="doneStep doneStep-step1">
+            <a href="#">Restaurant</a>
+            <!-- TODO: add restaurat -->
+            <img src="/images/logout.png" alt="Вийти" title="Вийти" class="logout"> 
+        </section>
+        
     </div>
 </template>
 
 <script>
+import {SendConnectWithCodeRequest} from './requests.js';
+
 export default {
     name: 'step1',
     props: ['step'],
     data() {
         return {
+            code: null,
             subSteps: ['Додати страви', 'Перевірити всі страви']
         }
     },
     computed: {
+
     },
     methods: {
+        connectWithCode: function() {
+            SendConnectWithCodeRequest(this.code).then((resp) => {
+                if(resp.status === 200) {
+                    //TODO: call next step function
+                } else {
+                    //TODO: make borders red
+                }
+            })
 
+            this.code = '';
+        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
 $color1: silver;
-$color2: #4b0082;
-$color3: white;
+$color2: gray;
+$color3: #4b0082;
+$color4: white;
 
 .step1 {
     display: flex;
@@ -68,7 +90,7 @@ $color3: white;
     &__active-block {
         display: flex;
         flex-direction: column;
-        border: 1px solid silver;
+        border: 1px solid $color2;
         border-top: none;
         padding: 3px;
         min-height: 250px;
@@ -80,7 +102,7 @@ $color3: white;
         &::before {
             content: '';
             display: inline-block;
-            border-top: 2px solid silver;
+            border-top: 2px solid $color2;
             width: 120px;
             position: relative;
             top: -2px;
@@ -98,16 +120,16 @@ $color3: white;
     
     &__btn {
         height: 50px;
-        color: $color2;
-        border: 1px solid $color2;
+        color: $color3;
+        border: 1px solid $color3;
         cursor: pointer;
         border-radius: 10px;
-        background-color: $color3; 
+        background-color: $color4; 
         transition-duration: 0.1s;
 
         &:hover {
-            color: $color3;
-            background-color: $color2;
+            color: $color4;
+            background-color: $color3;
         }
     }
     &__btn,
@@ -121,15 +143,24 @@ $color3: white;
     &__input {
         min-height: 35px;
         border-radius: 5px;
-        border: 1px solid $color1;
+        border: 1px solid $color2;
         
         &:focus {
             outline: none;
-            box-shadow: 0 0 1px 2px $color1;
+            box-shadow: 0 0 1px 2px $color2;
         }
     }
 
 }
 
+.logout {
+    width: 25px;
+    height: 25px;
+}
 
+.doneStep-step1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 </style>

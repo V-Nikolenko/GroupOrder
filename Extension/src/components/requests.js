@@ -1,21 +1,21 @@
-path = 'http://localhost:8080/orders/'
+let path = 'http://localhost:8080/orders/'
 
-async function SendAllUsersDishes(resp) {
+export async function SendAllUsersDishesRequest(data) {
     return await fetch(path, {
         method: 'POST',
-        body: JSON.stringify(resp)
+        body: JSON.stringify(data)
     });
 }
 
-async function GetOrdersList(code) {
+export async function SendGetOrdersListRequest(code) {
     return fetch(path + code + '/show-group-order', {});
 }
 
-async function GetAllDishes(code) {
+export async function SendGetAllDishesRequest(code) {
     return fetch(path + code + '/form-group-order', {});
 }
 
-async function ConnectWithCode(code) {
+export async function SendConnectWithCodeRequest(code) {
     return fetch (path + code + '/connect', {
         method: 'POST'
     });
