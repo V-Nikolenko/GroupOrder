@@ -5,7 +5,7 @@
             Крок 2. Доповнити замовленная
         </h2>
 
-        <div v-show="step.isActive" class="step2__active-block">
+        <div v-if="step.isActive" class="step2__active-block">
 
             <div class="step2__container">
 
@@ -14,6 +14,9 @@
 
                 <button class="step2__btn">Доповнити групове замовлення</button>
             </div>
+
+        </div>
+        <div v-else-if="step.isDone">
 
         </div>
     </div>
