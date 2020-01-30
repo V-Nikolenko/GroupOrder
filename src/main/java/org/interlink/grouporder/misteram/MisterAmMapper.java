@@ -3,7 +3,6 @@ package org.interlink.grouporder.misteram;
 import org.interlink.grouporder.core.entity.GroupOrder;
 import org.interlink.grouporder.core.entity.MemberOrder;
 import org.interlink.grouporder.core.entity.Product;
-import org.interlink.grouporder.misteram.entity.CodeDTO;
 import org.interlink.grouporder.misteram.entity.FullOrderItemsDTO;
 import org.interlink.grouporder.misteram.entity.ItemDTO;
 
@@ -46,11 +45,6 @@ public class MisterAmMapper {
         destination.setFullPrice(source.getFullPrice());
         destination.setItems(items);
 
-        return destination;
-    }
-
-    public static CodeDTO map(String source, CodeDTO destination){
-        destination.setCode(source);
         return destination;
     }
 }
