@@ -1,25 +1,201 @@
 <template>
-    <div>{{step}}</div>
+    <div class="step3">
+        <step-header
+                v-bind:title="step.title"
+                v-bind:isDone="step.isDone"
+                v-bind:isActive="step.isActive"
+        ></step-header>
+
+        <div v-if="step.isActive" class="step3__active-block">
+
+            <div class="items-container">
+                <a href="#" v-on:click="showCheckBlock()">{{ showText }}</a>
+                <img src="/images/lock.png" class='img img-lock' alt="Заблокувати замовлення" title="Заблокувати замовлення">
+            </div>
+            
+            <div class="btn-container"> 
+
+                <button class="step3__btn" v-on:click="formOrder()">Зібрати</button>
+
+            </div>
+
+        </div>
+        <div v-else-if="step.isDone" class="step doneStep">
+            {{step}}
+        </div>
+    </div>
 </template>
 
 <script>
+import stepHeader from "./stepHeader";
+import { sendGetAllDishesRequest } from "./requests";
+import { stepFactory } from './stepService.js'
+
 export default {
-    name: 'step1',
+    name: 'step3',
     props: ['step'],
+    components: {
+        stepHeader
+    },
+
     data() {
         return {
-            
+            service: stepFactory.service,
+            showCheck: true,
         }
     },
+
     computed: {
-
+        showText: function () {
+            return this.showCheck ? 'Показати' : 'Сховати';
+        }
     },
-    methods: {
 
+    methods: {
+        showCheckBlock: function() {
+            this.$emit('display');
+            showCheck = !showCheck;
+        },
+
+        formOrder: function () {
+            // replace to getCode()
+            sendGetAllDishesRequest(this.service.steps[0].data.code)
+            .then((resp)=> {
+                
+                if (resp.status === 200) {
+                    return resp.json();
+                } else throw new Error();
+
+            })
+            .then((resp)=> {
+
+                chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+                    chrome.tabs.sendMessage(tabs[0].id, {type: 'formOrder', resp}, (response) => {
+                    
+                        if (response) {
+                            chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+                                chrome.tabs.sendMessage(tabs[0].id, {type: 'reload'})
+
+                                this.$emit('next', this.step);
+                            })
+                        }
+                    })
+                })
+            })
+            .catch((error)=> { console.log(error) });
+
+        }
     }
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="scss" scoped>
+    $color1: silver;
+    $color2: #4b0082;
+    $color3: white;
+
+    .step3 {
+        display: flex;
+        flex-direction: column;
+
+        &__list {
+            padding: 0px;
+            margin: 0;
+            list-style-type: none;
+        }
+
+        &__container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            justify-content: space-around
+        }
+
+        &__active-block {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid silver;
+            border-top: none;
+            padding: 3px;
+            min-height: 250px;
+        }
+
+        &__delimeter {
+
+            &::after,
+            &::before {
+                content: '';
+                display: inline-block;
+                border-top: 2px solid silver;
+                width: 120px;
+                position: relative;
+                top: -2px;
+                transform: translate(0%, -50%);
+            }
+
+            &::after {
+                transform: translateX(15px)
+            }
+
+            &::before {
+                transform: translateX(-15px)
+            }
+        }
+
+        &__btn {
+            height: 50px;
+            color: $color2;
+            border: 1px solid $color2;
+            cursor: pointer;
+            border-radius: 10px;
+            background-color: $color3;
+            transition-duration: 0.1s;
+            margin: auto auto;
+
+            &:hover {
+                color: $color3;
+                background-color: $color2;
+            }
+        }
+        &__btn,
+        &__input {
+            box-sizing: border-box;
+            width: 200px;
+            padding: 5px;
+
+        }
+
+        &__input {
+            min-height: 35px;
+            border-radius: 5px;
+            border: 1px solid $color1;
+
+            &:focus {
+                outline: none;
+                box-shadow: 0 0 1px 2px $color1;
+            }
+        }
+
+    }
+
+.items-container {
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.btn-container {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+.img-lock {
+    margin-right: 3px;
+}
 
 </style>

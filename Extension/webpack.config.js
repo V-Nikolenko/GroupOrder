@@ -64,6 +64,7 @@ const config = {
       },
     ],
   },
+  devtool: 'eval-sourcemap',
   plugins: [
     new webpack.DefinePlugin({
       global: 'window',
@@ -73,6 +74,7 @@ const config = {
       filename: '[name].css',
     }),
     new CopyPlugin([
+      { from: 'images', to: 'images'},
       { from: 'icons', to: 'icons', ignore: ['icon.xcf'] },
       { from: 'popup/popup.html', to: 'popup/popup.html', transform: transformHtml },
       {
