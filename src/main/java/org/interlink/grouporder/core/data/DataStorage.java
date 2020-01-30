@@ -19,7 +19,7 @@ public class DataStorage {
 
     private static Map<String, GroupOrder> orders = new LinkedHashMap<>();
 
-    public static void addGroupOrder() {
+    public static String addGroupOrder() {
         String code;
 
         do {
@@ -27,7 +27,9 @@ public class DataStorage {
         } while (DataStorage.isContains(code));
 
         orders.put(code, new GroupOrder(code));
-}
+
+        return code;
+    }
 
     public static void removeGroupOrder(String code) {
         if (code != null) {

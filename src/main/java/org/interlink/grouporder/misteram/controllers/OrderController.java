@@ -7,6 +7,7 @@ import org.interlink.grouporder.core.entity.GroupOrder;
 import org.interlink.grouporder.core.entity.MemberOrder;
 import org.interlink.grouporder.core.entity.view.GroupOrderView;
 import org.interlink.grouporder.core.handler.ExceptionsHandler;
+import org.interlink.grouporder.misteram.entity.CodeDTO;
 import org.interlink.grouporder.misteram.entity.FullOrderItemsDTO;
 import org.interlink.grouporder.misteram.entity.MemberOrderDTO;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,9 @@ public class OrderController {
     @JsonView(GroupOrderView.Basic.class)
     public ResponseEntity createGroupOrder() {
         try {
-            DataStorage.addGroupOrder();
+            String code = DataStorage.addGroupOrder();
 
-            return ResponseEntity.ok("Success!");
+            return ResponseEntity.ok(map(code, new CodeDTO()));
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
