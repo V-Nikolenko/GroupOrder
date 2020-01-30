@@ -1,5 +1,7 @@
 package org.interlink.grouporder.core.utils;
 
+import org.interlink.grouporder.core.data.DataStorage;
+
 import java.security.SecureRandom;
 import java.util.Base64;
 
@@ -9,6 +11,7 @@ public class OrderCodeGenerator {
 
     private OrderCodeGenerator() {
     }
+
 
     public static String generateCode() {
         byte[] bytes = new byte[6];

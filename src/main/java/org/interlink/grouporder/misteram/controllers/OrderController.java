@@ -52,6 +52,7 @@ public class OrderController {
             DataStorage.getGroupOrder(code).addMemberToGroupOrder(memberOrder);
             return ResponseEntity.ok("Success");
         } catch (Exception e) {
+            e.printStackTrace();
             return ExceptionsHandler.handleException(e);
         }
     }
@@ -72,6 +73,24 @@ public class OrderController {
             GroupOrder groupOrder = DataStorage.getGroupOrder(code);
             groupOrder.setActiveOrderStatus(false);
             return ResponseEntity.ok(map(groupOrder, new FullOrderItemsDTO()));
+        } catch (Exception e) {
+            return ExceptionsHandler.handleException(e);
+        }
+    }
+
+    @PostMapping("/{code}/remove-from-order")
+    public ResponseEntity removeMemberFromOrder(@PathVariable("code") String code, @RequestBody MemberOrderDTO newMemberOrderDTO) {
+        try {
+            return ResponseEntity.ok("Success");
+        } catch (Exception e) {
+            return ExceptionsHandler.handleException(e);
+        }
+    }
+
+    @PostMapping("/{code}/lock-group-order")
+    public ResponseEntity LockGroupOrder(@PathVariable("code") String code) {
+        try {
+            return ResponseEntity.ok("Success");
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
