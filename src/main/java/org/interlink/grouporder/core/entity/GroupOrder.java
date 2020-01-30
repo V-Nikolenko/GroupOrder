@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Getter;
 import lombok.Setter;
 import org.interlink.grouporder.core.entity.view.GroupOrderView;
+import org.interlink.grouporder.core.exceptions.BadRequestException;
 import org.interlink.grouporder.core.utils.ProductsCounter;
 
 import java.math.BigDecimal;
@@ -23,6 +24,7 @@ public class GroupOrder {
     private String fullPrice;
     @JsonView(GroupOrderView.Extended.class)
     private List<MemberOrder> members = new ArrayList<>();
+    private boolean activeOrderStatus = true;
 
     public GroupOrder(String code) {
         this.code = code;
@@ -30,19 +32,23 @@ public class GroupOrder {
 
     private boolean isMemberInGroupOrder(MemberOrder member) {
         return members.stream()
-                .anyMatch(oldMember -> oldMember.getName().equals(member.getName()));
+                .anyMatch(oldMember -> oldMember.getEmail().equals(member.getEmail()));
     }
 
     public void addMemberToGroupOrder(MemberOrder member) {
-        if (isMemberInGroupOrder(member)) {
+        if (members.isEmpty()) {
+            internetShopURL = member.getUrl();
+            members.add(member);
+        } else if (isMemberInGroupOrder(member)) {
             members.stream()
                     .filter(oldMember -> oldMember.getName().equals(member.getName()))
                     .findFirst()
                     .ifPresent(oldMember -> oldMember = member);
+        } else if(member.getUrl().equals(internetShopURL)) {
+                members.add(member);
         } else {
-            members.add(member);
+            throw new BadRequestException("Internet shop url bad");
         }
-
         this.fullPrice = orderFullPrice();
     }
 

@@ -13,10 +13,6 @@ import org.interlink.grouporder.misteram.entity.MemberOrderDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 import static org.interlink.grouporder.misteram.MisterAmMapper.map;
 
 @RestController
@@ -26,13 +22,9 @@ public class OrderController {
     @PostMapping
     @JsonView(GroupOrderView.Basic.class)
     public GroupOrder createGroupOrder() {
-
-        String code = OrderCodeGenerator.generateCode();
+        String code = OrderCodeGenerator.generateUniqueCode();
         GroupOrder groupOrder = new GroupOrder(code);
         DataStorage.addGroupOrder(code, groupOrder);
-
-        ScheduledExecutorService schedule = new ScheduledThreadPoolExecutor(1);
-        schedule.schedule(() -> DataStorage.removeGroupOrder(code), 2, TimeUnit.HOURS);
 
         return groupOrder;
     }
@@ -51,7 +43,7 @@ public class OrderController {
     }
 
     @JsonView(GroupOrderView.Basic.class)
-    @PostMapping("/{code}/add-order")
+    @PostMapping("/{code}/add-member-order")
     public ResponseEntity addMemberToOrder(@PathVariable("code") String code, @RequestBody MemberOrderDTO newMemberOrderDTO) {
         try {
             MemberOrder memberOrder = map(newMemberOrderDTO, new MemberOrder());

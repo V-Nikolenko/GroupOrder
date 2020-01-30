@@ -1,5 +1,7 @@
 package org.interlink.grouporder.core.utils;
 
+import org.interlink.grouporder.core.data.DataStorage;
+
 import java.security.SecureRandom;
 import java.util.Base64;
 
@@ -10,10 +12,19 @@ public class OrderCodeGenerator {
     private OrderCodeGenerator() {
     }
 
-    public static String generateCode(){
+    public static String generateUniqueCode() {
+        String code;
+        do {
+            code = OrderCodeGenerator.generateCode();
+        } while (DataStorage.isContains(code));
+
+        return code;
+    }
+
+    private static String generateCode() {
         byte[] bytes = new byte[6];
         RANDOM.nextBytes(bytes);
 
-        return ENCODER.encodeToString(bytes).toLowerCase().replaceAll("[^a-zA-Z0-9]","");
+        return ENCODER.encodeToString(bytes).toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
     }
 }
