@@ -184,9 +184,9 @@ $color4: white;
 
 }
 
-.img {
-    width: 25px;
-    height: 25px;
+
+.copy-im,
+.logout-img {
     top: 50%;
     transform: translateY(-50%);
 }

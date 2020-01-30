@@ -6,11 +6,11 @@
                 v-bind:isActive="step.isActive"
         ></step-header>
 
-        <div v-if="!step.isActive" class="step4__active-block">
+        <div v-if="step.isActive" class="step4__active-block">
             <div class="step4__container">
-                <ul>
+                <!-- <ul>
                     <li v-for="member in members">{{member.name}} + "  ыаыааыыа  " + {{member.fullPrice}}</li>
-                </ul>
+                </ul> -->
             </div>
         </div>
         <div v-else-if="step.isDone">
@@ -20,23 +20,23 @@
 </template>
 
 <script>
-    import stepHeader from "./stepHeader";
+import stepHeader from "./stepHeader";
 
-    export default {
-        name: 'step4',
-        props: ['step'],
-        components: {
-            stepHeader
-        },
-        data() {
-            return {
-            }
-        },
-        computed: {
-        },
-        methods: {
+export default {
+    name: 'step4',
+    props: ['step'],
+    components: {
+        stepHeader
+    },
+    data() {
+        return {
         }
+    },
+    computed: {
+    },
+    methods: {
     }
+}
 </script>
 
 <style lang="scss" scoped>

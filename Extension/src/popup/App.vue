@@ -1,14 +1,22 @@
 <template>
-  <div>
+<div class="container">
+  <div v-bind:class="[isDisplay ? 'receipt' : 'receipt_none']" ></div>
+
+  <div class='extension'>
+    <header>
+      <h1 class="extension__title">Group Order</h1>
+    </header>
+
     <step1 v-bind:step=steps[0] v-on:next='nextStep(steps[0])'></step1>    
     
     <step2 v-bind:step=steps[1] v-on:next='nextStep(steps[1])'></step2> 
 
-    <step3 v-bind:step=steps[2] v-on:next='nextStep(steps[2])'></step3>    
+    <step3 v-bind:step=steps[2] v-on:next='nextStep(steps[2])' v-on:display='isDisplay = !isDisplay'></step3>    
 
     <step4 v-bind:step=steps[3] v-on:next='nextStep(steps[3])'></step4>    
-    
+
   </div>
+</div>
 </template>
 
 <script>
@@ -28,6 +36,7 @@ export default {
 
   data () {
     return {
+      isDisplay: false,
       steps: [
         {
           isActive: true,
@@ -83,9 +92,10 @@ body {
 }
 
 .extension {
-  display: flex;
-  flex-direction: column;
+  // display: flex;
+  // flex-direction: column;
   width: 400px;
+  float: right;
 
   &__title {
     margin: 0;
@@ -99,6 +109,10 @@ body {
   }
 }
 
+.container {
+  display: flex;
+}
+
 .doneStep {
   font-size: 16px;
   border: 1px solid $color2;
@@ -110,9 +124,22 @@ body {
   min-height: 35px;
   width: 100%;
   box-sizing: border-box;
-
 }
 
+.img {
+  width: 25px;
+  height: 25px;
+}
+
+.receipt_none {
+  width: 0px;
+  overflow: hidden;
+  transition: 2s ease-in-out;
+} 
+.receipt {
+  width: 200px;
+  transition: 2s ease-in-out;
+}
 
 </style>
 

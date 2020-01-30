@@ -8,7 +8,7 @@
 
         <div v-if="step.isActive" class="step3__active-block">
 
-            <a href="#" v-on:click="showCheck = !showCheck">{{showCheckButton}}</a>
+            <a href="#" v-on:click="showCheck = !showCheck">{{showAllOrders}}</a>
             <div class="step3__container">
 
                 <button class="step3__btn">Зібрати</button>
@@ -33,11 +33,12 @@ export default {
     },
     data() {
         return {
-            showCheck: true,
+            showCheck: false,
         }
     },
     computed: {
-        showCheckButton : function () {
+        showAllOrders: function () {
+            this.$emit('display');
             return this.showCheck ? 'Показати' : 'Сховати';
         }
     },
