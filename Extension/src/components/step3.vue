@@ -10,7 +10,7 @@
 
             <div class="items-container">
                 <a href="#" v-on:click="showCheckBlock()">{{ showText }}</a>
-                <img src="/images/lock.png" class='img' alt="Заблокувати замовлення" title="Заблокувати замовлення">
+                <img src="/images/lock.png" class='img img-lock' alt="Заблокувати замовлення" title="Заблокувати замовлення">
             </div>
             
             <div class="btn-container"> 
@@ -20,8 +20,8 @@
             </div>
 
         </div>
-        <div v-else-if="step.isDone">
-
+        <div v-else-if="step.isDone" class="step doneStep">
+            {{step}}
         </div>
     </div>
 </template>
@@ -29,6 +29,7 @@
 <script>
 import stepHeader from "./stepHeader";
 import { sendGetAllDishesRequest } from "./requests";
+import { stepFactory } from './stepService.js'
 
 export default {
     name: 'step3',
@@ -36,16 +37,20 @@ export default {
     components: {
         stepHeader
     },
+
     data() {
         return {
+            service: stepFactory.service,
             showCheck: true,
         }
     },
+
     computed: {
         showText: function () {
             return this.showCheck ? 'Показати' : 'Сховати';
         }
     },
+
     methods: {
         showCheckBlock: function() {
             this.$emit('display');
@@ -53,30 +58,31 @@ export default {
         },
 
         formOrder: function () {
-            chrome.storage.sync.get(['user'], (result) => {
-                sendGetAllDishesRequest(result.user.code)
-                .then((resp)=> {
-                    
-                    if (resp.status === 200) {
-                        return resp.json();
-                    } else throw new Error();
+            // replace to getCode()
+            sendGetAllDishesRequest(this.service.steps[0].data.code)
+            .then((resp)=> {
+                
+                if (resp.status === 200) {
+                    return resp.json();
+                } else throw new Error();
 
-                })
-                .then((resp)=> {
-                    console.log(resp)
-                    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-                        chrome.tabs.sendMessage(tabs[0].id, {type: 'formOrder', resp}, (response) => {
-                        
-                            if (response) {
-                                chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-                                    chrome.tabs.sendMessage(tabs[0].id, {type: 'reload'})
-                                    this.$emit('next');
-                                })
-                            }
-                        })
+            })
+            .then((resp)=> {
+
+                chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+                    chrome.tabs.sendMessage(tabs[0].id, {type: 'formOrder', resp}, (response) => {
+                    
+                        if (response) {
+                            chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+                                chrome.tabs.sendMessage(tabs[0].id, {type: 'reload'})
+
+                                this.$emit('next', this.step);
+                            })
+                        }
                     })
-                }).catch((error)=> { console.log(error) });
-            });
+                })
+            })
+            .catch((error)=> { console.log(error) });
 
         }
     }
@@ -188,5 +194,8 @@ export default {
     align-items: center;
 }
 
+.img-lock {
+    margin-right: 3px;
+}
 
 </style>

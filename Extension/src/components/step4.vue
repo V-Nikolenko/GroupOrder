@@ -7,8 +7,8 @@
         ></step-header>
 
         <div v-if="step.isActive" class="step4__active-block">
-            <div class="step4__container">
-                <!-- <ul>
+            <div class="step4__container"> {{data}}
+                 <!-- <ul>
                     <li v-for="member in members">{{member.name}} + "  ыаыааыыа  " + {{member.fullPrice}}</li>
                 </ul> -->
             </div>
@@ -21,6 +21,7 @@
 
 <script>
 import stepHeader from "./stepHeader";
+import { sendGetAllDishesRequest } from './requests'
 
 export default {
     name: 'step4',
@@ -30,11 +31,26 @@ export default {
     },
     data() {
         return {
+            data: null
         }
     },
     computed: {
     },
     methods: {
+    },
+    created() {
+        chrome.storage.sync.get(['user'], function(result) {
+            sendGetAllDishesRequest()
+            .then((resp) => {
+                if (resp.status === 200) {
+                    return resp.json();
+                } else throw new Error();
+            })
+            .then((resp)=> {
+                this.data = resp;
+            })
+            .catch((error) => { console.log(error) })
+        })
     }
 }
 </script>

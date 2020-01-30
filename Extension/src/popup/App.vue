@@ -1,19 +1,22 @@
 <template>
 <div class="container">
-  <div v-bind:class="[isDisplay ? 'receipt' : 'receipt_none']" ></div>
-
   <div class='extension'>
     <header>
       <h1 class="extension__title">Group Order</h1>
     </header>
 
-    <step1 v-bind:step=steps[0] v-on:next='nextStep(steps[0])'></step1>    
-    
-    <step2 v-bind:step=steps[1] v-on:next='nextStep(steps[1])'></step2> 
+    <div v-if="isLoaded">
+      
+      <step1 v-bind:step=steps[0] v-on:next='nextStep'></step1>    
+      
+      <step2 v-bind:step=steps[1] v-on:next='nextStep'></step2> 
 
-    <step3 v-bind:step=steps[2] v-on:next='nextStep(steps[2])' v-on:display='isDisplay = !isDisplay'></step3>    
+      <step3 v-bind:step=steps[2] v-on:next='nextStep'></step3>
 
-    <step4 v-bind:step=steps[3] v-on:next='nextStep(steps[3])'></step4>    
+      <step4 v-bind:step=steps[3] v-on:next='nextStep'></step4>
+      
+    </div>
+ 
 
   </div>
 </div>
@@ -24,6 +27,46 @@ import step1 from '../components/step1';
 import step2 from '../components/step2';
 import step3 from '../components/step3';
 import step4 from '../components/step4';
+import {stepFactory} from '../components/stepService';
+
+const STEPS = [
+        {
+          isActive: true,
+          isDone: false,
+          title: '1. Обрати заклад',
+          data: {
+            code: null
+          }
+        },
+        
+        {
+          isActive: false,
+          isDone: false,
+          title: '2. Доповнити замовлення',
+          data: {
+            name: null,
+            email: null
+          }
+        },
+        
+        {
+          isActive: false,
+          isDone: false,
+          title: '3. Зібрати замовлення',
+          data: {
+          }
+        },
+
+        {
+          isActive: false,
+          isDone: false,
+          title: '4. Показати борги',
+          data: {
+          
+          }
+        }
+
+      ];
 
 export default {
   name: "app",
@@ -36,48 +79,41 @@ export default {
 
   data () {
     return {
-      isDisplay: false,
-      steps: [
-        {
-          isActive: true,
-          isDone: false,
-          title: '1. Обрати заклад'
-        },
-        
-        {
-          isActive: false,
-          isDone: false,
-          title: '2. Доповнити замовлення'
-        },
-        
-        {
-          isActive: false,
-          isDone: false,
-          title: '3. Зібрати замовлення'
-        },
-
-        {
-          isActive: false,
-          isDone: false,
-          title: '4. Показати борги'
-        }
-      ]
+      stepService: null
     }
   },
+
+  computed: {
+    isLoaded() {
+      return !!this.stepService
+    },
+
+    steps() {
+      if (this.isLoaded) {
+        return this.stepService.steps;
+      } else return [];
+       
+    }
+  },
+
   methods: {
     nextStep: function(step) {
-      let currentId =  this.steps.indexOf(step)
-
-      if (currentId === (this.steps.length-1)) {
-        return
-      } else {
-        step.isActive = !step.isActive;
-        step.isDone = !step.isDone;
-        this.steps[currentId+1].isActive = true;
-      }
-
+      this.stepService.nextStep(step)
     }
+  },
+
+  created() {
+    chrome.storage.sync.get('steps', (result) => {
+      this.stepService = result.steps !== undefined
+                        ? stepFactory.create(result.steps) 
+                        : stepFactory.create(STEPS);
+      
+      // stepService.subscribe( function(steps) {
+      //   chrome.storage.sync.set({steps});
+      // });
+    });
   }
+
 }
 </script>
 

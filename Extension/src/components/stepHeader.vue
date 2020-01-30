@@ -8,7 +8,7 @@ export default {
     props: ['title', 'isDone', 'isActive'],
     data() {
         return {
-
+            
         }
     },
     computed: {

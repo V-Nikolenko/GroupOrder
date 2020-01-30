@@ -1,5 +1,6 @@
 <template>
     <div class="step1">
+        <div>{{service}}</div>
         <step-header 
             v-bind:title="step.title"
             v-bind:isDone="step.isDone"
@@ -17,7 +18,7 @@
 
                 <span class="step1__delimeter">або</span>
 
-                <input v-model="code" type="text" name="code" class="step1__input" placeholder="Код замовлення">
+                <input v-model="inputCode" type="text" name="code" class="step1__input" placeholder="Код замовлення">
 
                 <button class="step1__btn" v-on:click="connectWithCode()">Приєднатися до існуючого замовлення</button>
             </div>
@@ -25,7 +26,7 @@
         </section>
         
         <section v-show="step.isDone" class="doneStep doneStep-step1 step">
-            <a href="#" id="link">{{getCode}}</a>
+            <a href="#" >{{ step.data.code }}</a>
             <!-- TODO: add restaurat -->
             <img src="/images/copy.png" alt="Копіювати" title="Копіювати" class="img copy-img">
             <img src="/images/logout.png" alt="Вийти" title="Вийти" class="img logout-img"> 
@@ -36,7 +37,8 @@
 
 <script>
 import {sendConnectWithCodeRequest, sendCreateNewOrderRequest} from './requests.js';
-import stepHeader from './stepHeader.vue'
+import stepHeader from './stepHeader.vue';
+import {stepFactory} from './stepService.js';
 
 export default {
     name: 'step1',
@@ -44,18 +46,17 @@ export default {
     components: {
         stepHeader
     },
+    
     data() {
         return {
-            code: null,
+            service: stepFactory.service,
+            inputCode: null,
             subSteps: ['Додати страви', 'Перевірити всі страви']
         }
     },
+
     computed: {
-        getCode: function() {
-            chrome.storage.sync.get(['user'], function(result) {
-                link.textContent =  result.user.code;
-            })
-        }
+        
     },
 
     methods: {
@@ -69,8 +70,8 @@ export default {
                     throw new Error(resp.text)
                 }
             }).then((resp) => {
-                chrome.storage.sync.set({'user': {'code': resp.code}})
-                this.$emit('next');
+                this.step.data.code = resp.code;
+                this.$emit('next', this.step); 
             })
             .catch((error)=> {
                 //TODO: try again
@@ -82,8 +83,8 @@ export default {
             sendConnectWithCodeRequest(this.code)
             .then((resp) => {
                 if(resp.status === 200) {
-                    //TODO: call next step function
-                    this.$emit('next');
+                    this.step.data.code = this.inputCode;
+                    this.$emit('next', this.step);
                 } else {
                     //TODO: make borders red
                 }

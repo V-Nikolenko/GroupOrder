@@ -14,20 +14,26 @@
                 <input v-model="email" type="text" name="email" class="step2__input" placeholder="Ваша почта">
 
                 <button class="step2__btn" v-on:click="sendOrder()">Доповнити групове замовлення</button>
+
             </div>
 
         </div>
+        
         <div v-else-if="step.isDone" class="step doneStep doneStep2">
-            <span>{{name}}</span>
-            <span>{{fullPrice}}</span>
-            <img src="/images/delete.png" alt="Видалити замовлення" title="Видалити замовлення" class="img">
+        
+            <span>{{ name }}</span>
+            <span>{{ fullPrice }}</span>
+            <img src="/images/delete.png" alt="Видалити замовлення" title="Видалити замовлення" class="img img-reset">
+        
         </div>
+
     </div>
 </template>
 
 <script>
 import stepHeader from './stepHeader.vue';
 import {sendMemberOrder} from './requests.js';
+import {stepFactory} from './stepService.js';
 
 export default {
     name: 'step2',
@@ -35,39 +41,46 @@ export default {
     components: {
         stepHeader
     },
+
     data() {
         return {
+            service: stepFactory.service,
             name: '',
             email: '',
             fullPrice: null
         }
     },
+
     computed: {
 
     },
+
     methods: {
         sendOrder: function() {
 
-
             chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
                 chrome.tabs.sendMessage(tabs[0].id, {type: 'getOrders'}, (response) => {
-                    chrome.storage.sync.get(['user'], (result) => {
-                    
-                        Object.assign(result.user, {'name': this.name, 'email': this.email})
-                        chrome.storage.sync.set({'user': result.user});
+                        // Object.assign(result.user, {'name': this.name, 'email': this.email})
+                        // chrome.storage.sync.set({'user': result.user});
 
-                        response.email = this.email;
-                        response.name = this.name;
-                        this.fullPrice = response.fullPrice
-                        sendMemberOrder(result.user.code, response).then((resp)=> {
-                            if (resp.status === 200) {
-                                this.$emit('next');
-                            } else {
-                                throw new Error();
-                            }
-                            //TODO: add validation, inspect why add orders request does not work
-                        }).catch((error)=> {console.log(error)})
-                    })
+                    response.email = this.email;
+                    response.name = this.name;
+
+                    this.fullPrice = response.fullPrice
+
+                    //change this.service.steps[0].data.code to getCode() 
+                    sendMemberOrder(this.service.steps[0].data.code, response).then((resp)=> {
+                        
+                        if (resp.status === 200) {
+                            this.step.data.email = this.email;
+                            this.step.data.name = this.name;
+                            this.$emit('next', this.step);
+                        } else {
+                            throw new Error();
+                        }
+
+                        //TODO: add validation, inspect why add orders request does not work
+                    }).catch((error)=> {console.log(error)})
                 })
             })
         }
@@ -168,6 +181,10 @@ $color3: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.img-reset {
+    margin-right: 3px;
 }
 
 </style>
