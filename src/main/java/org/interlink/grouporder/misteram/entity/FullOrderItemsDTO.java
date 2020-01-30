@@ -9,4 +9,5 @@ import java.util.List;
 @Setter
 public class FullOrderItemsDTO {
     private List<ItemDTO> items;
+    private int fullPrice;
 }
