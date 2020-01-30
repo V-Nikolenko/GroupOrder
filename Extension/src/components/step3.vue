@@ -8,10 +8,14 @@
 
         <div v-if="step.isActive" class="step3__active-block">
 
-            <a href="#" v-on:click="showCheck = !showCheck">{{showAllOrders}}</a>
-            <div class="step3__container">
+            <div class="items-container">
+                <a href="#" v-on:click="showCheckBlock()">{{ showText }}</a>
+                <img src="/images/lock.png" class='img' alt="Заблокувати замовлення" title="Заблокувати замовлення">
+            </div>
+            
+            <div class="btn-container"> 
 
-                <button class="step3__btn">Зібрати</button>
+                <button class="step3__btn" v-on:click="formOrder()">Зібрати</button>
 
             </div>
 
@@ -24,6 +28,7 @@
 
 <script>
 import stepHeader from "./stepHeader";
+import { sendGetAllDishesRequest } from "./requests";
 
 export default {
     name: 'step3',
@@ -33,16 +38,47 @@ export default {
     },
     data() {
         return {
-            showCheck: false,
+            showCheck: true,
         }
     },
     computed: {
-        showAllOrders: function () {
-            this.$emit('display');
+        showText: function () {
             return this.showCheck ? 'Показати' : 'Сховати';
         }
     },
     methods: {
+        showCheckBlock: function() {
+            this.$emit('display');
+            showCheck = !showCheck;
+        },
+
+        formOrder: function () {
+            chrome.storage.sync.get(['user'], (result) => {
+                sendGetAllDishesRequest(result.user.code)
+                .then((resp)=> {
+                    
+                    if (resp.status === 200) {
+                        return resp.json();
+                    } else throw new Error();
+
+                })
+                .then((resp)=> {
+                    console.log(resp)
+                    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+                        chrome.tabs.sendMessage(tabs[0].id, {type: 'formOrder', resp}, (response) => {
+                        
+                            if (response) {
+                                chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+                                    chrome.tabs.sendMessage(tabs[0].id, {type: 'reload'})
+                                    this.$emit('next');
+                                })
+                            }
+                        })
+                    })
+                }).catch((error)=> { console.log(error) });
+            });
+
+        }
     }
 }
 </script>
@@ -109,6 +145,7 @@ export default {
             border-radius: 10px;
             background-color: $color3;
             transition-duration: 0.1s;
+            margin: auto auto;
 
             &:hover {
                 color: $color3;
@@ -135,6 +172,21 @@ export default {
         }
 
     }
+
+.items-container {
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.btn-container {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+}
 
 
 </style>

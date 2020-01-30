@@ -51,6 +51,7 @@ public class OrderController {
             DataStorage.getGroupOrder(code).addMemberToGroupOrder(memberOrder);
             return ResponseEntity.ok("Success");
         } catch (Exception e) {
+            e.printStackTrace();
             return ExceptionsHandler.handleException(e);
         }
     }

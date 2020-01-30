@@ -92,8 +92,8 @@ body {
 }
 
 .extension {
-  // display: flex;
-  // flex-direction: column;
+  display: flex;
+  flex-direction: column;
   width: 400px;
   float: right;
 
@@ -111,6 +111,7 @@ body {
 
 .container {
   display: flex;
+  justify-content: space-between;
 }
 
 .doneStep {

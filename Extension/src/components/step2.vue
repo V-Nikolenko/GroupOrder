@@ -60,11 +60,11 @@ export default {
                         response.name = this.name;
                         this.fullPrice = response.fullPrice
                         sendMemberOrder(result.user.code, response).then((resp)=> {
-                            // if (resp.status === 200) {
+                            if (resp.status === 200) {
                                 this.$emit('next');
-                            // } else {
-                            //     throw new Error();
-                            // }
+                            } else {
+                                throw new Error();
+                            }
                             //TODO: add validation, inspect why add orders request does not work
                         }).catch((error)=> {console.log(error)})
                     })

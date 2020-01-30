@@ -2,13 +2,13 @@ chrome.runtime.onMessage.addListener(
     function(message, sender, sendResponse) {
         switch(message.type) {
             case 'getOrders':
-                // console.log('get');
                 SendGetOrdersRequest().then(sendResponse);  
                 break;
             case 'formOrder':
-                // console.log('form');
-                // console.log(message);
-                FormOrder(message.allDishes.items);
+                FormOrder(message.resp.items).then(sendResponse);
+                break;
+            case 'reload': 
+                window.location.reload();
                 break;
         }
         return true;
@@ -81,12 +81,20 @@ async function ClearCurrentOrder() {
 }
 
 async function FormOrder(items) {
-    await ClearCurrentOrder()
+    try {
 
-    for (let i = 0; i < items.length; i++) { 
-        let item =  items[i];
-        for (let j = 0; j < item.count; j++) {
-            await SendAddDishRequest(item);
+        await ClearCurrentOrder()
+        console.log(items);
+        for (let i = 0; i < items.length; i++) { 
+            let item = items[i];
+            for (let j = 0; j < item.count; j++) {
+                await SendAddDishRequest(item);
+            }
         }
+        return true;
+        
+    } catch(error) {
+        console.log(error)
     }
 }
+
