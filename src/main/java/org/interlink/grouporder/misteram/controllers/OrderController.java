@@ -7,15 +7,10 @@ import org.interlink.grouporder.core.entity.GroupOrder;
 import org.interlink.grouporder.core.entity.MemberOrder;
 import org.interlink.grouporder.core.entity.view.GroupOrderView;
 import org.interlink.grouporder.core.handler.ExceptionsHandler;
-import org.interlink.grouporder.core.utils.OrderCodeGenerator;
 import org.interlink.grouporder.misteram.entity.FullOrderItemsDTO;
 import org.interlink.grouporder.misteram.entity.MemberOrderDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import static org.interlink.grouporder.misteram.MisterAmMapper.map;
 
@@ -25,20 +20,20 @@ public class OrderController {
 
     @PostMapping
     @JsonView(GroupOrderView.Basic.class)
-    public GroupOrder createGroupOrder() {
-        String code = OrderCodeGenerator.generateUniqueCode();
-        GroupOrder groupOrder = new GroupOrder(code);
-        DataStorage.addGroupOrder(code, groupOrder);
-//        ScheduledExecutorService schedule = new ScheduledThreadPoolExecutor(1);
-//        schedule.schedule(() -> DataStorage.removeGroupOrder(code), 2, TimeUnit.HOURS);
+    public ResponseEntity createGroupOrder() {
+        try {
+            DataStorage.addGroupOrder();
 
-        return groupOrder;
+            return ResponseEntity.ok("Success!");
+        } catch (Exception e) {
+            return ExceptionsHandler.handleException(e);
+        }
     }
 
     @PostMapping("{code}/connect")
     public ResponseEntity connectToGroupOrder(@PathVariable("code") String code) {
         try {
-            if (DataStorage.isContains(code) && DataStorage.getOrders().get(code).isActiveOrderStatus()) {
+            if (DataStorage.isContains(code) && DataStorage.getGroupOrder(code).isActiveOrderStatus()) {
                 return ResponseEntity.ok("Success!");
             } else {
                 return ResponseEntity.notFound().build();

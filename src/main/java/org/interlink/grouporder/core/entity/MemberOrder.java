@@ -17,4 +17,15 @@ public class MemberOrder {
     private String url;
     private List<Product> products = new ArrayList<>();
     private int fullPrice;
+
+    public MemberOrder(String name, String email, String url, List<Product> products, int fullPrice) {
+        this.name = name;
+        this.email = email;
+        this.url = url;
+        this.products = products;
+        this.fullPrice = fullPrice;
+    }
+
+    public MemberOrder() {
+    }
 }
