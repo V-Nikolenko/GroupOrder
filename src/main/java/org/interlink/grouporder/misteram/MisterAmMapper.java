@@ -42,6 +42,7 @@ public class MisterAmMapper {
                 .map(product -> map(product, ItemDTO.class))
                 .collect(Collectors.toList());
 
+        destination.setFullPrice(source.getFullPrice());
         destination.setItems(items);
 
         return destination;

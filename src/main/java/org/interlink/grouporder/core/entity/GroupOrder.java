@@ -7,10 +7,11 @@ import org.interlink.grouporder.core.entity.view.GroupOrderView;
 import org.interlink.grouporder.core.exceptions.BadRequestException;
 import org.interlink.grouporder.core.utils.ProductsCounter;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -21,9 +22,9 @@ public class GroupOrder {
     @JsonView(GroupOrderView.Extended.class)
     private String internetShopURL;
     @JsonView(GroupOrderView.Extended.class)
-    private String fullPrice;
+    private int fullPrice;
     @JsonView(GroupOrderView.Extended.class)
-    private List<MemberOrder> members = new ArrayList<>();
+    private Map<String, MemberOrder> members = new LinkedHashMap<>();
     private boolean activeOrderStatus = true;
 
     public GroupOrder(String code) {
@@ -31,42 +32,35 @@ public class GroupOrder {
     }
 
     private boolean isMemberInGroupOrder(MemberOrder member) {
-        return members.stream()
-                .anyMatch(oldMember -> oldMember.getEmail().equals(member.getEmail()));
+        return members.containsKey(member.getEmail());
+
     }
 
     public void addMemberToGroupOrder(MemberOrder member) {
-        if (members.isEmpty()) {
-            internetShopURL = member.getUrl();
-            members.add(member);
-        } else if (isMemberInGroupOrder(member)) {
-            members.stream()
-                    .filter(oldMember -> oldMember.getName().equals(member.getName()))
-                    .findFirst()
-                    .ifPresent(oldMember -> oldMember = member);
-        } else if(member.getUrl().equals(internetShopURL)) {
-                members.add(member);
-        } else {
-            throw new BadRequestException("Internet shop url bad");
+        if (member == null) {
+            throw new BadRequestException("Error! Method AddMemberToGroupOrder parameter 'MemberOrder' is null");
         }
-        this.fullPrice = orderFullPrice();
+        if (isMemberInGroupOrder(member)) {
+            members.replace(member.getEmail(), member);
+        } else {
+            members.put(member.getEmail(), member);
+        }
+
+        fullPrice = orderFullPrice();
     }
 
     public List<Product> getAllProducts() {
-        List<Product> products = new ArrayList<>();
-        for (MemberOrder member : members) {
-            products.addAll(member.getProducts());
-        }
+        List<Product> products = members.values().stream()
+                .map(MemberOrder::getProducts)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
         return ProductsCounter.getAllGroupingProducts(products);
     }
 
-    private String orderFullPrice() {
-        DecimalFormat df = new DecimalFormat("#0.00");
-        BigDecimal fullOrderPrice = new BigDecimal("0");
-
-        for (MemberOrder member : members) {
-            fullOrderPrice.add(new BigDecimal(member.getFullPrice()));
-        }
-        return df.format(fullOrderPrice);
+    private int orderFullPrice() {
+        return members.values().stream()
+                .mapToInt(MemberOrder::getFullPrice)
+                .sum();
     }
 }

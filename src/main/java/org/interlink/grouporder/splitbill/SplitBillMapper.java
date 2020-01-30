@@ -19,7 +19,7 @@ public class SplitBillMapper {
 
     public static OrderCheckDTO map(GroupOrder source, OrderCheckDTO destination) {
 
-        List<MemberDTO> items = source.getMembers().stream()
+        List<MemberDTO> items = source.getMembers().values().stream()
                 .map(member -> map(member, new MemberDTO()))
                 .collect(Collectors.toList());
 
@@ -31,6 +31,7 @@ public class SplitBillMapper {
 
     public static MemberDTO map(MemberOrder source, MemberDTO destination) {
         destination.setName(source.getName());
+        destination.setEmail(source.getEmail());
         destination.setPrice(source.getFullPrice());
         destination.setCount(1);
 

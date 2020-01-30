@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class MemberDTO {
     private String name;
+    private String email;
     private int price;
     private int count = 1;
 }

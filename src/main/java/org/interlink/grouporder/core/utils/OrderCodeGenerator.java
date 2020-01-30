@@ -12,16 +12,8 @@ public class OrderCodeGenerator {
     private OrderCodeGenerator() {
     }
 
-    public static String generateUniqueCode() {
-        String code;
-        do {
-            code = OrderCodeGenerator.generateCode();
-        } while (DataStorage.isContains(code));
 
-        return code;
-    }
-
-    private static String generateCode() {
+    public static String generateCode() {
         byte[] bytes = new byte[6];
         RANDOM.nextBytes(bytes);
 
