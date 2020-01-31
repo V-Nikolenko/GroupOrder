@@ -85,11 +85,12 @@ public class OrderController {
         }
     }
 
-    @PostMapping("/{code}/lock-group-order")
+    @PutMapping("/{code}/lock-group-order")
     public ResponseEntity LockGroupOrder(@PathVariable("code") String code) {
         try {
-
-            return ResponseEntity.ok("Success");
+            GroupOrder groupOrder = DataStorage.getGroupOrder(code);
+            groupOrder.setLock(true);
+            return ResponseEntity.ok("Order " + code + " is locked!");
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
