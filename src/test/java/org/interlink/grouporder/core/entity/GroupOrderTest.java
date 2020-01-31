@@ -75,7 +75,7 @@ public class GroupOrderTest {
     }
 
     @Test
-    public void When_GetAllProductsFromMultipleMembers_Expect_ResultIsEmptyAsTrue() {
+    public void When_GetAllProductsFromMultipleMembers_Expect_ResultOfProductsIsThree() {
         groupOrder.addMemberToGroupOrder(memberOrder1);
         groupOrder.addMemberToGroupOrder(memberOrder2);
 
@@ -90,5 +90,13 @@ public class GroupOrderTest {
         assertEquals(groupOrder.getFullPrice(), 3000);
     }
 
+    @Test
+    public void When_RemoveMemberFromGroupOrder_Expect_ResultIsEmptyAsTrue() {
+        groupOrder.addMemberToGroupOrder(memberOrder1);
+
+        groupOrder.removeMemberFromOrder(memberOrder1);
+
+        assertTrue(groupOrder.getMembers().isEmpty());
+    }
 
 }

@@ -7,6 +7,7 @@ import org.interlink.grouporder.core.entity.GroupOrder;
 import org.interlink.grouporder.core.entity.MemberOrder;
 import org.interlink.grouporder.core.entity.view.GroupOrderView;
 import org.interlink.grouporder.core.handler.ExceptionsHandler;
+import org.interlink.grouporder.misteram.MisterAmMapper;
 import org.interlink.grouporder.misteram.entity.FullOrderItemsDTO;
 import org.interlink.grouporder.misteram.entity.MemberOrderDTO;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +52,6 @@ public class OrderController {
             DataStorage.getGroupOrder(code).addMemberToGroupOrder(memberOrder);
             return ResponseEntity.ok("Success");
         } catch (Exception e) {
-            e.printStackTrace();
             return ExceptionsHandler.handleException(e);
         }
     }
@@ -77,8 +77,10 @@ public class OrderController {
     }
 
     @PostMapping("/{code}/remove-from-order")
-    public ResponseEntity removeMemberFromOrder(@PathVariable("code") String code, @RequestBody MemberOrderDTO newMemberOrderDTO) {
+    public ResponseEntity removeMemberFromOrder(@PathVariable("code") String code, @RequestBody MemberOrderDTO memberOrderDTO) {
         try {
+            GroupOrder groupOrder = DataStorage.getGroupOrder(code);
+            groupOrder.removeMemberFromOrder(MisterAmMapper.map(memberOrderDTO, new MemberOrder()));
             return ResponseEntity.ok("Success");
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
@@ -86,7 +88,7 @@ public class OrderController {
     }
 
     @PostMapping("/{code}/lock-group-order")
-    public ResponseEntity LockGroupOrder(@PathVariable("code") String code) {
+    public ResponseEntity lockGroupOrder(@PathVariable("code") String code) {
         try {
             return ResponseEntity.ok("Success");
         } catch (Exception e) {

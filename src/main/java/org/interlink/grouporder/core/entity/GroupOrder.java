@@ -47,6 +47,12 @@ public class GroupOrder {
         fullPrice = orderFullPrice();
     }
 
+    public void removeMemberFromOrder(MemberOrder memberOrder) {
+        if (isMemberInGroupOrder(memberOrder)) {
+            members.remove(memberOrder.getEmail());
+        }
+    }
+
     public List<Product> getAllProducts() {
         List<Product> products = members.values().stream()
                 .map(MemberOrder::getProducts)
