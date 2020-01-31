@@ -87,11 +87,23 @@ public class OrderController {
         }
     }
 
-    @PostMapping("/{code}/lock-group-order")
+    @PutMapping("/{code}/lock-group-order")
     public ResponseEntity lockGroupOrder(@PathVariable("code") String code) {
         try {
+            GroupOrder groupOrder = DataStorage.getGroupOrder(code);
+            groupOrder.lockOrder();
+            return ResponseEntity.ok("Order " + code + " is locked!");
+        } catch (Exception e) {
+            return ExceptionsHandler.handleException(e);
+        }
+    }
 
-            return ResponseEntity.ok("Success");
+    @DeleteMapping("/{code}/lock-group-order")
+    public ResponseEntity unlockGroupOrder(@PathVariable("code") String code) {
+        try {
+            GroupOrder groupOrder = DataStorage.getGroupOrder(code);
+            groupOrder.unlockOrder();
+            return ResponseEntity.ok("Order " + code + " is locked!");
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }

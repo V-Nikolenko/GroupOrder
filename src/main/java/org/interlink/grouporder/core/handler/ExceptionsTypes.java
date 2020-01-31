@@ -2,6 +2,7 @@ package org.interlink.grouporder.core.handler;
 
 import org.interlink.grouporder.core.exceptions.BadRequestException;
 import org.interlink.grouporder.core.exceptions.ForbiddenException;
+import org.interlink.grouporder.core.exceptions.NotModifiedException;
 import org.interlink.grouporder.core.exceptions.UnprocessableEntityException;
 import org.springframework.http.HttpStatus;
 
@@ -18,6 +19,8 @@ class ExceptionsTypes {
             return HttpStatus.NOT_FOUND; // Сервер не може знайти класс
         } else if (e instanceof UnprocessableEntityException) {
             return HttpStatus.UNPROCESSABLE_ENTITY; // Тип і синтаксис правильні, однак, серверу не вдалося опрацювати інструкцію вмісту
+        } else if (e instanceof NotModifiedException) {
+            return HttpStatus.NOT_MODIFIED; // Не можу зробити це бо вже хтось другий зробив це.
         } else {
             return HttpStatus.INTERNAL_SERVER_ERROR; // Непередбачувана умова яка не дозволила виконати запрос
         }

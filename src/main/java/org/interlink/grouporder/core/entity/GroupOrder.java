@@ -1,10 +1,12 @@
 package org.interlink.grouporder.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Getter;
 import lombok.Setter;
 import org.interlink.grouporder.core.entity.view.GroupOrderView;
 import org.interlink.grouporder.core.exceptions.BadRequestException;
+import org.interlink.grouporder.core.exceptions.NotModifiedException;
 import org.interlink.grouporder.core.utils.ProductsCounter;
 
 import java.util.Collection;
@@ -26,6 +28,9 @@ public class GroupOrder {
     @JsonView(GroupOrderView.Extended.class)
     private Map<String, MemberOrder> members = new LinkedHashMap<>();
 
+    @JsonIgnore
+    private boolean isLocked = false;
+
     public GroupOrder(String code) {
         this.code = code;
     }
@@ -38,7 +43,14 @@ public class GroupOrder {
         if (member == null) {
             throw new BadRequestException("Error! Method AddMemberToGroupOrder parameter 'MemberOrder' is null");
         }
+        if (!isLocked) {
+            doActionWithMember(member);
+        } else {
+            throw new NotModifiedException("Group order is locked");
+        }
+    }
 
+    private void doActionWithMember(MemberOrder member) {
         if (isMemberInGroupOrder(member)) {
             members.replace(member.getEmail(), member);
         } else if (members.isEmpty()) {
@@ -64,6 +76,14 @@ public class GroupOrder {
                 .collect(Collectors.toList());
 
         return ProductsCounter.getAllGroupingProducts(products);
+    }
+
+    public void lockOrder() {
+        isLocked = true;
+    }
+
+    public void unlockOrder() {
+        isLocked = false;
     }
 
     private int orderFullPrice() {
