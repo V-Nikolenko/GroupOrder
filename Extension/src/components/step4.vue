@@ -8,8 +8,10 @@
 
         <div v-if="step.isActive" class="step4__active-block">
             <div class="step4__container">
-                <div class="step4__title"><span>Борги</span><img src="" alt=""></div>
-                <list-bills></list-bills>
+                <div class="step4__title"><span>Борги</span>
+                <img src="/images/export.png" alt="export" title="Експортувати" class="img" v-on:click="copy">
+            </div>
+                <list-bills v-on:bills="saveBills"></list-bills>
                 
                 <!-- <ul class="list">
                     <li v-for="(member, index) in data.items" v-bind:key="index" class="list-item">
@@ -47,6 +49,18 @@ export default {
         
     },
     methods: {
+        saveBills: function(data) {
+            this.data = data;
+        },
+
+        copy: function() {
+            let el = document.createElement('textarea');
+            el.value = JSON.stringify(this.data);
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+        },
     },
     // watch: {
     //     isActive: function() {
@@ -83,12 +97,15 @@ $color3: white;
     }
 
     &__title{
-        margin: 5px 0;
+        font-size: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     &__container {
-        width: 95%;
-        margin: 0 auto;
+        padding: 3px;
+        // margin: 0 auto;
     }
 
     &__active-block {

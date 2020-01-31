@@ -29,6 +29,7 @@ export default{
             } else throw new Error();
         })
         .then((resp)=> {
+            this.$emit('bills', resp)
             this.data = resp;
         })
         .catch((error) => { console.log(error) });

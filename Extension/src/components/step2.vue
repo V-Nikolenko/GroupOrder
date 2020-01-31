@@ -6,7 +6,7 @@
                 v-bind:isActive="step.isActive"
         ></step-header>
 
-        <div v-if="step.isActive" class="step2__active-block">
+        <div v-show="step.isActive" class="step2__active-block">
 
             <div class="step2__container">
 
@@ -19,7 +19,7 @@
 
         </div>
         
-        <div v-else-if="step.isDone" class="step doneStep doneStep2">
+        <div v-show="step.isDone" class="step doneStep doneStep2">
         
             <span>{{ service.steps[1].data.name }}</span>
             <span>{{ service.steps[1].data.userFullPrice}}</span>

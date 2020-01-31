@@ -4,6 +4,7 @@ class StepService {
     }
 
     nextStep(step) {
+        console.log(this.steps)
         let currentId = this.steps.indexOf(step)
 
         if (currentId === (this.steps.length-1)) {
@@ -29,7 +30,8 @@ class StepService {
     }
 
     setData(data) {
-        this.notify(data);
+        this.steps = data
+        this.notify(this.steps);
     }
 
     subscribe(listener) {

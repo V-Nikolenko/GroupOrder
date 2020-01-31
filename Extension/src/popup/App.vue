@@ -1,8 +1,8 @@
 <template>
-<div class="container">
 
+<div class="container">
   <div v-if="isLoaded">
-    
+
     <div v-bind:class="[isDisplay ? 'receipt' : 'receipt_none']">
       
       <h2 class="receipt-heading">{{steps[0].data.code}}</h2>
@@ -21,13 +21,14 @@
   </div>
   
   <div class='extension'>
-
     <header>
       <h1 class="extension__title">Group Order</h1>
     </header>
 
     <div v-if="isLoaded">
-      
+
+      <div>{{stepService}}</div>
+
       <step1 v-bind:step=steps[0] v-on:next='nextStep' v-on:logOut="logOut"></step1>    
       
       <step2 v-bind:step=steps[1] v-on:next='nextStep'></step2> 
@@ -53,45 +54,45 @@ import {stepFactory} from '../components/stepService';
 import {sendGetOrdersListRequest} from '../components/requests'
 
 const STEPS = [
-        {
-          isActive: true,
-          isDone: false,
-          title: '1. Обрати заклад',
-          data: {
-            code: null
-          }
-        },
-        
-        {
-          isActive: false,
-          isDone: false,
-          title: '2. Доповнити замовлення',
-          data: {
-            name: null,
-            email: null,
-            userFullPrice: null
-          }
-        },
-        
-        {
-          isActive: false,
-          isDone: false,
-          title: '3. Зібрати замовлення',
-          data: {
-            fullPrice: null
-          }
-        },
+  {
+    isActive: true,
+    isDone: false,
+    title: '1. Обрати заклад',
+    data: {
+      code: null
+    }
+  },
+  
+  {
+    isActive: false,
+    isDone: false,
+    title: '2. Доповнити замовлення',
+    data: {
+      name: null,
+      email: null,
+      userFullPrice: null
+    }
+  },
+  
+  {
+    isActive: false,
+    isDone: false,
+    title: '3. Зібрати замовлення',
+    data: {
+      fullPrice: null
+    }
+  },
 
-        {
-          isActive: false,
-          isDone: false,
-          title: '4. Показати борги',
-          data: {
-          
-          }
-        }
+  {
+    isActive: false,
+    isDone: false,
+    title: '4. Показати борги',
+    data: {
+    
+    }
+  }
 
-      ];
+];
 
 export default {
   name: "app",
@@ -143,16 +144,19 @@ export default {
     nextStep: function(step) {
       this.stepService.nextStep(step);
     },
+
     logOut: function() {
-      this.stepService.setData(STEPS);
+      let copy =  STEPS.map((elem) => Object.assign({}, elem));
+      this.stepService.setData(copy);
     }
   },
 
   created() {
     chrome.storage.sync.get('steps', (result) => {
+      let copy = STEPS.map((elem) => Object.assign({}, elem))
       this.stepService = result.steps !== undefined
                         ? stepFactory.create(result.steps) 
-                        : stepFactory.create(STEPS);
+                        : stepFactory.create(copy);
       
       // stepService.subscribe( function(steps) {
       //   chrome.storage.sync.set({steps});
@@ -176,8 +180,7 @@ body {
 .extension {
   display: flex;
   flex-direction: column;
-  width: 400px;
-  float: right;
+  min-width: 400px;
 
   &__title {
     margin: 0;

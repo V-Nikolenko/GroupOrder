@@ -18,6 +18,7 @@
 
                 <span class="step1__delimeter">або</span>
 
+
                 <input v-model="inputCode" type="text" name="code" class="step1__input" placeholder="Код замовлення">
 
                 <button class="step1__btn" v-on:click="connectWithCode()">Приєднатися до існуючого замовлення</button>
@@ -26,9 +27,10 @@
         </section>
         
         <section v-show="step.isDone" class="doneStep doneStep-step1 step">
-            <a href="#" >{{ step.data.code }}</a>
+
+            <a href="#">{{ step.data.code }}</a>
             <!-- TODO: add restaurat -->
-            <img src="/images/copy.png" alt="Копіювати" title="Копіювати" class="img copy-img">
+            <img src="/images/copy.png" alt="Копіювати" title="Копіювати" class="img copy-img" v-on:click="copy">
             <img src="/images/logout.png" alt="Вийти" title="Вийти" class="img logout-img" v-on:click="logOut"> 
         </section>
         
@@ -60,6 +62,17 @@ export default {
     },
 
     methods: {
+        copy: function() {
+            // let code = JSON.parse(JSON.stringify(this.service.steps[0].data.code));
+            // code = code.();
+            let el = document.createElement('textarea');
+            el.value = this.service.steps[0].data.code;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+        },
+
         logOut: function() {
             this.$emit('logOut')
         },
