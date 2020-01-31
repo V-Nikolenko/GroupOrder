@@ -90,6 +90,7 @@ public class OrderController {
     @PostMapping("/{code}/lock-group-order")
     public ResponseEntity lockGroupOrder(@PathVariable("code") String code) {
         try {
+
             return ResponseEntity.ok("Success");
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);

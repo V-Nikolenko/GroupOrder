@@ -23,6 +23,7 @@ public class SplitBillMapper {
                 .map(member -> map(member, new MemberDTO()))
                 .collect(Collectors.toList());
 
+        destination.setFullPrice(source.getFullPrice());
         destination.setInternetShopURL(source.getInternetShopURL());
         destination.setItems(items);
 
