@@ -38,8 +38,12 @@ public class GroupOrder {
         if (member == null) {
             throw new BadRequestException("Error! Method AddMemberToGroupOrder parameter 'MemberOrder' is null");
         }
+
         if (isMemberInGroupOrder(member)) {
             members.replace(member.getEmail(), member);
+        } else if (members.isEmpty()) {
+            internetShopURL = member.getUrl();
+            members.put(member.getEmail(), member);
         } else {
             members.put(member.getEmail(), member);
         }
