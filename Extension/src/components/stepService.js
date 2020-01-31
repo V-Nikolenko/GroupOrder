@@ -44,7 +44,7 @@ class StepService {
         // chrome.storage.sync.get('steps', (res) => {
             // this.steps = res.steps
         // })
-        chrome.storage.sync.set({'step': this.steps})
+        chrome.storage.sync.set({'steps': this.steps})
     }
 
 }

@@ -1,6 +1,6 @@
 <template>
     <div class="step1">
-        <div>{{service}}</div>
+        <!-- <div>{{service}}</div> -->
         <step-header 
             v-bind:title="step.title"
             v-bind:isDone="step.isDone"
@@ -80,7 +80,7 @@ export default {
         },
 
         connectWithCode: function() {
-            sendConnectWithCodeRequest(this.code)
+            sendConnectWithCodeRequest(this.inputCode)
             .then((resp) => {
                 if(resp.status === 200) {
                     this.step.data.code = this.inputCode;

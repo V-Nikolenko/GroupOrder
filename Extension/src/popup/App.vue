@@ -15,34 +15,6 @@
           v-bind:id="id">
         </list-item>
 
-        <!-- <li v-for="(member,id) in members" v-bind:key='id' class="list-item">
-          
-          <div class="head" v-on:click="isBody">
-            <span>{{member.name}}</span> 
-            <span>{{member.fullPrice}}</span>
-          </div>
-
-          <table class="body">
-            <thead>
-              <th height='25'>№</th>
-              <th height='25'>Назва</th>
-              <th height='25'>Кількість</th>
-              <th height='25'>Ціна</th>
-            </thead>
-
-            <tbody>
-              <tr v-for="(product, prodId) in member.products" v-bind:key="prodId">
-                <td class="text-center">{{prodId}}</td>
-                <td>{{product.name}}</td>
-                <td class="text-center">{{product.count}}</td>
-                <td class="text-center">{{product.price}}</td>
-              </tr>
-            </tbody>
-          </table>
-
-        </li> -->
-
-
       </ul>
     </div>
   
@@ -96,7 +68,8 @@ const STEPS = [
           title: '2. Доповнити замовлення',
           data: {
             name: null,
-            email: null
+            email: null,
+            userFullPrice: null
           }
         },
         
@@ -242,14 +215,21 @@ body {
 .receipt_none {
   width: 0px;
   overflow: hidden;
-  transition: 2s ease-in-out;
+  transition: 1s ease-out;
+  overflow-y: auto;
+  height: 100vh;
 } 
 .receipt {
+  height: 100vh;
+  overflow-y: auto;
   width: 300px;
-  transition: 2s ease-in-out;
+  transition: 1s ease-in;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .receipt-heading {
+  overflow-x: hidden;
   min-height: 40px;
   margin: 0;
   display: flex;

@@ -37,6 +37,7 @@ export default {
     computed: {
     },
     methods: {
+        
     },
     created() {
         chrome.storage.sync.get(['user'], function(result) {
