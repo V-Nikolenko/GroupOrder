@@ -65,12 +65,12 @@ export default {
             .then((resp) => {
                 console.log(resp)
                 if(resp.status === 200) {
-                    return resp.json()
+                    return resp.text()
                 } else {
                     throw new Error(resp.text)
                 }
             }).then((resp) => {
-                this.step.data.code = resp.code;
+                this.step.data.code = resp;
                 this.$emit('next', this.step); 
             })
             .catch((error)=> {
