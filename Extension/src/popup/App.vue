@@ -28,7 +28,7 @@
 
     <div v-if="isLoaded">
       
-      <step1 v-bind:step=steps[0] v-on:next='nextStep'></step1>    
+      <step1 v-bind:step=steps[0] v-on:next='nextStep' v-on:logOut="logOut"></step1>    
       
       <step2 v-bind:step=steps[1] v-on:next='nextStep'></step2> 
 
@@ -142,6 +142,9 @@ export default {
   methods: {
     nextStep: function(step) {
       this.stepService.nextStep(step);
+    },
+    logOut: function() {
+      this.stepService.setData(STEPS);
     }
   },
 
@@ -255,9 +258,6 @@ body {
   padding: 0;
   margin: 0;
 
-  &-item {
-
-  }
 }
 
 .text-center {

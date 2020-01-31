@@ -16,10 +16,10 @@
 
             <tbody>
                 <tr v-for="(product, prodId) in member.products" v-bind:key="prodId">
-                <td class="text-center">{{prodId}}</td>
-                <td>{{product.name}}</td>
-                <td class="text-center">{{product.count}}</td>
-                <td class="text-center">{{product.price}}</td>
+                    <td class="text-center">{{prodId}}</td>
+                    <td>{{product.name}}</td>
+                    <td class="text-center">{{product.count}}</td>
+                    <td class="text-center">{{product.price}}</td>
                 </tr>
             </tbody>
         </table>
@@ -35,7 +35,6 @@ export default {
     data() {
         return {
             isBody: false
-
         }
     }
 }
@@ -49,6 +48,9 @@ $color2: gray;
 
 .head {
     cursor: pointer;
+}
+.body {
+    width: 100%;
 }
 
 table {
@@ -77,10 +79,10 @@ tr:nth-child(2) {
 }
 
 tr:nth-child(3) {
-  width: 25%;
+  width: 20%;
 }
 tr:nth-child(4) {
-  width: 25%;
+  width: 20%;
 }
 
 
