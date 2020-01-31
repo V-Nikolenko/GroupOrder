@@ -25,7 +25,6 @@ public class GroupOrder {
     private int fullPrice;
     @JsonView(GroupOrderView.Extended.class)
     private Map<String, MemberOrder> members = new LinkedHashMap<>();
-    private boolean activeOrderStatus = true;
 
     public GroupOrder(String code) {
         this.code = code;
@@ -33,7 +32,6 @@ public class GroupOrder {
 
     private boolean isMemberInGroupOrder(MemberOrder member) {
         return members.containsKey(member.getEmail());
-
     }
 
     public void addMemberToGroupOrder(MemberOrder member) {

@@ -32,7 +32,7 @@ public class OrderController {
     @PostMapping("{code}/connect")
     public ResponseEntity connectToGroupOrder(@PathVariable("code") String code) {
         try {
-            if (DataStorage.isContains(code) && DataStorage.getGroupOrder(code).isActiveOrderStatus()) {
+            if (DataStorage.isContains(code)) {
                 return ResponseEntity.ok("Success!");
             } else {
                 return ResponseEntity.notFound().build();
@@ -70,7 +70,6 @@ public class OrderController {
     public ResponseEntity formGroupOrder(@PathVariable("code") String code) {
         try {
             GroupOrder groupOrder = DataStorage.getGroupOrder(code);
-            groupOrder.setActiveOrderStatus(false);
             return ResponseEntity.ok(map(groupOrder, new FullOrderItemsDTO()));
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
