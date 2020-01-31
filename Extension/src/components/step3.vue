@@ -9,7 +9,7 @@
         <div v-if="step.isActive" class="step3__active-block">
 
             <div class="items-container">
-                <a href="#" v-on:click="showCheckBlock()">{{ showText }}</a>
+                <a href="#" v-on:click="showCheckBlock">{{ showCheckText }}</a>
                 <img src="/images/lock.png" class='img img-lock' alt="Заблокувати замовлення" title="Заблокувати замовлення">
             </div>
             
@@ -20,8 +20,9 @@
             </div>
 
         </div>
+
         <div v-else-if="step.isDone" class="step doneStep">
-            {{step}}
+            {{ step.data.fullPrice }}
         </div>
     </div>
 </template>
@@ -46,17 +47,16 @@ export default {
     },
 
     computed: {
-        showText: function () {
+        showCheckText: function () {
             return this.showCheck ? 'Показати' : 'Сховати';
         }
     },
 
     methods: {
-        showCheckBlock: function() {
-            this.$emit('display');
-            showCheck = !showCheck;
+        showCheckBlock() {
+            this.showCheck = !this.showCheck;
+            this.$emit('display')
         },
-
         formOrder: function () {
             // replace to getCode()
             sendGetAllDishesRequest(this.service.steps[0].data.code)
@@ -76,6 +76,7 @@ export default {
                             chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
                                 chrome.tabs.sendMessage(tabs[0].id, {type: 'reload'})
 
+                                this.step.data.fullPrice = resp.fullPrice;
                                 this.$emit('next', this.step);
                             })
                         }
@@ -198,4 +199,13 @@ export default {
     margin-right: 3px;
 }
 
+.check {
+    position: absolute;
+    z-index: 0;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+}
 </style>

@@ -11,7 +11,7 @@
             <div class="step2__container">
 
                 <input v-model="name" type="text" name="name" class="step2__input" placeholder="Ваше ім'я">
-                <input v-model="email" type="text" name="email" class="step2__input" placeholder="Ваша почта">
+                <input v-model="email" type="text" name="email" class="step2__input" placeholder="Ваша пошта">
 
                 <button class="step2__btn" v-on:click="sendOrder()">Доповнити групове замовлення</button>
 
