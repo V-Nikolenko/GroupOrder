@@ -51,7 +51,6 @@ public class OrderController {
             DataStorage.getGroupOrder(code).addMemberToGroupOrder(memberOrder);
             return ResponseEntity.ok("Success");
         } catch (Exception e) {
-            e.printStackTrace();
             return ExceptionsHandler.handleException(e);
         }
     }
@@ -86,10 +85,21 @@ public class OrderController {
     }
 
     @PutMapping("/{code}/lock-group-order")
-    public ResponseEntity LockGroupOrder(@PathVariable("code") String code) {
+    public ResponseEntity lockGroupOrder(@PathVariable("code") String code) {
         try {
             GroupOrder groupOrder = DataStorage.getGroupOrder(code);
-            groupOrder.setLock(true);
+            groupOrder.lockOrder();
+            return ResponseEntity.ok("Order " + code + " is locked!");
+        } catch (Exception e) {
+            return ExceptionsHandler.handleException(e);
+        }
+    }
+
+    @DeleteMapping("/{code}/lock-group-order")
+    public ResponseEntity unlockGroupOrder(@PathVariable("code") String code) {
+        try {
+            GroupOrder groupOrder = DataStorage.getGroupOrder(code);
+            groupOrder.unlockOrder();
             return ResponseEntity.ok("Order " + code + " is locked!");
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);

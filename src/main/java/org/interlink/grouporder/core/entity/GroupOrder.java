@@ -29,7 +29,7 @@ public class GroupOrder {
     private Map<String, MemberOrder> members = new LinkedHashMap<>();
 
     @JsonIgnore
-    private boolean lock = false;
+    private boolean isLocked = false;
 
     public GroupOrder(String code) {
         this.code = code;
@@ -43,7 +43,7 @@ public class GroupOrder {
         if (member == null) {
             throw new BadRequestException("Error! Method AddMemberToGroupOrder parameter 'MemberOrder' is null");
         }
-        if (!lock) {
+        if (!isLocked) {
             doActionWithMember(member);
         } else {
             throw new NotModifiedException("Group order is locked");
@@ -73,11 +73,11 @@ public class GroupOrder {
     }
 
     public void lockOrder() {
-        lock = true;
+        isLocked = true;
     }
 
     public void unlockOrder() {
-        lock = false;
+        isLocked = false;
     }
 
     private int orderFullPrice() {
