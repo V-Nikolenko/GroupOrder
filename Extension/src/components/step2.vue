@@ -22,8 +22,8 @@
         <div v-show="step.isDone" class="step doneStep doneStep2">
         
             <span>{{ service.steps[1].data.name }}</span>
-            <span>{{ service.steps[1].data.userFullPrice}}</span>
-            <img src="/images/delete.png" alt="Видалити замовлення" title="Видалити замовлення" class="img img-reset">
+            <span style="padding-right: 3px">{{ service.steps[1].data.userFullPrice}} грн.</span>
+            <!-- <img src="/images/delete.png" alt="Видалити замовлення" title="Видалити замовлення" class="img img-reset"> -->
         
         </div>
 
@@ -66,9 +66,9 @@ export default {
                     response.email = this.email;
                     response.name = this.name;
                     
-                    // this.fullPrice = response.fullPrice
+                    // this.fullPrice = response.fullPrice;
 
-                    //change this.service.steps[0].data.code to getCode() 
+                    //change this.service.steps[0].data.code to getCode();
                     sendMemberOrder(this.service.steps[0].data.code, response).then((resp)=> {
                         
                         if (resp.status === 200) {
@@ -90,9 +90,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$color1: silver;
-$color2: #4b0082;
+$color1: #f5f5f5;
+$color2: #6658f3;
 $color3: white;
+$color4: #8a8f93;
 
 .step2 {
     display: flex;
@@ -109,7 +110,7 @@ $color3: white;
         flex-direction: column;
         align-items: center;
         flex: 1;
-        justify-content: space-around
+        justify-content: space-around;
     }
 
     &__active-block {
@@ -118,7 +119,7 @@ $color3: white;
         border: 1px solid silver;
         border-top: none;
         padding: 3px;
-        min-height: 250px;
+        min-height: 200px;
     }
 
     &__delimeter {
@@ -168,11 +169,11 @@ $color3: white;
     &__input {
         min-height: 35px;
         border-radius: 5px;
-        border: 1px solid $color1;
+        border: 1px solid $color4;
 
         &:focus {
             outline: none;
-            box-shadow: 0 0 1px 2px $color1;
+            box-shadow: 0 0 1px 2px $color4;
         }
     }
 

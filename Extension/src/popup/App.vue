@@ -5,7 +5,7 @@
 
     <div v-bind:class="[isDisplay ? 'receipt' : 'receipt_none']">
       
-      <h2 class="receipt-heading">{{steps[0].data.code}}</h2>
+      <h2 class="receipt-heading">Чек № {{steps[0].data.code}}</h2>
 
       <ul class="list">
 
@@ -22,12 +22,10 @@
   
   <div class='extension'>
     <header>
-      <h1 class="extension__title">Group Order</h1>
+      <h1 class="extension__title pd-left">Group Order</h1>
     </header>
 
     <div v-if="isLoaded">
-
-      <div>{{stepService}}</div>
 
       <step1 v-bind:step=steps[0] v-on:next='nextStep' v-on:logOut="logOut"></step1>    
       
@@ -114,7 +112,7 @@ export default {
 
   computed: {
     isLoaded() {
-      return !!this.stepService
+      return !!this.stepService;
     },
 
     steps() {
@@ -148,6 +146,7 @@ export default {
     logOut: function() {
       let copy =  STEPS.map((elem) => Object.assign({}, elem));
       this.stepService.setData(copy);
+      // window.location.reload();
     }
   },
 
@@ -168,8 +167,8 @@ export default {
 </script>
 
 <style lang="scss">
-$color1: silver;
-$color2: gray;
+$color1: #f5f5f5;
+$color2: #8a8f93;
 
 body {
   margin: 0;
@@ -197,6 +196,7 @@ body {
 .container {
   display: flex;
   justify-content: space-between;
+  height: 400px;
 }
 
 .doneStep {
@@ -206,7 +206,7 @@ body {
 }
 
 .step {
-  padding: 3px;
+  padding: 0 3px 0 8px;
   min-height: 35px;
   width: 100%;
   box-sizing: border-box;
@@ -267,6 +267,9 @@ body {
   text-align: center;
 }
 
+.pd-left{
+  padding-left: 7px;
+}
 
 </style>
 

@@ -10,7 +10,7 @@
         <section v-show="step.isActive" class="step1__active-block">
             
             <ol class="step1__list">
-                <li v-for="(subStep, index) in subSteps" v-bind:key="index">{{ '1.' + (index + 1) + ". " + subStep }}</li>
+                <li v-for="(subStep, index) in subSteps" class="pd-left8" v-bind:key="index">{{ '1.' + (index + 1) + ". " + subStep }}</li>
             </ol>
 
             <div class="step1__container">
@@ -28,7 +28,7 @@
         
         <section v-show="step.isDone" class="doneStep doneStep-step1 step">
 
-            <a href="#">{{ step.data.code }}</a>
+            <a href="#" class="link">Код замовлення: {{ step.data.code }}</a>
             <!-- TODO: add restaurat -->
             <img src="/images/copy.png" alt="Копіювати" title="Копіювати" class="img copy-img" v-on:click="copy">
             <img src="/images/logout.png" alt="Вийти" title="Вийти" class="img logout-img" v-on:click="logOut"> 
@@ -113,10 +113,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$color1: silver;
-$color2: gray;
-$color3: #4b0082;
+$color1: #f5f5f5;
+$color2: #8a8f93;
+$color3: #6658f3;
 $color4: white;
+.pd-left8 {
+    padding: 8px;
+}
 
 .step1 {
     display: flex;
@@ -202,6 +205,11 @@ $color4: white;
 
 }
 
+.link {
+    text-decoration: none;
+    color: $color3;
+    cursor: default;
+}
 
 .copy-im,
 .logout-img {

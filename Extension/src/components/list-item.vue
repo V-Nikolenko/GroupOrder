@@ -3,12 +3,12 @@
 
         <div class="head" v-on:click="isBody = !isBody">
             <span>{{member.name}}</span> 
-            <span>{{member.fullPrice}}</span>
+            <span>{{member.fullPrice}} грн.</span>
         </div>
 
         <table v-show="isBody" class="body">
             <thead>
-                <th height='25'>№</th>
+                <th height='25' style="padding-left: 5px">№</th>
                 <th height='25'>Назва</th>
                 <th height='25'>Кількість</th>
                 <th height='25'>Ціна</th>
@@ -16,7 +16,7 @@
 
             <tbody>
                 <tr v-for="(product, prodId) in member.products" v-bind:key="prodId">
-                    <td class="text-center">{{prodId}}</td>
+                    <td style="padding-left: 5px">{{prodId}}</td>
                     <td>{{product.name}}</td>
                     <td class="text-center">{{product.count}}</td>
                     <td class="text-center">{{product.price}}</td>
@@ -43,8 +43,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$color1: silver;
-$color2: gray;
+$color1: #f8f9fb;
+$color2: #8a8f93;
 
 .head {
     cursor: pointer;

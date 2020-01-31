@@ -9,7 +9,7 @@
   },
 
   "page_action": {
-    "default_title": "Group Grder extension",
+    "default_title": "Group Order extension",
     "default_popup": "popup/popup.html"
   },
 

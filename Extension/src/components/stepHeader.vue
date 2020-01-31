@@ -25,8 +25,10 @@ export default {
 </script> 
 
 <style lang="scss" scoped>
-$color1: silver;
-$color2: gray;
+$color1: #f5f5f5;
+$color2: #8a8f93;
+$color3: #6658f3;
+$color4: white;
 
 .step-heading {
     margin: 0;

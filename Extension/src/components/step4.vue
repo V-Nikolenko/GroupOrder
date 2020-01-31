@@ -82,8 +82,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$color1: silver;
-$color2: #4b0082;
+$color1: #f5f5f5;
+$color2: #6658f3;
 $color3: white;
 
 .step4 {
@@ -97,6 +97,8 @@ $color3: white;
     }
 
     &__title{
+        margin-bottom: 10px; 
+        padding: 0 0 0 8px;
         font-size: 16px;
         display: flex;
         justify-content: space-between;
@@ -113,7 +115,6 @@ $color3: white;
         flex-direction: column;
         border: 1px solid silver;
         border-top: none;
-        padding: 3px;
         min-height: 250px;
     }
     
@@ -179,6 +180,7 @@ $color3: white;
     width: 100%;
 
     &-item {
+        padding: 0 0 0 8px; 
         display: flex;
         justify-content: space-between;
         width: 100%;

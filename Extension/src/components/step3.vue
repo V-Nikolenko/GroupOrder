@@ -9,8 +9,8 @@
         <div v-if="step.isActive" class="step3__active-block">
 
             <div class="items-container">
-                <a href="#" v-on:click="showCheckBlock">{{ showCheckText }}</a>
-                <img src="/images/lock.png" class='img img-lock' alt="Заблокувати замовлення" title="Заблокувати замовлення">
+                <button class="btn" v-on:click="showCheckBlock">{{ showCheckText }}</button>
+                <!-- <img src="/images/lock.png" class='img img-lock' alt="Заблокувати замовлення" title="Заблокувати замовлення"> -->
             </div>
             
             <div class="btn-container"> 
@@ -22,7 +22,7 @@
         </div>
 
         <div v-else-if="step.isDone" class="step doneStep">
-            {{ step.data.fullPrice }}
+            Сума: {{ step.data.fullPrice }} грн.
         </div>
     </div>
 </template>
@@ -94,8 +94,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    $color1: silver;
-    $color2: #4b0082;
+    $color1: #f5f5f5;
+    $color2: #6658f3;
     $color3: white;
 
     .step3 {
@@ -122,7 +122,7 @@ export default {
             border: 1px solid silver;
             border-top: none;
             padding: 3px;
-            min-height: 250px;
+            min-height: 200px;
         }
 
         &__delimeter {
@@ -184,6 +184,7 @@ export default {
     }
 
 .items-container {
+    padding: 0 0 0 8px; 
     margin: 10px 0;
     display: flex;
     justify-content: space-between;
@@ -210,5 +211,16 @@ export default {
 .step {
     display: flex;
     align-items: center;
+}
+.btn {
+    color: $color2;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0px;
+
+    &:focus {
+        outline: none;
+    }
 }
 </style>

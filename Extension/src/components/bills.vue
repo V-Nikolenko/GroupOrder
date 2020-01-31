@@ -2,8 +2,8 @@
     <ul class="list" v-if="!!data">
         
         <li v-for="(member, index) in data.items" v-bind:key="index" class="list-item">
-            <span>{{ index + 1 +') ' + member.name}}</span>
-            <span>{{member.price + 'грн.'}}</span>
+            <span style="font-size: 13px">{{ index + 1 +') ' + member.name}}</span>
+            <span style="padding-right: 4px; font-size: 13px;">{{member.price + 'грн.'}}</span>
         </li>
 
     </ul>
@@ -40,5 +40,9 @@ export default{
 </script>
 
 <style lang="scss" scoped>
-
+.list-item {
+    padding: 0 0 0 8px;
+    display: flex;
+    justify-content: space-between;
+}
 </style>
