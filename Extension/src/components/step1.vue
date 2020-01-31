@@ -1,6 +1,6 @@
 <template>
     <div class="step1">
-        <div>{{service}}</div>
+        <!-- <div>{{service}}</div> -->
         <step-header 
             v-bind:title="step.title"
             v-bind:isDone="step.isDone"
@@ -29,7 +29,7 @@
             <a href="#" >{{ step.data.code }}</a>
             <!-- TODO: add restaurat -->
             <img src="/images/copy.png" alt="Копіювати" title="Копіювати" class="img copy-img">
-            <img src="/images/logout.png" alt="Вийти" title="Вийти" class="img logout-img"> 
+            <img src="/images/logout.png" alt="Вийти" title="Вийти" class="img logout-img" v-on:click="logOut"> 
         </section>
         
     </div>
@@ -60,6 +60,10 @@ export default {
     },
 
     methods: {
+        logOut: function() {
+            this.$emit('logOut')
+        },
+
         newOrder: function() {
             sendCreateNewOrderRequest()
             .then((resp) => {
@@ -80,7 +84,7 @@ export default {
         },
 
         connectWithCode: function() {
-            sendConnectWithCodeRequest(this.code)
+            sendConnectWithCodeRequest(this.inputCode)
             .then((resp) => {
                 if(resp.status === 200) {
                     this.step.data.code = this.inputCode;

@@ -13,7 +13,7 @@ class StepService {
           step.isDone = !step.isDone;
           this.steps[currentId+1].isActive = true;
         }
-        this.notify();
+        this.notify(this.steps);
     }
 
     getCode() {
@@ -28,15 +28,15 @@ class StepService {
         this.steps[1].data.email;
     }
 
-    setStepData(/*data, id*/) {
-        
+    setData(data) {
+        this.notify(data);
     }
 
     subscribe(listener) {
         this.listener = listener;
     }
 
-    notify() {
+    notify(data) {
         // rewrite in local storage
         // if (this.listener) {
         //     this.listener(this.steps);
@@ -44,7 +44,7 @@ class StepService {
         // chrome.storage.sync.get('steps', (res) => {
             // this.steps = res.steps
         // })
-        chrome.storage.sync.set({'step': this.steps})
+        chrome.storage.sync.set({'steps': data})
     }
 
 }

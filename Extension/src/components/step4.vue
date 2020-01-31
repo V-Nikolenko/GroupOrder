@@ -3,146 +3,171 @@
         <step-header
                 v-bind:title="step.title"
                 v-bind:isDone="step.isDone"
-                v-bind:isActive="step.isActive"
-        ></step-header>
+                v-bind:isActive="step.isActive">
+        </step-header>
 
         <div v-if="step.isActive" class="step4__active-block">
-            <div class="step4__container"> {{data}}
-                 <!-- <ul>
-                    <li v-for="member in members">{{member.name}} + "  ыаыааыыа  " + {{member.fullPrice}}</li>
+            <div class="step4__container">
+                <div class="step4__title"><span>Борги</span><img src="" alt=""></div>
+                <list-bills></list-bills>
+                
+                <!-- <ul class="list">
+                    <li v-for="(member, index) in data.items" v-bind:key="index" class="list-item">
+                        <span>{{ index + 1 +') ' + member.name}}</span>
+                        <span>{{member.price + 'грн.'}}</span>
+                    </li>
                 </ul> -->
-            </div>
-        </div>
-        <div v-else-if="step.isDone">
 
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import stepHeader from "./stepHeader";
-import { sendGetAllDishesRequest } from './requests'
+import { sendGetAllDishesRequest, sendGetSplitBillData } from './requests';
+import { stepFactory } from "./stepService";
+import listBills from './bills';
 
 export default {
     name: 'step4',
     props: ['step'],
     components: {
-        stepHeader
+        stepHeader,
+        listBills
     },
+
     data() {
         return {
-            data: null
+            service: stepFactory.service,
+            data: null,
         }
     },
     computed: {
+        
     },
     methods: {
     },
-    created() {
-        chrome.storage.sync.get(['user'], function(result) {
-            sendGetAllDishesRequest()
-            .then((resp) => {
-                if (resp.status === 200) {
-                    return resp.json();
-                } else throw new Error();
-            })
-            .then((resp)=> {
-                this.data = resp;
-            })
-            .catch((error) => { console.log(error) })
-        })
-    }
+    // watch: {
+    //     isActive: function() {
+    //         if(this.step.isActive) {
+    //             sendGetSplitBillData(this.service.steps[0].data.code)
+    //             .then((resp) => {
+    //                 if (resp.status === 200) {
+    //                     return resp.json();
+    //                 } else throw new Error();
+    //             })
+    //             .then((resp)=> {
+    //                 this.data = resp;
+    //             })
+    //             .catch((error) => { console.log(error) });
+    //         }
+    //     }
+    // }
 }
 </script>
 
 <style lang="scss" scoped>
-    $color1: silver;
-    $color2: #4b0082;
-    $color3: white;
+$color1: silver;
+$color2: #4b0082;
+$color3: white;
 
-    .step4 {
+.step4 {
+    display: flex;
+    flex-direction: column;
+
+    &__list {
+        padding: 0px;
+        margin: 0;
+        list-style-type: none;
+    }
+
+    &__title{
+        margin: 5px 0;
+    }
+
+    &__container {
+        width: 95%;
+        margin: 0 auto;
+    }
+
+    &__active-block {
         display: flex;
         flex-direction: column;
+        border: 1px solid silver;
+        border-top: none;
+        padding: 3px;
+        min-height: 250px;
+    }
+    
+    &__delimeter {
 
-        &__list {
-            padding: 0px;
-            margin: 0;
-            list-style-type: none;
+        &::after,
+        &::before {
+            content: '';
+            display: inline-block;
+            border-top: 2px solid silver;
+            width: 120px;
+            position: relative;
+            top: -2px;
+            transform: translate(0%, -50%);
         }
 
-        &__container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-            justify-content: space-around
+        &::after {
+            transform: translateX(15px)
         }
 
-        &__active-block {
-            display: flex;
-            flex-direction: column;
-            border: 1px solid silver;
-            border-top: none;
-            padding: 3px;
-            min-height: 250px;
+        &::before {
+            transform: translateX(-15px)
         }
+    }
 
-        &__delimeter {
+    &__btn {
+        height: 50px;
+        color: $color2;
+        border: 1px solid $color2;
+        cursor: pointer;
+        border-radius: 10px;
+        background-color: $color3;
+        transition-duration: 0.1s;
 
-            &::after,
-            &::before {
-                content: '';
-                display: inline-block;
-                border-top: 2px solid silver;
-                width: 120px;
-                position: relative;
-                top: -2px;
-                transform: translate(0%, -50%);
-            }
-
-            &::after {
-                transform: translateX(15px)
-            }
-
-            &::before {
-                transform: translateX(-15px)
-            }
+        &:hover {
+            color: $color3;
+            background-color: $color2;
         }
-
-        &__btn {
-            height: 50px;
-            color: $color2;
-            border: 1px solid $color2;
-            cursor: pointer;
-            border-radius: 10px;
-            background-color: $color3;
-            transition-duration: 0.1s;
-
-            &:hover {
-                color: $color3;
-                background-color: $color2;
-            }
-        }
-        &__btn,
-        &__input {
-            box-sizing: border-box;
-            width: 200px;
-            padding: 5px;
-
-        }
-
-        &__input {
-            min-height: 35px;
-            border-radius: 5px;
-            border: 1px solid $color1;
-
-            &:focus {
-                outline: none;
-                box-shadow: 0 0 1px 2px $color1;
-            }
-        }
+    }
+    &__btn,
+    &__input {
+        box-sizing: border-box;
+        width: 200px;
+        padding: 5px;
 
     }
+
+    &__input {
+        min-height: 35px;
+        border-radius: 5px;
+        border: 1px solid $color1;
+
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 1px 2px $color1;
+        }
+    }
+
+}
+
+
+.list {
+    width: 100%;
+
+    &-item {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+}
+
 
 
 </style>

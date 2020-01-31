@@ -77,6 +77,9 @@ export default {
                                 chrome.tabs.sendMessage(tabs[0].id, {type: 'reload'})
 
                                 this.step.data.fullPrice = resp.fullPrice;
+                                if (!this.showCheck) {
+                                    this.showCheckBlock();
+                                }
                                 this.$emit('next', this.step);
                             })
                         }

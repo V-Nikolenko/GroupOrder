@@ -21,8 +21,8 @@
         
         <div v-else-if="step.isDone" class="step doneStep doneStep2">
         
-            <span>{{ name }}</span>
-            <span>{{ fullPrice }}</span>
+            <span>{{ service.steps[1].data.name }}</span>
+            <span>{{ service.steps[1].data.userFullPrice}}</span>
             <img src="/images/delete.png" alt="Видалити замовлення" title="Видалити замовлення" class="img img-reset">
         
         </div>
@@ -65,13 +65,14 @@ export default {
 
                     response.email = this.email;
                     response.name = this.name;
-
-                    this.fullPrice = response.fullPrice
+                    
+                    // this.fullPrice = response.fullPrice
 
                     //change this.service.steps[0].data.code to getCode() 
                     sendMemberOrder(this.service.steps[0].data.code, response).then((resp)=> {
                         
                         if (resp.status === 200) {
+                            this.step.data.userFullPrice = response.fullPrice;
                             this.step.data.email = this.email;
                             this.step.data.name = this.name;
                             this.$emit('next', this.step);
