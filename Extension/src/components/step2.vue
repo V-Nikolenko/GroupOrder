@@ -1,29 +1,51 @@
 <template>
-    <div class="step2">
+    <div class="addOrder">
         <step-header
                 v-bind:title="step.title"
                 v-bind:isDone="step.isDone"
                 v-bind:isActive="step.isActive"
         ></step-header>
 
-        <div v-show="step.isActive" class="step2__active-block">
+        <div v-show="step.isActive" class="active-block">
 
-            <div class="step2__container">
-
-                <input v-model="name" type="text" name="name" class="step2__input" placeholder="Ваше ім'я">
-                <input v-model="email" type="text" name="email" class="step2__input" placeholder="Ваша пошта">
-
-                <button class="step2__btn" v-on:click="sendOrder()">Доповнити групове замовлення</button>
-
+            <div class="nameContainer">
+                <input v-model="name" 
+                    type="text" 
+                    name="name" 
+                    v-bind:class="[{'input_error': isNameError}, 'input']" 
+                    placeholder="Ваше ім'я"
+                    v-on:input="nameError">
+                <p v-show="isNameError" class="error" >
+                    Ім'я має бути більше  3 символів
+                </p>
             </div>
+
+            <div class="emailContainer">
+                <input v-model="email" 
+                    type="text" 
+                    name="email" v-bind:class="[{'input_error': isEmailError}, 'input']" 
+                    placeholder="Ваша пошта"
+                    v-on:input="emailError">
+                <p v-show="isEmailError" class="error">
+                    Мінімальна довжина пошти повинна бути 6 символів, 
+                    а також містити символ '@'.;
+                </p>
+            </div>
+
+            <button 
+                v-bind:class="[btn_disabled, 'btn']" 
+                v-on:click="sendOrder()"
+                v-bind:disabled="(isEmailError || isNameError || !email || !name)">
+                Доповнити групове замовлення
+            </button>
 
         </div>
         
-        <div v-show="step.isDone" class="step doneStep doneStep2">
+        <div v-show="step.isDone" class="step step-result-container step-result">
         
             <span>{{ service.steps[1].data.name }}</span>
-            <span style="padding-right: 3px">{{ service.steps[1].data.userFullPrice}} грн.</span>
-            <!-- <img src="/images/delete.png" alt="Видалити замовлення" title="Видалити замовлення" class="img img-reset"> -->
+            <span>{{ service.steps[1].data.userFullPrice}} грн.</span>
+            <img src="/images/delete.png" alt="Видалити замовлення" title="Видалити замовлення" class="img img-reset">
         
         </div>
 
@@ -47,15 +69,38 @@ export default {
             service: stepFactory.service,
             name: '',
             email: '',
-            fullPrice: null
+            fullPrice: null,
+            isNameError: false,
+            isEmailError: false,
         }
     },
 
     computed: {
-
+        btn_disabled() {
+            return {
+                btn_disabled: (this.isEmailError || this.isNameError || !this.email || !this.name)
+            }
+        }
     },
 
     methods: {
+        nameError() {
+            if (this.name.length < 3) {
+                this.isNameError = true;
+            } else this.isNameError = false;
+        },
+
+        emailError() {
+            function isEmailValid(email) {
+                const re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+                return re.test(email)
+            } 
+            if (!isEmailValid(this.email)) {
+                this.isEmailError = true;
+            } else this.isEmailError = false;
+        },
+
+
         sendOrder: function() {
 
             chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
@@ -75,12 +120,18 @@ export default {
                             this.step.data.userFullPrice = response.fullPrice;
                             this.step.data.email = this.email;
                             this.step.data.name = this.name;
+
+
+                            this.name = '',
+                            this.email = '',
+                            this.fullPrice = null,
+                            this.isNameError = false,
+                            this.isEmailError = false,
                             this.$emit('next', this.step);
                         } else {
                             throw new Error();
                         }
 
-                        //TODO: add validation, inspect why add orders request does not work
                     }).catch((error)=> {console.log(error)})
                 })
             })
@@ -90,103 +141,63 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$color1: #f5f5f5;
-$color2: #6658f3;
-$color3: white;
-$color4: #8a8f93;
+@import '../styles/colors.scss';
 
-.step2 {
+.addOrder {
     display: flex;
     flex-direction: column;
-
-    &__list {
-        padding: 0px;
-        margin: 0;
-        list-style-type: none;
-    }
-
-    &__container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        flex: 1;
-        justify-content: space-around;
-    }
-
-    &__active-block {
-        display: flex;
-        flex-direction: column;
-        border: 1px solid silver;
-        border-top: none;
-        padding: 3px;
-        min-height: 200px;
-    }
-
-    &__delimeter {
-
-        &::after,
-        &::before {
-            content: '';
-            display: inline-block;
-            border-top: 2px solid silver;
-            width: 120px;
-            position: relative;
-            top: -2px;
-            transform: translate(0%, -50%);
-        }
-
-        &::after {
-            transform: translateX(15px)
-        }
-
-        &::before {
-            transform: translateX(-15px)
-        }
-    }
-
-    &__btn {
-        height: 50px;
-        color: $color2;
-        border: 1px solid $color2;
-        cursor: pointer;
-        border-radius: 10px;
-        background-color: $color3;
-        transition-duration: 0.1s;
-
-        &:hover {
-            color: $color3;
-            background-color: $color2;
-        }
-    }
-    &__btn,
-    &__input {
-        box-sizing: border-box;
-        width: 200px;
-        padding: 5px;
-
-    }
-
-    &__input {
-        min-height: 35px;
-        border-radius: 5px;
-        border: 1px solid $color4;
-
-        &:focus {
-            outline: none;
-            box-shadow: 0 0 1px 2px $color4;
-        }
-    }
-
 }
 
-.doneStep2 {
+.active-block {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
+    flex-direction: column;
+    min-height: 180px;
 }
 
-.img-reset {
-    margin-right: 3px;
+.btn,
+.input {
+    width: 200px;
+}
+
+.btn {
+    min-height: 40px;
+    margin: 5px 0;
+}
+
+.input {
+    min-height: 35px;
+    margin: 5px 0;
+}
+
+.step {
+
+    &-result-container {
+        display: flex;
+        justify-content: space-between;
+        color: $color3;
+        font-size: 14px;
+    }
+}
+
+.nameContainer,
+.emailContainer {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.nameContainer {
+    min-height: 60px;
+}
+ 
+.emailContainer {
+    min-height: 75px;
+}
+
+.error {
+    margin: 0;
 }
 
 </style>

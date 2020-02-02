@@ -8,9 +8,9 @@ export default {
     props: ['title', 'isDone', 'isActive'],
     data() {
         return {
-            
         }
     },
+
     computed: {
         classes: function() {
             return {
@@ -25,22 +25,19 @@ export default {
 </script> 
 
 <style lang="scss" scoped>
-$color1: #f5f5f5;
-$color2: #8a8f93;
-$color3: #6658f3;
-$color4: white;
+@import '../styles/colors.scss';
 
 .step-heading {
+    display: flex;
+    align-items: center;
     margin: 0;
     display: flex;
     align-items: center;
-    border: 1px solid $color2;
-    font-size: 18px;
-    border-top: none;
     background-color: $color1;
+    font-size: 18px;
 
     &_disabled {
-        color: $color2;
+        color: $color3;
     }
 }
 

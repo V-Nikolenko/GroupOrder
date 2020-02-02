@@ -14,13 +14,14 @@ import { sendGetSplitBillData } from "./requests";
 import { stepFactory } from "./stepService";
 
 export default{
-    name: 'list-bills',
+    name: 'bills-list',
     data() {
         return {
             service: stepFactory.service,
             data: null
         }
     },
+
     created() {
         sendGetSplitBillData(this.service.steps[0].data.code)
         .then((resp) => {
@@ -34,15 +35,16 @@ export default{
         })
         .catch((error) => { console.log(error) });
     }
-    // }
     
 }
 </script>
 
 <style lang="scss" scoped>
-.list-item {
-    padding: 0 0 0 8px;
+@import '../styles/colors.scss';
+.list{
+    &-item {
     display: flex;
     justify-content: space-between;
+    }
 }
 </style>

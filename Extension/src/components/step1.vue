@@ -1,40 +1,62 @@
 <template>
-    <div class="step1">
-        <!-- <div>{{service}}</div> -->
-        <step-header 
-            v-bind:title="step.title"
-            v-bind:isDone="step.isDone"
-            v-bind:isActive="step.isActive">
-        </step-header>
+<div class="chooseRestaurant">
 
-        <section v-show="step.isActive" class="step1__active-block">
-            
-            <ol class="step1__list">
-                <li v-for="(subStep, index) in subSteps" class="pd-left8" v-bind:key="index">{{ '1.' + (index + 1) + ". " + subStep }}</li>
-            </ol>
-
-            <div class="step1__container">
-                <button class="step1__btn" v-on:click="newOrder()">Створити замовлення</button>
-
-                <span class="step1__delimeter">або</span>
+    <step-header 
+        v-bind:title="step.title"
+        v-bind:isDone="step.isDone"
+        v-bind:isActive="step.isActive">
+    </step-header>
 
 
-                <input v-model="inputCode" type="text" name="code" class="step1__input" placeholder="Код замовлення">
+    <section v-show="step.isActive" class="active-block">
+        
+        <ol class="list">
+            <li v-for="(subStep, index) in subSteps" class="list-item" v-bind:key="index">{{ '1.' + (index + 1) + ". " + subStep }}</li>
+        </ol>
 
-                <button class="step1__btn" v-on:click="connectWithCode()">Приєднатися до існуючого замовлення</button>
+
+        <div class="container">
+
+            <div class="newOrderContainer">
+                <button class="btn" v-on:click="newOrder()">Створити замовлення</button>
+                <p class="error">{{ newOrderError }}</p>
             </div>
 
-        </section>
-        
-        <section v-show="step.isDone" class="doneStep doneStep-step1 step">
+            <span class="delimeter">або</span>
+            
+            <div class="conncetionContainer">
+                <input v-model="inputCode" 
+                    type="text" 
+                    name="code"
+                    v-bind:class="[{'input_error': isConnectionError}, 'input']"
+                    placeholder="Код замовлення"
+                    v-on:focus="isConnectionError = false"
+                    >
+                    <!-- v-show="isConnectionError" -->
+                <p  class="error">{{ newConnectionError }}</p>
+            </div>
 
-            <a href="#" class="link">Код замовлення: {{ step.data.code }}</a>
-            <!-- TODO: add restaurat -->
+            <button class="btn" v-on:click="connectWithCode()">
+                Приєднатися до існуючого замовлення
+            </button>
+        
+        </div>
+
+    </section>
+
+    
+    <section v-show="step.isDone" class="step step-result-container">
+
+        <a href="#" class="link">Код замовлення: {{ step.data.code }}</a>
+        <!-- TODO: add restaurat -->
+        <div>
             <img src="/images/copy.png" alt="Копіювати" title="Копіювати" class="img copy-img" v-on:click="copy">
             <img src="/images/logout.png" alt="Вийти" title="Вийти" class="img logout-img" v-on:click="logOut"> 
-        </section>
-        
-    </div>
+        </div>
+
+    </section>
+    
+</div>
 </template>
 
 <script>
@@ -52,19 +74,29 @@ export default {
     data() {
         return {
             service: stepFactory.service,
-            inputCode: null,
-            subSteps: ['Додати страви', 'Перевірити всі страви']
+            inputCode: '',
+            subSteps: ['Додати страви', 'Перевірити всі страви'],
+            isNewOrderError: false,
+            isConnectionError: false
         }
     },
 
     computed: {
-        
+        newOrderError() {
+            if(this.isNewOrderError) {
+                return 'Виникла помилка. Спробуйте ще раз';
+            } 
+        },
+
+        newConnectionError() {
+            if (this.isConnectionError) {
+                return 'Введено неправильний код';
+            }
+        }
     },
 
     methods: {
         copy: function() {
-            // let code = JSON.parse(JSON.stringify(this.service.steps[0].data.code));
-            // code = code.();
             let el = document.createElement('textarea');
             el.value = this.service.steps[0].data.code;
             document.body.appendChild(el);
@@ -80,7 +112,7 @@ export default {
         newOrder: function() {
             sendCreateNewOrderRequest()
             .then((resp) => {
-                console.log(resp)
+                // console.log(resp)
                 if(resp.status === 200) {
                     return resp.text()
                 } else {
@@ -88,10 +120,14 @@ export default {
                 }
             }).then((resp) => {
                 this.step.data.code = resp;
+
+                this.inputCode = '';
+                this.isNewOrderError =  false;
+                this.isConnectionError = false;
                 this.$emit('next', this.step); 
             })
             .catch((error)=> {
-                //TODO: try again
+                this.isNewOrderError = true;
                 console.log(error)
             })
         },
@@ -101,135 +137,123 @@ export default {
             .then((resp) => {
                 if(resp.status === 200) {
                     this.step.data.code = this.inputCode;
+
+                    this.inputCode = '';
+                    this.isNewOrderError =  false;
+                    this.isConnectionError = false;
+
                     this.$emit('next', this.step);
-                } else {
-                    //TODO: make borders red
-                }
+                } else throw new Error(resp)
             })
-            this.code = '';
+            .catch((error) => {
+                this.isConnectionError = true;
+                console.log(error)
+            })
+            // this.inputCode = null;
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-$color1: #f5f5f5;
-$color2: #8a8f93;
-$color3: #6658f3;
-$color4: white;
-.pd-left8 {
-    padding: 8px;
-}
+@import '../styles/colors.scss';
 
-.step1 {
+.chooseRestaurant{
     display: flex;
     flex-direction: column;
+}
 
-    &__list {
-        padding: 0px;
-        margin: 0;
-        list-style-type: none;
+.active-block {
+    display: flex;
+    flex-direction: column;
+    min-height: 230px;
+}
+
+.list-item {
+    font-size: 12px;
+    padding-left: 3px;
+    color: $color3;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.delimeter {
+    &::after,
+    &::before {
+        content: '';
+        display: inline-block;
+        border-top: 2px solid $color4;
+        width: 100px;
+        position: relative;
+        top: -2px;
+        transform: translate(0%, -50%);
     }
 
-    &__container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        flex: 1;
-        justify-content: space-around
+    &::after {
+        transform: translateX(10px)
     }
 
-    &__active-block {
-        display: flex;
-        flex-direction: column;
-        border: 1px solid $color2;
-        border-top: none;
-        padding: 3px;
-        min-height: 250px;
+    &::before {
+        transform: translateX(-10px)
     }
+}
 
-    &__delimeter {
+.btn,
+.input {
+    width: 200px;
+}
 
-        &::after,
-        &::before {
-            content: '';
-            display: inline-block;
-            border-top: 2px solid $color2;
-            width: 120px;
-            position: relative;
-            top: -2px;
-            transform: translate(0%, -50%);
-        }
+.btn {
+    margin: 5px 0;
+    min-height: 40px;;
+}
 
-        &::after {
-            transform: translateX(15px)
-        }
-
-        &::before {
-            transform: translateX(-15px)
-        }
-    }
-    
-    &__btn {
-        height: 50px;
-        color: $color3;
-        border: 1px solid $color3;
-        cursor: pointer;
-        border-radius: 10px;
-        background-color: $color4; 
-        transition-duration: 0.1s;
-
-        &:hover {
-            color: $color4;
-            background-color: $color3;
-        }
-    }
-    &__btn,
-    &__input {
-        box-sizing: border-box;
-        width: 200px;
-        padding: 5px;
-
-    }
-
-    &__input {
-        min-height: 35px;
-        border-radius: 5px;
-        border: 1px solid $color2;
-        
-        &:focus {
-            outline: none;
-            box-shadow: 0 0 1px 2px $color2;
-        }
-    }
-
+.input {
+    min-height: 35px;
 }
 
 .link {
     text-decoration: none;
-    color: $color3;
+    color: $color2;
     cursor: default;
 }
 
-.copy-im,
-.logout-img {
-    top: 50%;
-    transform: translateY(-50%);
-}
 
 .copy-img {
-    position: absolute;
-    right: 45px;
+    margin-right: 5px;
 }
 
-.logout-img {
-    position: absolute;
-    right: 5px
+.step {
+
+    &-result-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
 }
-.doneStep-step1 {
-    position: relative;
+
+.conncetionContainer,
+.newOrderContainer {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
 }
+
+.conncetionContainer {
+    min-height: 55px;
+    margin: 10px 0 5px 0;
+}
+.newOrderContainer {
+    margin: 5px 0 5px 0;
+    min-height:  65px;
+}
+
+.error {
+    margin: 0;
+}
+
 </style>

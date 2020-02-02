@@ -84,17 +84,29 @@ async function FormOrder(items) {
     try {
 
         await ClearCurrentOrder()
-        console.log(items);
+
+        //do this at backend
+        let quantity = 0;
+        for (let i = 0; i < items.length; i++) {
+            quantity += items[i].count;
+        }
+
+        chrome.runtime.sendMessage({type: "quantity", quantity: quantity})
+        
+
         for (let i = 0; i < items.length; i++) { 
             let item = items[i];
+
             for (let j = 0; j < item.count; j++) {
                 await SendAddDishRequest(item);
+                chrome.runtime.sendMessage({type: "added"})
             }
         }
         return true;
         
     } catch(error) {
         console.log(error)
+        return false;
     }
 }
 

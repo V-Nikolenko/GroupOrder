@@ -43,15 +43,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$color1: #f8f9fb;
-$color2: #8a8f93;
+@import '../styles/colors.scss';
+// $color1: #f8f9fb;
+// $color2: #8a8f93;
 
-.head {
-    cursor: pointer;
-}
-.body {
-    width: 100%;
-}
+// .head {
+//     cursor: pointer;
+// }
+// .body {
+//     width: 100%;
+// }
 
 table {
   border-collapse: collapse;
