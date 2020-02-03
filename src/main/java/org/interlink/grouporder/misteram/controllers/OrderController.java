@@ -39,8 +39,7 @@ public class OrderController {
     public ResponseEntity connectToGroupOrder(@PathVariable("code") String code) {
         try {
             GroupOrder groupOrder = DataStorage.getGroupOrder(code);
-            String orderLink = groupOrder.getRestaurantUrl() + "?code=" + groupOrder.getCode();
-            return ResponseEntity.ok(MisterAmMapper.map(orderLink, new OrderLinkDTO()));
+            return ResponseEntity.ok(MisterAmMapper.map(groupOrder, new OrderLinkDTO()));
 
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);

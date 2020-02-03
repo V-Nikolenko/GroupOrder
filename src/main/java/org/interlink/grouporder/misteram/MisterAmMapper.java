@@ -50,8 +50,10 @@ public class MisterAmMapper {
         return destination;
     }
 
-    public static OrderLinkDTO map(String source, OrderLinkDTO destination) {
-        destination.setLink(source);
+    public static OrderLinkDTO map(GroupOrder source, OrderLinkDTO destination) {
+        String orderLink = source.getRestaurantUrl() + "?code=" + source.getCode();
+        destination.setLink(orderLink);
+        destination.setRestaurantName(source.getRestaurantName());
         return destination;
     }
 }
