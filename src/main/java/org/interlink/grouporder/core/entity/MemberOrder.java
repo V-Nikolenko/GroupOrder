@@ -16,13 +16,15 @@ public class MemberOrder {
     private String email;
     private String url;
     private List<Product> products = new ArrayList<>();
+    private int companyId;
     private int fullPrice;
 
-    public MemberOrder(String name, String email, String url, List<Product> products, int fullPrice) {
+    public MemberOrder(String name, String email, String url, List<Product> products, int companyId, int fullPrice) {
         this.name = name;
         this.email = email;
         this.url = url;
         this.products = products;
+        this.companyId = companyId;
         this.fullPrice = fullPrice;
     }
 

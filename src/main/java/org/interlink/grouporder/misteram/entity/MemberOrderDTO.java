@@ -12,5 +12,6 @@ public class MemberOrderDTO {
     private String email;
     private String url;
     private List<ItemDTO> items;
+    private int companyId;
     private int fullPrice;
 }
