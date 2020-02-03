@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.interlink.grouporder.core.entity.view.GroupOrderView;
 import org.interlink.grouporder.core.exceptions.BadRequestException;
+import org.interlink.grouporder.core.exceptions.GroupOrderLockedException;
 import org.interlink.grouporder.core.exceptions.NotModifiedException;
 import org.interlink.grouporder.core.utils.ProductsCounter;
 
@@ -46,7 +47,7 @@ public class GroupOrder {
         if (!isLocked) {
             doActionWithMember(member);
         } else {
-            throw new NotModifiedException("Group order is locked");
+            throw new GroupOrderLockedException("Group order is locked.");
         }
     }
 
