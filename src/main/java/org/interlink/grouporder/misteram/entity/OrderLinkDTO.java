@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class OrderLinkDTO {
     private String restaurantName;
-    private String link;
+    private String restaurantURL;
 }
