@@ -9,7 +9,9 @@ import org.interlink.grouporder.core.entity.view.GroupOrderView;
 import org.interlink.grouporder.core.handler.ExceptionsHandler;
 import org.interlink.grouporder.misteram.MisterAmMapper;
 import org.interlink.grouporder.misteram.entity.FullOrderItemsDTO;
+import org.interlink.grouporder.misteram.entity.GroupOrderDTO;
 import org.interlink.grouporder.misteram.entity.MemberOrderDTO;
+import org.interlink.grouporder.misteram.entity.OrderLinkDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +23,12 @@ public class OrderController {
 
     @PostMapping
     @JsonView(GroupOrderView.Basic.class)
-    public ResponseEntity createGroupOrder() {
+    public ResponseEntity createGroupOrder(@RequestBody GroupOrderDTO newGroupOrderDTO) {
         try {
-            String code = DataStorage.addGroupOrder();
+            String restaurantName = newGroupOrderDTO.getRestaurantName();
+            String restaurantUrl = newGroupOrderDTO.getRestaurantUrl();
+
+            String code = DataStorage.addGroupOrder(restaurantName, restaurantUrl);
             return ResponseEntity.ok(code);
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
@@ -33,11 +38,10 @@ public class OrderController {
     @PostMapping("{code}/connect")
     public ResponseEntity connectToGroupOrder(@PathVariable("code") String code) {
         try {
-            if (DataStorage.isContains(code)) {
-                return ResponseEntity.ok("Success!");
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            GroupOrder groupOrder = DataStorage.getGroupOrder(code);
+            String orderLink = groupOrder.getRestaurantUrl() + "?code=" + groupOrder.getCode();
+            return ResponseEntity.ok(MisterAmMapper.map(orderLink, new OrderLinkDTO()));
+
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }

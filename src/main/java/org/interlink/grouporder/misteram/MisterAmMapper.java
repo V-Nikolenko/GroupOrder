@@ -49,4 +49,9 @@ public class MisterAmMapper {
 
         return destination;
     }
+
+    public static OrderLinkDTO map(String source, OrderLinkDTO destination) {
+        destination.setLink(source);
+        return destination;
+    }
 }
