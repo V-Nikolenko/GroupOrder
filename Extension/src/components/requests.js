@@ -1,9 +1,12 @@
 let path = 'http://localhost:8080/orders'
 
-export async function sendCreateNewOrderRequest(data) {
+export async function sendCreateNewOrderRequest(obj) {
     return await fetch(path, {
         method: 'POST',
-        body: JSON.stringify(data)
+        body: JSON.stringify({
+            url: obj.url,
+            restaurantName: obj.name 
+        })
     });
 }
 

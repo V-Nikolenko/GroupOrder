@@ -105,14 +105,10 @@ export default {
 
             chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
                 chrome.tabs.sendMessage(tabs[0].id, {type: 'getOrders'}, (response) => {
-                        // Object.assign(result.user, {'name': this.name, 'email': this.email})
-                        // chrome.storage.sync.set({'user': result.user});
 
                     response.email = this.email;
                     response.name = this.name;
                     
-                    // this.fullPrice = response.fullPrice;
-
                     //change this.service.steps[0].data.code to getCode();
                     sendMemberOrder(this.service.steps[0].data.code, response).then((resp)=> {
                         

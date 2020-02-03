@@ -10,6 +10,8 @@ chrome.runtime.onMessage.addListener(
             case 'reload': 
                 window.location.reload();
                 break;
+            case 'restaurant': 
+                getRestaurant().then(sendResponse);
         }
         return true;
     }
@@ -110,3 +112,17 @@ async function FormOrder(items) {
     }
 }
 
+async function getRestaurant() {
+    let url = window.location.href
+    let companyContainer = document.getElementsByClassName('company-name')[0];
+    let name;
+
+    if (url.includes('cart')) {
+        name = companyContainer.getElementsByTagName("a")[0].textContent;
+        url = companyContainer.getElementsByTagName('a')[0].href;
+    } else {
+        name = companyContainer.getElementsByTagName('p')[0].textContent;
+    }
+    
+    return {url: url, name: name}
+}
