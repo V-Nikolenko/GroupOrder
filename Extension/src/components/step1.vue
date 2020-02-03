@@ -47,7 +47,7 @@
     
     <section v-show="step.isDone" class="step step-result-container">
 
-        <a href="#" class="link">{{ step.data.restaurant }} ( {{ step.data.code}} ) </a>
+        <a href="#" class="link">{{ step.data.restaurant }}({{ step.data.code}}) </a>
         <!-- TODO: add restaurat -->
         <div>
             <img src="/images/copy.png" alt="Копіювати" title="Копіювати" class="img copy-img" v-on:click="copy">
@@ -117,18 +117,19 @@ export default {
                     .then((resp) => {
                         // console.log(resp)
                         if(resp.status === 200) {
-                            this.step.data.url = response.url;
-                            this.step.data.name = response.restaurant;
                             return resp.text();
                         } else {
                             throw new Error(resp.text)
                         }
                     }).then((resp) => {
+                        this.step.data.url = response.url + '?code=' + resp;
+                        this.step.data.restaurant = response.name;
                         this.step.data.code = resp;
-
+                        
                         this.inputCode = '';
                         this.isNewOrderError =  false;
                         this.isConnectionError = false;
+
                         this.$emit('next', this.step); 
                     })
                     .catch((error)=> {
@@ -144,8 +145,6 @@ export default {
             .then((resp) => {
                 if(resp.status === 200) {
                     this.step.data.code = this.inputCode;
-
-                    
 
                     this.inputCode = '';
                     this.isNewOrderError =  false;
