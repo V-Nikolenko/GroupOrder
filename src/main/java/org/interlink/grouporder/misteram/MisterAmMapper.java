@@ -52,7 +52,7 @@ public class MisterAmMapper {
 
     public static OrderLinkDTO map(GroupOrder source, OrderLinkDTO destination) {
         String orderLink = source.getRestaurantUrl() + "?code=" + source.getCode();
-        destination.setRestaurantURL(orderLink);
+        destination.setRestaurantUrl(orderLink);
         destination.setRestaurantName(source.getRestaurantName());
         return destination;
     }
