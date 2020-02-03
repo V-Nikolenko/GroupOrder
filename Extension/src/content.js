@@ -1,17 +1,40 @@
+let url = new URL (window.location.href);
+
+if (url.searchParams.get('code')) {
+    
+    localStorage.setItem('connectCode', url.searchParams.get('code'))
+}
+
 chrome.runtime.onMessage.addListener(
     function(message, sender, sendResponse) {
         switch(message.type) {
             case 'getOrders':
                 SendGetOrdersRequest().then(sendResponse);  
                 break;
+
             case 'formOrder':
                 FormOrder(message.resp.items).then(sendResponse);
                 break;
+
             case 'reload': 
                 window.location.reload();
                 break;
+
             case 'restaurant': 
                 getRestaurant().then(sendResponse);
+                break;
+
+            // case 'setURLcode': 
+            //     console.log('recived');
+            //     localStorage.setItem('connectCode', message.connectCode)
+            //     console.log(message.connectCode)
+            //     break;
+
+            case 'getURLcode':
+                let code = localStorage.connectCode;
+                localStorage.connectCode = "";
+                sendResponse(code);
+                break;
         }
         return true;
     }

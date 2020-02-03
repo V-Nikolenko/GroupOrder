@@ -36,7 +36,7 @@
                 <p  class="error">{{ newConnectionError }}</p>
             </div>
 
-            <button class="btn" v-on:click="connectWithCode()">
+            <button class="btn" v-on:click="connectWithCode(inputCode)">
                 Приєднатися до існуючого замовлення
             </button>
         
@@ -119,7 +119,7 @@ export default {
                         if(resp.status === 200) {
                             return resp.text();
                         } else {
-                            throw new Error(resp.text)
+                            throw new Error(resp)
                         }
                     }).then((resp) => {
                         this.step.data.url = response.url + '?code=' + resp;
@@ -140,18 +140,24 @@ export default {
             });    
         },
 
-        connectWithCode: function() {
-            sendConnectWithCodeRequest(this.inputCode)
+        connectWithCode: function(code) {
+            sendConnectWithCodeRequest(code)
             .then((resp) => {
                 if(resp.status === 200) {
                     this.step.data.code = this.inputCode;
+                    return resp.json();
+
+                } else throw new Error(resp);
+            })
+            .then((resp) => {
+                    this.step.data.restaurant = resp.restaurantName;
+                    this.step.data.url = resp.restaurantUrl;
 
                     this.inputCode = '';
                     this.isNewOrderError =  false;
                     this.isConnectionError = false;
 
                     this.$emit('next', this.step);
-                } else throw new Error(resp)
             })
             .catch((error) => {
                 this.isConnectionError = true;
@@ -182,6 +188,7 @@ export default {
     padding-left: 3px;
     color: $color3;
 }
+
 .container {
     display: flex;
     flex-direction: column;

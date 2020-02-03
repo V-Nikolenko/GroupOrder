@@ -46,7 +46,7 @@ import step4 from '../components/step4';
 import order from '../components/order';
 import listItem from '../components/list-item';
 import { stepFactory } from '../components/stepService';
-import { sendGetOrdersListRequest } from '../components/requests';
+import { sendGetOrdersListRequest, sendConnectWithCodeRequest } from '../components/requests';
 
 const STEPS = [
   {
@@ -77,8 +77,6 @@ const STEPS = [
     title: '3. Зібрати замовлення',
     data: {
       fullPrice: null,
-      // progressMax: null,
-      // progressValue: 0
     }
   },
 
@@ -151,16 +149,49 @@ export default {
   },
 
   created() {
-    chrome.storage.sync.get('steps', (result) => {
-      let copy = STEPS.map((elem) => Object.assign({}, elem))
-      this.stepService = result.steps !== undefined
+    let copy = STEPS.map((elem) => Object.assign({}, elem));
+
+    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, {type: 'getURLcode'}, (response) => {
+        
+        if (response) {
+          this.stepService = stepFactory.create(copy);
+          
+          sendConnectWithCodeRequest(response)
+          .then((resp) => {
+            if (resp.status === 200) {
+             
+              return resp.json();
+            } else throw new Error();
+          })
+          .then((resp)=> {
+
+              this.stepService.steps[0].data.code = response;
+              this.stepService.steps[0].data.restaurant = resp.restaurantName;
+              this.stepService.steps[0].data.url = resp.restaurantUrl;
+
+              this.nextStep(this.stepService.steps[0]);  
+          }).catch((error) => {{ console.log(error) }});
+
+
+        } else {
+
+          chrome.storage.sync.get('steps', (result) => {
+            this.stepService = result.steps !== undefined
                         ? stepFactory.create(result.steps) 
                         : stepFactory.create(copy);
+
+        // stepService.subscribe( function(steps) {
+        //   chrome.storage.sync.set({steps});
+        // });
+          });
+
+
+        }
       
-      // stepService.subscribe( function(steps) {
-      //   chrome.storage.sync.set({steps});
-      // });
+      });
     });
+
   }
 
 }
