@@ -23,17 +23,23 @@ public class GroupOrder {
     @JsonView(GroupOrderView.Basic.class)
     private String code;
     @JsonView(GroupOrderView.Extended.class)
-    private String internetShopURL;
+    private String restaurantName;
+    @JsonView(GroupOrderView.Extended.class)
+    private String restaurantUrl;
     @JsonView(GroupOrderView.Extended.class)
     private int fullPrice;
+    @JsonView(GroupOrderView.Extended.class)
+    private int companyId;
     @JsonView(GroupOrderView.Extended.class)
     private Map<String, MemberOrder> members = new LinkedHashMap<>();
 
     @JsonIgnore
     private boolean isLocked = false;
 
-    public GroupOrder(String code) {
+    public GroupOrder(String code, String restaurantName, String restaurantUrl) {
         this.code = code;
+        this.restaurantName = restaurantName;
+        this.restaurantUrl = restaurantUrl;
     }
 
     private boolean isMemberInGroupOrder(MemberOrder member) {
@@ -55,7 +61,7 @@ public class GroupOrder {
         if (isMemberInGroupOrder(member)) {
             members.replace(member.getEmail(), member);
         } else if (members.isEmpty()) {
-            internetShopURL = member.getUrl();
+            companyId = member.getCompanyId();
             members.put(member.getEmail(), member);
         } else {
             members.put(member.getEmail(), member);

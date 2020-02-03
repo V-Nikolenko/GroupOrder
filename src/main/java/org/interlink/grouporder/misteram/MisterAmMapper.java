@@ -7,6 +7,7 @@ import org.interlink.grouporder.misteram.entity.FullOrderItemsDTO;
 import org.interlink.grouporder.misteram.entity.ItemDTO;
 
 import org.interlink.grouporder.misteram.entity.MemberOrderDTO;
+import org.interlink.grouporder.misteram.entity.OrderLinkDTO;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class MisterAmMapper {
         destination.setEmail(source.getEmail());
         destination.setProducts(products);
         destination.setUrl(source.getUrl());
+        destination.setCompanyId(source.getCompanyId());
         destination.setFullPrice(source.getFullPrice());
 
         return destination;
