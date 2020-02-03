@@ -25,11 +25,11 @@ public class GroupOrderTest {
 
     @BeforeMethod
     private void fillGroupOrder() {
-        memberOrder1 = new MemberOrder("Vasya", "qweqweqwe", "qweqweqweqwe", PRODUCTS_VASYA, 2000);
-        memberOrder2 = new MemberOrder("Kolya", "asdfasdf", "ghkjghjfghj", PRODUCTS_KOLYA, 1000);
-        memberOrder3 = new MemberOrder("Misha", "zxcvzxcv", "uioluiolu", PRODUCTS_MISHA, 0);
+        memberOrder1 = new MemberOrder("Vasya", "qweqweqwe", "qweqweqweqwe", PRODUCTS_VASYA, 12, 2000);
+        memberOrder2 = new MemberOrder("Kolya", "asdfasdf", "ghkjghjfghj", PRODUCTS_KOLYA, 12, 1000);
+        memberOrder3 = new MemberOrder("Misha", "zxcvzxcv", "uioluiolu", PRODUCTS_MISHA, 12, 0);
 
-        groupOrder = new GroupOrder("12345");
+        groupOrder = new GroupOrder("12345", "CustomRestaurant", "CustomURL");
     }
 
     @Test
