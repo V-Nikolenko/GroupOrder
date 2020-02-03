@@ -47,7 +47,7 @@
     
     <section v-show="step.isDone" class="step step-result-container">
 
-        <a href="#" class="link">Код замовлення: {{ step.data.code }}</a>
+        <a href="#" class="link">{{ step.data.restaurant }} ( {{ step.data.code}} ) </a>
         <!-- TODO: add restaurat -->
         <div>
             <img src="/images/copy.png" alt="Копіювати" title="Копіювати" class="img copy-img" v-on:click="copy">
@@ -77,7 +77,7 @@ export default {
             inputCode: '',
             subSteps: ['Додати страви', 'Перевірити всі страви'],
             isNewOrderError: false,
-            isConnectionError: false
+            isConnectionError: false,
         }
     },
 
@@ -98,7 +98,7 @@ export default {
     methods: {
         copy: function() {
             let el = document.createElement('textarea');
-            el.value = this.service.steps[0].data.code;
+            el.value = this.step.data.url;
             document.body.appendChild(el);
             el.select();
             document.execCommand('copy');
@@ -110,26 +110,33 @@ export default {
         },
 
         newOrder: function() {
-            sendCreateNewOrderRequest()
-            .then((resp) => {
-                // console.log(resp)
-                if(resp.status === 200) {
-                    return resp.text()
-                } else {
-                    throw new Error(resp.text)
-                }
-            }).then((resp) => {
-                this.step.data.code = resp;
+            chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+                chrome.tabs.sendMessage(tabs[0].id, {type: 'restaurant'}, (response) => {
+                    
+                    sendCreateNewOrderRequest(response)
+                    .then((resp) => {
+                        // console.log(resp)
+                        if(resp.status === 200) {
+                            this.step.data.url = response.url;
+                            this.step.data.name = response.restaurant;
+                            return resp.text();
+                        } else {
+                            throw new Error(resp.text)
+                        }
+                    }).then((resp) => {
+                        this.step.data.code = resp;
 
-                this.inputCode = '';
-                this.isNewOrderError =  false;
-                this.isConnectionError = false;
-                this.$emit('next', this.step); 
-            })
-            .catch((error)=> {
-                this.isNewOrderError = true;
-                console.log(error)
-            })
+                        this.inputCode = '';
+                        this.isNewOrderError =  false;
+                        this.isConnectionError = false;
+                        this.$emit('next', this.step); 
+                    })
+                    .catch((error)=> {
+                        this.isNewOrderError = true;
+                        console.log(error)
+                    });
+                });                
+            });    
         },
 
         connectWithCode: function() {
@@ -137,6 +144,8 @@ export default {
             .then((resp) => {
                 if(resp.status === 200) {
                     this.step.data.code = this.inputCode;
+
+                    
 
                     this.inputCode = '';
                     this.isNewOrderError =  false;

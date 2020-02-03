@@ -54,7 +54,9 @@ const STEPS = [
     isDone: false,
     title: '1. Обрати заклад',
     data: {
-      code: null
+      code: null,
+      restaurant: null,
+      url: null 
     }
   },
   
