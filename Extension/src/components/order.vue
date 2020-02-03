@@ -1,20 +1,19 @@
 <template>
 <div>
     
-    <h2 class="receipt-heading">Чек № {{code}}</h2>
+    <h1 class="receipt-heading">Чек № {{code}} <span class="exit" v-on:click="$emit('showAllOrders')">&#10006;</span> </h1>
 
     <ul class="list">
     
         <li v-for="(member, id) in members" class="list-item"  v-bind:key='id'>
 
-            <div class="head" v-on:click="showBody($event)">
+            <div class="head" v-on:click="showBody(id)">
                 <span class="head-title">{{member.name}}</span> 
                 <span class="head-price">{{member.fullPrice}} грн.</span>
-                <span class="item-ico"></span>
+                <span v-bind:class="[ {'anime': !selected.includes(id)},'item-ico']"></span>
             </div>
 
-
-            <table class="body none">
+            <table v-bind:class="[{body_none: !selected.includes(id)},'body']">
 
                 <thead>
                     <th 
@@ -54,13 +53,18 @@ export default {
     props: ['members', 'code'],
     data() {
         return {
-            tableHeaders: ['№', 'Назва', 'Кількість', 'Ціна', '']
+            tableHeaders: ['№', 'Назва', 'Кількість', 'Ціна', ''],
+            selected: []
         }
     },
     methods: {
         showBody: function(el) {
-            el.currentTarget.parentNode.getElementsByClassName('body')[0].classList.toggle('none')
-            el.currentTarget.getElementsByClassName('item-ico')[0].classList.toggle('anime');
+            if (!this.selected.includes(el)) {
+                this.selected.push(el);
+            } else this.selected.splice(this.selected.indexOf(el), 1)
+
+            // el.currentTarget.parentNode.getElementsByClassName('body')[0].classList.toggle('none')
+            // el.currentTarget.getElementsByClassName('item-ico')[0].classList.toggle('anime');
         }
     }
 }
@@ -76,12 +80,25 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 3px;
+    padding: 5px;
     box-sizing: border-box;
+    position: relative;
 }
 
+.exit {
+    position: absolute;
+    right: 8px;
+    cursor: pointer;
+    transition: .1s;
 
-.head { 
+    &:hover {
+        transform: scale(1.1);
+
+    }
+}
+
+.head {
+    cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -119,11 +136,23 @@ export default {
 }
 
 .body {
+    display: block;
     width: 100%;
+    // max-height: 500px;
+    // transition: 0.5s ease-in-out;
+
+    &_none {
+        display: none;
+        // transition: 1s ease-in-out;
+        // overflow: hidden;
+        // max-height: 0px;
+    }
 }
+
 .none {
     display: none;
 }
+
 table {
     border-collapse: collapse;
 }

@@ -11,7 +11,7 @@
     <div v-if="step.isActive" class="active-block">
 
         <div class="container">
-            <button class="show-items-btn" v-on:click="showCheckBlock">{{ showCheckText }}</button>
+            <button class="show-items-btn" v-on:click="$emit('showAllOrders')">Показати</button>
             <img src="/images/lock.png" class='img img-lock' alt="Заблокувати замовлення" title="Заблокувати замовлення">
         </div>
         
@@ -61,16 +61,9 @@ export default {
     },
 
     computed: {
-        showCheckText: function () {
-            return this.showCheck ? 'Показати' : 'Сховати';
-        }
     },
 
     methods: {
-        showCheckBlock() {
-            this.showCheck = !this.showCheck;
-            this.$emit('display');
-        },
         
         formOrder() {
             // replace to getCode()

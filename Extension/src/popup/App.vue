@@ -1,16 +1,18 @@
 <template>
 
 <div class="container">
-
+<!-- v-bind:class="[isDisplay ? 'receipt' : 'receipt_none']" -->
   <div v-if="isLoaded">
-    <order 
-      v-bind:class="[isDisplay ? 'receipt' : 'receipt_none']"
+    <order
+      v-on:showAllOrders="isDisplay = !isDisplay"
+      v-show="isDisplay"
+      class="receipt"
       v-bind:members="members"
       v-bind:code="stepService.steps[0].data.code">
     </order>
   </div>
   
-  <div class='extension'>
+  <div class='extension' v-show="!isDisplay">
     <header>
       <h1 class="extension-title">Group Order</h1>
     </header>
@@ -25,7 +27,7 @@
 
       <step3 v-bind:step="steps[2]"
         v-on:next='nextStep' 
-        v-on:display="isDisplay = !isDisplay">
+        v-on:showAllOrders="isDisplay = !isDisplay">
       </step3>
 
       <step4 v-bind:step="steps[3]" v-on:next="nextStep"></step4>
@@ -182,19 +184,17 @@ export default {
 }
 
 .receipt_none {
-  width: 0px;
+  // width: 0px;
   overflow: hidden;
-  transition: 1s ease-out;
+  // transition: 1s ease-out;
   overflow-y: auto;
   height: 100vh;
 } 
 
 .receipt {
-  height: 100vh;
   overflow-y: auto;
   width: 300px;
-  transition: 1s ease-in;
-  overflow-y: auto;
+  height: 400px;
   overflow-x: hidden;
 }
 
