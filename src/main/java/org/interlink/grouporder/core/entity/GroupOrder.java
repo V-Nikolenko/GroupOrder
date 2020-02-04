@@ -20,7 +20,6 @@ public class GroupOrder {
 
     private int restaurantId;
     private int fullPrice;
-    private Map<String, MemberOrder> members = new LinkedHashMap<>();
 
     @JsonIgnore
     private boolean isLocked = false;
