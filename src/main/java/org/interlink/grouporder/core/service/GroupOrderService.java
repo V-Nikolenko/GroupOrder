@@ -1,13 +1,17 @@
 package org.interlink.grouporder.core.service;
 
+import org.interlink.grouporder.core.repository.GroupOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GroupOrderService {
 
+    private GroupOrderRepository groupOrderRepository;
+
     @Autowired
-    public GroupOrderService() {
+    public GroupOrderService(GroupOrderRepository groupOrderRepository) {
+        this.groupOrderRepository = groupOrderRepository;
     }
 
 
