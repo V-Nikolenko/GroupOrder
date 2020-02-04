@@ -151,7 +151,7 @@ export default {
     display: flex;  
     justify-content: space-between;
     align-items: center;
-    height: 30px;
+    height: 40px;
 }
 
 .img-reset {
@@ -223,12 +223,10 @@ export default {
     }
 }
 
-///////////////////// LOCK ////////////////
-/* :::::::::::::: Presentation css */
 .lock {
     width: 15px;
     height: 12px;
-    border: 3px solid black;
+    border: 3px solid $main-font-color;
     border-radius: 5px;
     position: relative;
     cursor: pointer;
@@ -238,7 +236,7 @@ export default {
     &:after {
         content: "";
         display: block;
-        background: black;
+        background: $main-font-color;
         width: 3px;
         height: 7px;
         position: absolute;
@@ -252,13 +250,13 @@ export default {
     &:before {
         content: "";
         display: block;
-        width: 10px;
-        height: 10px;
+        width: 7px;
+        height: 9px;
         bottom: 100%;
         position: absolute;
-        left: 50%;
+        left: 55%;
         margin-left: -8px;
-        border: 3px solid black;
+        border: 3px solid $main-font-color;
         border-top-right-radius: 50%;
         border-top-left-radius: 50%;
         border-bottom: 0;
@@ -271,35 +269,29 @@ export default {
     }
 }
 
-.unlocked {
-transform: rotate(10deg);
 
+.unlocked {
     &:before {
-        bottom: 130%;
-        left: 31%;
+        bottom: 120%;
+        left: 40%;
         margin-left: -11.5px;
-        transform: rotate(-45deg);
+        transform: rotate(-40deg);
+    }
+    
+    &:before {
+        border-color: $main-font-color;
     }
 
     &:after {
-        background: black;
-    }
-
-    &:hover {
-        transform: rotate(3deg);
+        background: $main-font-color;
     }
 
     &:hover:before {
-        height: 10px;
-        left: 40%;
-        bottom: 124%;
+        height: 9px;
+        left: 50%;
+        bottom: 120%;
         transform: rotate(-30deg);
     }
-}
-
-.unlocked,
-.unlocked:before {
-  border-color: black;
 }
 
 </style>

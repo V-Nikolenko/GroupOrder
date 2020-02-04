@@ -166,33 +166,44 @@ export default {
 
       chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
         chrome.tabs.sendMessage(tabs[0].id, {type: 'getURLcode'}, (response) => {
-          
-          if (chromeStorage.steps && response && response !== chromeStorage.steps[0].data.code) {
+          console.log(response)
 
-            this.stepService = stepFactory.create(copy);
+          // if (chromeStorage.steps && response && response !== chromeStorage.steps[0].data.code) {
+          if (response) {
+            console.log(chromeStorage.steps)
+            console.log(chromeStorage.steps[0].data.code)
+            console.log(response)
+            if (chromeStorage.steps && chromeStorage.steps[0].data.code !== response) {
+              this.stepService = stepFactory.create(copy);
             
-            console.log(this.stepService)
+              // console.log(this.stepService)
 
 
-            sendConnectWithCodeRequest(response)
-            .then((resp) => {
-              if (resp.status === 200) {
-              
-                return resp.json();
-              } else throw new Error();
-            })
-            .then((resp)=> {
+              sendConnectWithCodeRequest(response)
+              .then((resp) => {
+                if (resp.status === 200) {
+                
+                  return resp.json();
+                } else throw new Error();
+              })
+              .then((resp)=> {
 
-                this.stepService.steps[0].data.code = response;
-                this.stepService.steps[0].data.restaurant = resp.restaurantName;
-                this.stepService.steps[0].data.url = resp.restaurantUrl;
+                  this.stepService.steps[0].data.code = response;
+                  this.stepService.steps[0].data.restaurant = resp.restaurantName;
+                  this.stepService.steps[0].data.url = resp.restaurantUrl;
 
-                this.nextStep(this.stepService.steps[0]);
+                  this.nextStep(this.stepService.steps[0]);
 
-            }).catch((error) => {{ console.log(error) }});
+              }).catch((error) => {{ console.log(error) }});
 
-
+              } else {
+                // console.log('localstorage match')
+                this.stepService = chromeStorage.steps !== undefined
+                        ? stepFactory.create(chromeStorage.steps) 
+                        : stepFactory.create(copy);
+            }
           } else {
+            // console.log('no url code')
             this.stepService = chromeStorage.steps !== undefined
                         ? stepFactory.create(chromeStorage.steps) 
                         : stepFactory.create(copy);

@@ -32,14 +32,19 @@
                 </p>
             </div>
 
-            <button 
-                v-bind:class="[btn_disabled, 'btn']" 
-                v-on:click="sendOrder()"
-                v-bind:disabled="(isEmailError || isNameError || !email || !name)">
-                Доповнити групове замовлення
-            </button>
+            <div class="btnContainer">
+                <button 
+                    v-bind:class="[btn_disabled, 'btn']" 
+                    v-on:click="sendOrder()"
+                    v-bind:disabled="(isEmailError || isNameError || !email || !name)">
+                    Доповнити групове замовлення
+                </button>
+
+                <p v-show="isSendingError" class="error">{{ sendingError }}</p>
+            </div>
 
         </div>
+
         
         <div v-show="step.isDone" class="step step-result-container step-result">
         
@@ -72,6 +77,8 @@ export default {
             fullPrice: null,
             isNameError: false,
             isEmailError: false,
+            isSendingError: false,
+            sendingError: null
         }
     },
 
@@ -118,17 +125,27 @@ export default {
                             this.step.data.name = this.name;
 
 
-                            this.name = '',
-                            this.email = '',
-                            this.fullPrice = null,
-                            this.isNameError = false,
-                            this.isEmailError = false,
+                            this.name = '';
+                            this.email = '';
+                            this.fullPrice = null;
+                            this.isNameError = false;
+                            this.isEmailError = false;
+                            this.isSendingError = false;
+                            this.sendingError = null;
                             this.$emit('next', this.step);
                         } else {
-                            throw new Error();
+                            this.isSendingError = true; 
+                            
+                            if (resp.status === 423){
+                                this.sendingError = 'Замовлення заблоковано';    
+                            }
                         }
 
-                    }).catch((error)=> {console.log(error)})
+                    }).catch((error)=> {
+                        this.isSendingError = true;
+                        this.sendingError = 'Спробуйте ще раз';
+
+                    })
                 })
             })
         }
@@ -178,7 +195,8 @@ export default {
 }
 
 .nameContainer,
-.emailContainer {
+.emailContainer,
+.btnContainer{
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -190,6 +208,10 @@ export default {
  
 .emailContainer {
     min-height: 75px;
+}
+
+.btnContainer {
+    min-height: 70px;
 }
 
 .error {
