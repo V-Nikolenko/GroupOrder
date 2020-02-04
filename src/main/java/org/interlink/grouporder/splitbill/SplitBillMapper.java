@@ -24,7 +24,7 @@ public class SplitBillMapper {
                 .collect(Collectors.toList());
 
         destination.setFullPrice(source.getFullPrice());
-        destination.setCompanyId(source.getCompanyId());
+        destination.setCompanyId(source.getRestaurantId());
         destination.setItems(items);
 
         return destination;
@@ -33,7 +33,7 @@ public class SplitBillMapper {
     public static MemberDTO map(MemberOrder source, MemberDTO destination) {
         destination.setName(source.getName());
         destination.setEmail(source.getEmail());
-        destination.setPrice(source.getFullPrice());
+        destination.setPrice(source.getOrderPrice());
         destination.setCount(1);
 
         return destination;
