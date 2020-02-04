@@ -12,4 +12,8 @@ public class GroupOrderService {
     public GroupOrderService(GroupOrderRepository groupOrderRepository) {
         this.groupOrderRepository = groupOrderRepository;
     }
+
+    public void addGroupOrder(String code, String restaurantId, String restaurantName, String restaurantUrl){
+        this.groupOrderRepository.addGroupOrder(code, restaurantId, restaurantName, restaurantUrl);
+    }
 }
