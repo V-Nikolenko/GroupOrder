@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface GroupOrderRepository extends JpaRepository<GroupOrder, Integer> {
 
     @Modifying
@@ -22,7 +24,11 @@ public interface GroupOrderRepository extends JpaRepository<GroupOrder, Integer>
     @Query("DELETE FROM member_order " +
             "WHERE member_order.email = :email " +
             "AND group_urder_code = :groupOrderCode")
-    void removeMemberFromOrder(@Param("") String groupOrderCode,
-                               @Param("") String email);
+    void removeMemberFromOrder(@Param("groupOrderCode") String groupOrderCode,
+                               @Param("email") String email);
 
+    @Query("SELECT products " +
+            "FROM member_order" +
+            "WHERE member_order.group_order_code = :groupOrderCode")
+    List<String> findAllProducts(@Param("groupOrderCode") String groupOrderCode);
 }
