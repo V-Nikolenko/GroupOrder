@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface GroupOrderRepository extends JpaRepository<GroupOrder, Integer> {
+
     @Modifying
-    @Query("INSERT INTO member_order (group_order_code, name, email, restaurant_id, products, order_price) " +
+    @Query(value = "INSERT INTO member_order (group_order_code, name, email, restaurant_id, products, order_price) " +
             "VALUES  (:groupOrderCode, :name, :email, :restaurantId, :orderPrice)", nativeQuery = true)
     void addMemberToGroupOrder(@Param("groupOrderCode") String groupOrderCode,
                                @Param("name") String name,
@@ -16,4 +17,12 @@ public interface GroupOrderRepository extends JpaRepository<GroupOrder, Integer>
                                @Param("products") String products,
                                @Param("restaurantId") int restaurantId,
                                @Param("orderPrice") int orderPrice);
+
+    @Modifying
+    @Query("DELETE FROM member_order " +
+            "WHERE member_order.email = :email " +
+            "AND group_urder_code = :groupOrderCode")
+    void removeMemberFromOrder(@Param("") String groupOrderCode,
+                               @Param("") String email);
+
 }
