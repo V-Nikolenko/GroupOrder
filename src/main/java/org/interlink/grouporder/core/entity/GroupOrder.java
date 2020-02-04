@@ -6,9 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.interlink.grouporder.core.entity.view.GroupOrderView;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 @Getter
 @Setter
 public class GroupOrder {
