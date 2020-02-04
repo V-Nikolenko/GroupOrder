@@ -24,12 +24,6 @@ chrome.runtime.onMessage.addListener(
                 getRestaurant().then(sendResponse);
                 break;
 
-            // case 'setURLcode': 
-            //     console.log('recived');
-            //     localStorage.setItem('connectCode', message.connectCode)
-            //     console.log(message.connectCode)
-            //     break;
-
             case 'getURLcode':
                 let code = localStorage.connectCode;
                 localStorage.connectCode = "";

@@ -151,44 +151,40 @@ export default {
   created() {
     let copy = STEPS.map((elem) => Object.assign({}, elem));
 
-    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-      chrome.tabs.sendMessage(tabs[0].id, {type: 'getURLcode'}, (response) => {
-        
-        if (response) {
-          this.stepService = stepFactory.create(copy);
+    chrome.storage.sync.get('steps', (chromeStorage) => {
+
+      chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, {type: 'getURLcode'}, (response) => {
           
-          sendConnectWithCodeRequest(response)
-          .then((resp) => {
-            if (resp.status === 200) {
-             
-              return resp.json();
-            } else throw new Error();
-          })
-          .then((resp)=> {
+          if (chromeStorage.steps && response && response !== chromeStorage.steps[0].data.code) {
 
-              this.stepService.steps[0].data.code = response;
-              this.stepService.steps[0].data.restaurant = resp.restaurantName;
-              this.stepService.steps[0].data.url = resp.restaurantUrl;
+            this.stepService = stepFactory.create(copy);
+            
+            sendConnectWithCodeRequest(response)
+            .then((resp) => {
+              if (resp.status === 200) {
+              
+                return resp.json();
+              } else throw new Error();
+            })
+            .then((resp)=> {
 
-              this.nextStep(this.stepService.steps[0]);  
-          }).catch((error) => {{ console.log(error) }});
+                this.stepService.steps[0].data.code = response;
+                this.stepService.steps[0].data.restaurant = resp.restaurantName;
+                this.stepService.steps[0].data.url = resp.restaurantUrl;
+
+                this.nextStep(this.stepService.steps[0]);
+
+            }).catch((error) => {{ console.log(error) }});
 
 
-        } else {
-
-          chrome.storage.sync.get('steps', (result) => {
-            this.stepService = result.steps !== undefined
-                        ? stepFactory.create(result.steps) 
+          } else {
+            this.stepService = chromeStorage.steps !== undefined
+                        ? stepFactory.create(chromeStorage.steps) 
                         : stepFactory.create(copy);
+          }
 
-        // stepService.subscribe( function(steps) {
-        //   chrome.storage.sync.set({steps});
-        // });
-          });
-
-
-        }
-      
+        });
       });
     });
 
