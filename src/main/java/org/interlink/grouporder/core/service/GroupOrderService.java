@@ -6,13 +6,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GroupOrderService {
-
     private GroupOrderRepository groupOrderRepository;
 
     @Autowired
     public GroupOrderService(GroupOrderRepository groupOrderRepository) {
         this.groupOrderRepository = groupOrderRepository;
     }
-
-
 }
