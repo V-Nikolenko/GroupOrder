@@ -47,7 +47,7 @@
     
     <section v-show="step.isDone" class="step step-result-container">
 
-        <a href="#" class="link">{{ step.data.restaurant }}({{ step.data.code}}) </a>
+        <p class="restaurant">{{ step.data.restaurant }}({{ step.data.code}}) </p>
         <!-- TODO: add restaurat -->
         <div>
             <img src="/images/copy.png" alt="Копіювати" title="Копіювати" class="img copy-img" v-on:click="copy">
@@ -231,10 +231,11 @@ export default {
     min-height: 35px;
 }
 
-.link {
+.restaurant {
     text-decoration: none;
     color: $color2;
     cursor: default;
+    margin: 0;
 }
 
 
