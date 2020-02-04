@@ -18,15 +18,15 @@ class StepService {
     }
 
     getCode() {
-        this.steps[0].data.code;
+        return this.steps[0].data.code;
     }
 
     getName() {
-        this.steps[1].data.name;
+        return this.steps[1].data.name;
     }
 
-    getName() {
-        this.steps[1].data.email;
+    getEmail() {
+        return this.steps[1].data.email;
     }
 
     setData(data) {

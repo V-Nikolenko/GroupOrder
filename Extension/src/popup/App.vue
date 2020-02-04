@@ -149,7 +149,18 @@ export default {
   },
 
   created() {
-    let copy = STEPS.map((elem) => Object.assign({}, elem));
+
+    let copy = STEPS.map((step) => {
+      let newObj = {};
+      for (let key in step) {
+        
+        if (typeof(step[key]) === 'object') {
+          newObj[key] = Object.assign({}, step[key])
+        } else newObj[key] = step[key];      
+      }
+      return newObj;
+
+    });
 
     chrome.storage.sync.get('steps', (chromeStorage) => {
 
@@ -160,6 +171,9 @@ export default {
 
             this.stepService = stepFactory.create(copy);
             
+            console.log(this.stepService)
+
+
             sendConnectWithCodeRequest(response)
             .then((resp) => {
               if (resp.status === 200) {

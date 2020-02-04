@@ -1,7 +1,6 @@
 let url = new URL (window.location.href);
 
 if (url.searchParams.get('code')) {
-    
     localStorage.setItem('connectCode', url.searchParams.get('code'))
 }
 
@@ -130,7 +129,7 @@ async function FormOrder(items) {
 }
 
 async function getRestaurant() {
-    let url = window.location.href
+    let url = window.location.href.split('?')[0];
     let companyContainer = document.getElementsByClassName('company-name')[0];
     let name;
 

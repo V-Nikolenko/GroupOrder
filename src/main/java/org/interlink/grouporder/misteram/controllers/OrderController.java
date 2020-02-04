@@ -106,7 +106,7 @@ public class OrderController {
         try {
             GroupOrder groupOrder = DataStorage.getGroupOrder(code);
             groupOrder.unlockOrder();
-            return ResponseEntity.ok("Order " + code + " is locked!");
+            return ResponseEntity.ok("Order " + code + " is unlocked!");
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }

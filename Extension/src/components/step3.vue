@@ -12,7 +12,8 @@
 
         <div class="container">
             <button class="show-items-btn" v-on:click="showCheckBlock">{{ showCheckText }}</button>
-            <img src="/images/lock.png" class='img img-lock' alt="Заблокувати замовлення" title="Заблокувати замовлення">
+            <!-- <img src="/images/lock.png" class='img img-lock' alt="Заблокувати замовлення" title="Заблокувати замовлення"> -->
+            <span v-bind:class="[{'unlocked': !isLocked}, 'lock']" v-on:click="changeLockState"></span>
         </div>
         
         <div class="btn-container"> 
@@ -40,7 +41,7 @@
 
 <script>
 import stepHeader from "./stepHeader";
-import { sendGetAllDishesRequest } from "./requests";
+import { sendGetAllDishesRequest, sendLockOrderRequest, sendOrderStateRequest } from "./requests";
 import { stepFactory } from './stepService.js';
 
 export default {
@@ -56,7 +57,8 @@ export default {
             showCheck: true,
             isSending: false,
             progressMax: null,
-            progressValue: 0
+            progressValue: 0,
+            isLocked: false
         }
     },
 
@@ -70,6 +72,12 @@ export default {
         showCheckBlock() {
             this.showCheck = !this.showCheck;
             this.$emit('display');
+        },
+
+        changeLockState() {
+            sendOrderStateRequest(this.service.getCode(), this.isLocked).then((resp) => {
+                this.isLocked = ! this.isLocked;
+            })
         },
         
         formOrder() {
@@ -143,6 +151,7 @@ export default {
     display: flex;  
     justify-content: space-between;
     align-items: center;
+    height: 30px;
 }
 
 .img-reset {
@@ -211,6 +220,86 @@ export default {
 
     border-radius: 2px; 
     background-size: 35px 20px, 100% 100%, 100% 100%;
+    }
 }
+
+///////////////////// LOCK ////////////////
+/* :::::::::::::: Presentation css */
+.lock {
+    width: 15px;
+    height: 12px;
+    border: 3px solid black;
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+    -webkit-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+    
+    &:after {
+        content: "";
+        display: block;
+        background: black;
+        width: 3px;
+        height: 7px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -3.5px 0 0 -2px;
+        -webkit-transition: all 0.1s ease-in-out;
+        transition: all 0.1s ease-in-out;
+    }
+
+    &:before {
+        content: "";
+        display: block;
+        width: 10px;
+        height: 10px;
+        bottom: 100%;
+        position: absolute;
+        left: 50%;
+        margin-left: -8px;
+        border: 3px solid black;
+        border-top-right-radius: 50%;
+        border-top-left-radius: 50%;
+        border-bottom: 0;
+        -webkit-transition: all 0.1s ease-in-out;
+        transition: all 0.1s ease-in-out;
+    }
+
+    &:hover:before {
+        height: 10px;
+    }
 }
+
+.unlocked {
+transform: rotate(10deg);
+
+    &:before {
+        bottom: 130%;
+        left: 31%;
+        margin-left: -11.5px;
+        transform: rotate(-45deg);
+    }
+
+    &:after {
+        background: black;
+    }
+
+    &:hover {
+        transform: rotate(3deg);
+    }
+
+    &:hover:before {
+        height: 10px;
+        left: 40%;
+        bottom: 124%;
+        transform: rotate(-30deg);
+    }
+}
+
+.unlocked,
+.unlocked:before {
+  border-color: black;
+}
+
 </style>

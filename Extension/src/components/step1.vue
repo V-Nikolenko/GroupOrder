@@ -112,7 +112,7 @@ export default {
         newOrder: function() {
             chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
                 chrome.tabs.sendMessage(tabs[0].id, {type: 'restaurant'}, (response) => {
-                    
+                    console.log(response)
                     sendCreateNewOrderRequest(response)
                     .then((resp) => {
                         // console.log(resp)
