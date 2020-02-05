@@ -254,7 +254,7 @@ export default {
         height: 9px;
         bottom: 100%;
         position: absolute;
-        left: 55%;
+        left: 60%;
         margin-left: -8px;
         border: 3px solid $main-font-color;
         border-top-right-radius: 50%;
@@ -273,7 +273,7 @@ export default {
 .unlocked {
     &:before {
         bottom: 120%;
-        left: 40%;
+        left: 45%;
         margin-left: -11.5px;
         transform: rotate(-40deg);
     }
@@ -288,7 +288,7 @@ export default {
 
     &:hover:before {
         height: 9px;
-        left: 50%;
+        left: 52%;
         bottom: 120%;
         transform: rotate(-30deg);
     }

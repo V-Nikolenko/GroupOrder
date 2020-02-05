@@ -4,7 +4,7 @@ class StepService {
     }
 
     nextStep(step) {
-        console.log(this.steps)
+        // console.log(this.steps)
         let currentId = this.steps.indexOf(step)
 
         if (currentId === (this.steps.length-1)) {

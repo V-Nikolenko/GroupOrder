@@ -8,7 +8,8 @@ export async function sendCreateNewOrderRequest(obj) {
         },
         body: JSON.stringify({
             restaurantUrl: obj.url,
-            restaurantName: obj.name
+            restaurantName: obj.name,
+            restaurantId: obj.companyId
         })
     });
 }

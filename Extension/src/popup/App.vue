@@ -1,7 +1,6 @@
 <template>
 
 <div class="container">
-
   <div v-if="isLoaded">
     <order 
       v-bind:class="[isDisplay ? 'receipt' : 'receipt_none']"
@@ -15,7 +14,7 @@
       <h1 class="extension-title">Group Order</h1>
     </header>
 
-  <!-- <div>{{stepService}}</div> -->
+  <div>{{stepService}}</div>
 
     <div v-if="isLoaded">
 
@@ -143,25 +142,11 @@ export default {
     },
 
     logOut: function() {
-      let copy =  STEPS.map((elem) => Object.assign({}, elem));
-      this.stepService.setData(copy);
+      this.stepService.setData( JSON.parse(JSON.stringify(STEPS)) );
     }
   },
 
   created() {
-
-    let copy = STEPS.map((step) => {
-      let newObj = {};
-      for (let key in step) {
-        
-        if (typeof(step[key]) === 'object') {
-          newObj[key] = Object.assign({}, step[key])
-        } else newObj[key] = step[key];      
-      }
-      return newObj;
-
-    });
-
     chrome.storage.sync.get('steps', (chromeStorage) => {
 
       chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
@@ -170,11 +155,11 @@ export default {
 
           // if (chromeStorage.steps && response && response !== chromeStorage.steps[0].data.code) {
           if (response) {
-            console.log(chromeStorage.steps)
-            console.log(chromeStorage.steps[0].data.code)
-            console.log(response)
+            // console.log(chromeStorage.steps)
+            // console.log(chromeStorage.steps[0].data.code)
+            // console.log(response)
             if (chromeStorage.steps && chromeStorage.steps[0].data.code !== response) {
-              this.stepService = stepFactory.create(copy);
+              this.stepService = stepFactory.create(JSON.parse(JSON.stringify(STEPS)));
             
               // console.log(this.stepService)
 
@@ -200,13 +185,13 @@ export default {
                 // console.log('localstorage match')
                 this.stepService = chromeStorage.steps !== undefined
                         ? stepFactory.create(chromeStorage.steps) 
-                        : stepFactory.create(copy);
+                        : stepFactory.create(JSON.parse(JSON.stringify(STEPS)));
             }
           } else {
             // console.log('no url code')
             this.stepService = chromeStorage.steps !== undefined
                         ? stepFactory.create(chromeStorage.steps) 
-                        : stepFactory.create(copy);
+                        : stepFactory.create(JSON.parse(JSON.stringify(STEPS)));
           }
 
         });

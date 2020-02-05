@@ -62,7 +62,8 @@
 <script>
 import {sendConnectWithCodeRequest, sendCreateNewOrderRequest} from './requests.js';
 import stepHeader from './stepHeader.vue';
-import {stepFactory} from './stepService.js';
+import { stepFactory } from './stepService.js';
+import { copyToClipboard } from './copy.js'
 
 export default {
     name: 'step1',
@@ -97,12 +98,7 @@ export default {
 
     methods: {
         copy: function() {
-            let el = document.createElement('textarea');
-            el.value = this.step.data.url;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
+            copyToClipboard(this.step.data.url);
         },
 
         logOut: function() {
@@ -110,9 +106,10 @@ export default {
         },
 
         newOrder: function() {
+
             chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
                 chrome.tabs.sendMessage(tabs[0].id, {type: 'restaurant'}, (response) => {
-                    console.log(response)
+                    // console.log(response)
                     sendCreateNewOrderRequest(response)
                     .then((resp) => {
                         // console.log(resp)
