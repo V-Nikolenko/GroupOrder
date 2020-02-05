@@ -8,12 +8,17 @@ class StepService {
         let currentId = this.steps.indexOf(step)
 
         if (currentId === (this.steps.length-1)) {
-          return
+          return;
         } else {
           step.isActive = !step.isActive;
           step.isDone = !step.isDone;
           this.steps[currentId+1].isActive = true;
         }
+
+        this.saveSteps();
+    }
+
+    saveSteps() {
         this.notify(this.steps);
     }
 

@@ -8,7 +8,7 @@
     </step-header>
 
 
-    <section v-show="step.isActive" class="active-block">
+    <section v-if="step.isActive" class="active-block">
         
         <ol class="list">
             <li v-for="(subStep, index) in subSteps" class="list-item" v-bind:key="index">{{ '1.' + (index + 1) + ". " + subStep }}</li>
@@ -18,7 +18,7 @@
         <div class="container">
 
             <div class="newOrderContainer">
-                <button class="btn" v-on:click="newOrder()">Створити замовлення</button>
+                <button class="btn" v-on:click="newOrder()" v-bind:disabled="isDisabled">Створити замовлення</button>
                 <p class="error">{{ newOrderError }}</p>
             </div>
 
@@ -36,7 +36,7 @@
                 <p  class="error">{{ newConnectionError }}</p>
             </div>
 
-            <button class="btn" v-on:click="connectWithCode(inputCode)">
+            <button class="btn" v-on:click="connectWithCode(inputCode)" v-bind:disabled="isDisabled">
                 Приєднатися до існуючого замовлення
             </button>
         
@@ -45,10 +45,10 @@
     </section>
 
     
-    <section v-show="step.isDone" class="step step-result-container">
+    <section v-else-if="step.isDone" class="step step-result-container">
 
         <p class="restaurant">{{ step.data.restaurant }}({{ step.data.code}}) </p>
-        <!-- TODO: add restaurat -->
+        
         <div>
             <img src="/images/copy.png" alt="Копіювати" title="Копіювати" class="img copy-img" v-on:click="copy">
             <img src="/images/logout.png" alt="Вийти" title="Вийти" class="img logout-img" v-on:click="logOut"> 
@@ -79,6 +79,7 @@ export default {
             subSteps: ['Додати страви', 'Перевірити всі страви'],
             isNewOrderError: false,
             isConnectionError: false,
+            isDisabled: false
         }
     },
 
@@ -106,7 +107,7 @@ export default {
         },
 
         newOrder: function() {
-
+            this.isDisabled = true;
             chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
                 chrome.tabs.sendMessage(tabs[0].id, {type: 'restaurant'}, (response) => {
                     // console.log(response)
@@ -123,13 +124,12 @@ export default {
                         this.step.data.restaurant = response.name;
                         this.step.data.code = resp;
                         
-                        this.inputCode = '';
-                        this.isNewOrderError =  false;
-                        this.isConnectionError = false;
-
                         this.$emit('next', this.step); 
+                        this.isDisabled = false;
                     })
                     .catch((error)=> {
+                        this.isDisabled = false;
+
                         this.isNewOrderError = true;
                         console.log(error)
                     });
@@ -138,6 +138,8 @@ export default {
         },
 
         connectWithCode: function(code) {
+            this.isDisabled = true;
+
             sendConnectWithCodeRequest(code)
             .then((resp) => {
                 if(resp.status === 200) {
@@ -150,13 +152,11 @@ export default {
                     this.step.data.restaurant = resp.restaurantName;
                     this.step.data.url = resp.restaurantUrl;
 
-                    this.inputCode = '';
-                    this.isNewOrderError =  false;
-                    this.isConnectionError = false;
-
                     this.$emit('next', this.step);
+                    this.isDisabled = false;
             })
             .catch((error) => {
+                this.isDisabled = false;
                 this.isConnectionError = true;
                 console.log(error)
             })

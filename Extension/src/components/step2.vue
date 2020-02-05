@@ -6,7 +6,7 @@
                 v-bind:isActive="step.isActive"
         ></step-header>
 
-        <div v-show="step.isActive" class="active-block">
+        <div v-if="step.isActive" class="active-block">
 
             <div class="nameContainer">
                 <input v-model="name" 
@@ -36,7 +36,7 @@
                 <button 
                     v-bind:class="[btn_disabled, 'btn']" 
                     v-on:click="sendOrder()"
-                    v-bind:disabled="(isEmailError || isNameError || !email || !name)">
+                    v-bind:disabled="(isEmailError || isNameError || !email || !name || isDisabled)">
                     Доповнити групове замовлення
                 </button>
 
@@ -46,7 +46,7 @@
         </div>
 
         
-        <div v-show="step.isDone" class="step step-result-container step-result">
+        <div v-else-if="step.isDone" class="step step-result-container step-result">
         
             <span>{{ service.steps[1].data.name }}</span>
             <span>{{ service.steps[1].data.userFullPrice}} грн.</span>
@@ -78,7 +78,8 @@ export default {
             isNameError: false,
             isEmailError: false,
             isSendingError: false,
-            sendingError: null
+            sendingError: null,
+            isDisabled: false
         }
     },
 
@@ -109,7 +110,7 @@ export default {
 
 
         sendOrder: function() {
-
+            this.isDisabled = true;
             chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
                 chrome.tabs.sendMessage(tabs[0].id, {type: 'getOrders'}, (response) => {
 
@@ -124,15 +125,8 @@ export default {
                             this.step.data.email = this.email;
                             this.step.data.name = this.name;
 
-
-                            this.name = '';
-                            this.email = '';
-                            this.fullPrice = null;
-                            this.isNameError = false;
-                            this.isEmailError = false;
-                            this.isSendingError = false;
-                            this.sendingError = null;
                             this.$emit('next', this.step);
+
                         } else {
                             this.isSendingError = true; 
                             
@@ -140,11 +134,11 @@ export default {
                                 this.sendingError = 'Замовлення заблоковано';    
                             }
                         }
-
+                        this.isDisabled = false;
                     }).catch((error)=> {
+                        this.isDisabled = false;
                         this.isSendingError = true;
                         this.sendingError = 'Спробуйте ще раз';
-
                     })
                 })
             })

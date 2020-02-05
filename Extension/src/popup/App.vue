@@ -15,19 +15,20 @@
     </header>
 
   <div>{{stepService}}</div>
-
+    <p>{{componentsId}}</p>
     <div v-if="isLoaded">
 
-      <step1 v-bind:step="steps[0]" v-on:next="nextStep" v-on:logOut="logOut"></step1>    
+      <step1 v-bind:step="steps[0]" v-on:next="nextStep" v-on:logOut="logOut" v-bind:key="componentsId[0]"></step1>    
       
-      <step2 v-bind:step="steps[1]" v-on:next="nextStep"></step2> 
+      <step2 v-bind:step="steps[1]" v-on:next="nextStep" v-bind:key="componentsId[1]"></step2> 
 
       <step3 v-bind:step="steps[2]"
         v-on:next='nextStep' 
-        v-on:display="isDisplay = !isDisplay">
+        v-on:display="isDisplay = !isDisplay"
+        v-bind:key="componentsId[2]">
       </step3>
 
-      <step4 v-bind:step="steps[3]" v-on:next="nextStep"></step4>
+      <step4 v-bind:step="steps[3]" v-on:next="nextStep" v-bind:key="componentsId[3]"></step4>
       
     </div>
 
@@ -76,6 +77,7 @@ const STEPS = [
     title: '3. Зібрати замовлення',
     data: {
       fullPrice: null,
+      isLocked: false
     }
   },
 
@@ -84,7 +86,7 @@ const STEPS = [
     isDone: false,
     title: '4. Показати борги',
     data: {
-    
+      
     }
   }
 
@@ -105,7 +107,13 @@ export default {
     return {
       isDisplay: false,
       stepService: null,
-      members: null
+      members: null,
+      componentsId: [
+        'comp1:',
+        'comp2:',
+        'comp3:',
+        'comp4:'
+      ]
     }
   },
 
@@ -113,13 +121,12 @@ export default {
     isLoaded() {
       return !!this.stepService;
     },
-
+    
     steps() {
       if (this.isLoaded) {
         return this.stepService.steps;
       } else return [];  
     }
-    
   },
 
   watch: {
@@ -142,6 +149,9 @@ export default {
     },
 
     logOut: function() {
+      this.componentsId.forEach((el, id) => {
+        this.componentsId[id] += 1;
+      });
       this.stepService.setData( JSON.parse(JSON.stringify(STEPS)) );
     }
   },

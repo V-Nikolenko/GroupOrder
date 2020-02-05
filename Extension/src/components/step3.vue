@@ -13,12 +13,12 @@
         <div class="container">
             <button class="show-items-btn" v-on:click="showCheckBlock">{{ showCheckText }}</button>
             <!-- <img src="/images/lock.png" class='img img-lock' alt="Заблокувати замовлення" title="Заблокувати замовлення"> -->
-            <span v-bind:class="[{'unlocked': !isLocked}, 'lock']" v-on:click="changeLockState"></span>
+            <span v-bind:class="[{'unlocked': !step.data.isLocked}, 'lock']" v-on:click="changeLockState"></span>
         </div>
         
         <div class="btn-container"> 
 
-            <button class="btn" v-on:click="formOrder()">Зібрати</button>
+            <button v-on:click="formOrder()" v-bind:class="[btn_disabled, 'btn']" v-bind:disabled="isDisabled">Зібрати</button>
              
             <progress
                 v-show="isSending" 
@@ -40,8 +40,8 @@
 </template>
 
 <script>
-import stepHeader from "./stepHeader";
-import { sendGetAllDishesRequest, sendLockOrderRequest, sendOrderStateRequest } from "./requests";
+import stepHeader from "./stepHeader.vue";
+import { sendGetAllDishesRequest, sendLockOrderRequest, sendOrderStateRequest } from "./requests.js";
 import { stepFactory } from './stepService.js';
 
 export default {
@@ -58,13 +58,19 @@ export default {
             isSending: false,
             progressMax: null,
             progressValue: 0,
-            isLocked: false
+            isDisabled: false
         }
     },
 
     computed: {
         showCheckText: function () {
             return this.showCheck ? 'Показати' : 'Сховати';
+        },
+
+        btn_disabled() {
+            return {
+                btn_disabled: this.isDisabled
+            }
         }
     },
 
@@ -75,14 +81,21 @@ export default {
         },
 
         changeLockState() {
-            sendOrderStateRequest(this.service.getCode(), this.isLocked).then((resp) => {
-                this.isLocked = ! this.isLocked;
+            sendOrderStateRequest(this.service.getCode(), this.step.data.isLocked).then((resp) => {
+                this.step.data.isLocked = !this.step.data.isLocked;
+                this.service.saveSteps();
             })
         },
         
         formOrder() {
+            
+            console.log(this.isDisabled + 'before');
+            this.isDisabled = true;
             // replace to getCode()
-            sendGetAllDishesRequest(this.service.steps[0].data.code)
+            console.log(this.isDisabled + 'after');
+
+            console.log('start sending');
+            sendGetAllDishesRequest(this.service.getCode())
             .then((resp)=> {
                 
                 if (resp.status === 200) {
@@ -91,7 +104,7 @@ export default {
 
             })
             .then((resp)=> {
-                console.log(this.step.data.progressValue)
+
                 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     if (request.type === 'quantity') {
                         this.progressMax = request.quantity;
@@ -112,22 +125,26 @@ export default {
                         if (response) {
                             
                             chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-                                chrome.tabs.sendMessage(tabs[0].id, {type: 'reload'})
+                                chrome.tabs.sendMessage(tabs[0].id, {type: 'reload'});
 
                                 this.step.data.fullPrice = resp.fullPrice;
                                 if (!this.showCheck) {
                                     this.showCheckBlock();
                                 }
+
                                 this.$emit('next', this.step);
-                                this.isSending = false;
-                                this.progressValue = 0;
-                                this.progressMax = null;        
+                            
+                                this.isDisabled = false;
+                                console.log('sent' + 'state' + this.isDisabled)
                             });
                         }
                     })
                 })        
             })
-            .catch((error)=> { console.log(error) });
+            .catch((error)=> {
+                console.log(error);
+                this.isDisabled = false;
+            });
         }
     }
 }
