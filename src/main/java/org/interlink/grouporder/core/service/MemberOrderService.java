@@ -1,5 +1,6 @@
 package org.interlink.grouporder.core.service;
 
+import org.interlink.grouporder.core.entity.MemberOrder;
 import org.interlink.grouporder.core.repository.GroupOrderRepository;
 import org.interlink.grouporder.core.repository.MemberOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,9 @@ public class MemberOrderService {
 
     public List<String> findAllProducts(String code) {
         return this.memberOrderRepository.findAllProducts(code);
+    }
+
+    public List<MemberOrder> findAllMembers(String code) {
+        return this.memberOrderRepository.findAllMembers(code);
     }
 }

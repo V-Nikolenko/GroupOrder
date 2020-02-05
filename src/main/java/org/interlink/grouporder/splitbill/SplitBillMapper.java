@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.interlink.grouporder.core.entity.GroupOrder;
 import org.interlink.grouporder.core.entity.MemberOrder;
+import org.interlink.grouporder.misteram.entity.StringResultDTO;
 import org.interlink.grouporder.splitbill.entity.MemberDTO;
 import org.interlink.grouporder.splitbill.entity.OrderCheckDTO;
 
@@ -18,15 +19,6 @@ public class SplitBillMapper {
     }
 
     public static OrderCheckDTO map(GroupOrder source, OrderCheckDTO destination) {
-
-        List<MemberDTO> items = source.getMembers().values().stream()
-                .map(member -> map(member, new MemberDTO()))
-                .collect(Collectors.toList());
-
-        destination.setFullPrice(source.getFullPrice());
-        destination.setCompanyId(source.getRestaurantId());
-        destination.setItems(items);
-
         return destination;
     }
 
@@ -38,7 +30,5 @@ public class SplitBillMapper {
 
         return destination;
     }
-
-
 
 }

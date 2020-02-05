@@ -23,7 +23,7 @@ public interface MemberOrderRepository extends JpaRepository<MemberOrder, Intege
     @Modifying
     @Query("DELETE FROM member_order " +
             "WHERE member_order.email = :email " +
-            "AND group_urder_code = :groupOrderCode")
+            "AND group_order_code = :groupOrderCode")
     void removeMemberFromOrder(@Param("groupOrderCode") String groupOrderCode,
                                @Param("email") String email);
 
@@ -31,4 +31,8 @@ public interface MemberOrderRepository extends JpaRepository<MemberOrder, Intege
             "FROM member_order" +
             "WHERE member_order.group_order_code = :groupOrderCode")
     List<String> findAllProducts(@Param("groupOrderCode") String groupOrderCode);
+
+    @Query("SELECT m FROM  member_order m" +
+            "WHERE m.group_order_code = :groupOrderCode")
+    List<MemberOrder> findAllMembers(@Param("groupOrderCode") String groupOrderCode);
 }

@@ -10,7 +10,6 @@ public class OrderCodeGenerator {
     private OrderCodeGenerator() {
     }
 
-
     public static String generateCode() {
         byte[] bytes = new byte[6];
         RANDOM.nextBytes(bytes);

@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface GroupOrderRepository extends JpaRepository<GroupOrder, Integer> {
 
     @Modifying
@@ -16,8 +18,10 @@ public interface GroupOrderRepository extends JpaRepository<GroupOrder, Integer>
                        @Param("restaurantName") String restaurantName,
                        @Param("restaurantUrl") String restaurantUrl);
 
-    @Query("SELECT g " +
-           "FROM group_order g" +
+    @Query("SELECT g FROM group_order g" +
             "WHERE g.code = :code")
     GroupOrder getGroupOrder(@Param("code") String code);
+
+    @Query("select code from  group_order")
+    List<String> findAllCodes();
 }
