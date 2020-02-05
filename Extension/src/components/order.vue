@@ -18,10 +18,7 @@
                 <thead>
                     <th 
                         v-for="(header, index) in tableHeaders" 
-                        v-bind:key="index" 
-                        style="height: 25px"
-                        >
-                        
+                        v-bind:key="index">
                         {{ header }}
                     </th>
                 </thead>
@@ -62,9 +59,6 @@ export default {
             if (!this.selected.includes(el)) {
                 this.selected.push(el);
             } else this.selected.splice(this.selected.indexOf(el), 1)
-
-            // el.currentTarget.parentNode.getElementsByClassName('body')[0].classList.toggle('none')
-            // el.currentTarget.getElementsByClassName('item-ico')[0].classList.toggle('anime');
         }
     }
 }
@@ -162,7 +156,7 @@ thead {
 }
 
 thead th {
-    min-height: 30px;
+    height: 30px;
 }
 
 th, tr {
