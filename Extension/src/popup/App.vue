@@ -47,7 +47,6 @@ import step2 from '../components/step2';
 import step3 from '../components/step3';
 import step4 from '../components/step4';
 import order from '../components/order';
-import listItem from '../components/list-item';
 import { stepFactory } from '../components/stepService';
 import { sendGetOrdersListRequest, sendConnectWithCodeRequest } from '../components/requests';
 
@@ -103,7 +102,6 @@ export default {
     step3, 
     step4,
     order,
-    listItem
   },
 
   data () {
