@@ -35,7 +35,7 @@
 
     <div v-else-if="step.isDone" class="step step-result-container">
         <span>Загальна сума: {{ step.data.fullPrice }} грн.</span>
-        <button class="show-items-btn">Показати</button>
+        <button class="show-items-btn" v-on:click="$emit('showAllOrders')">Показати</button>
     </div>
 </div>
 </template>

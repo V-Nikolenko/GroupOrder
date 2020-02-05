@@ -2,16 +2,16 @@
     <ul class="list" v-if="!!data">
         
         <li v-for="(member, index) in data.items" v-bind:key="index" class="list-item">
-            <span style="font-size: 13px">{{ index + 1 +') ' + member.name}}</span>
-            <span style="padding-right: 4px; font-size: 13px;">{{member.price + 'грн.'}}</span>
+            <span>{{ index + 1 +') ' + member.name}}</span>
+            <span>{{member.price + 'грн.'}}</span>
         </li>
 
     </ul>
 </template>
 
 <script>
-import { sendGetSplitBillData } from "./requests";
-import { stepFactory } from "./stepService";
+import { sendGetSplitBillData } from "./requests.js";
+import { stepFactory } from "./stepService.js";
 
 export default{
     name: 'bills-list',
@@ -45,6 +45,7 @@ export default{
     &-item {
     display: flex;
     justify-content: space-between;
+    font-size: 13px;
     }
 }
 </style>

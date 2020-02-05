@@ -13,7 +13,7 @@
   </div>
   
   <div class='extension' v-show="!isDisplay">
-
+    
     <header>
       <h1 class="extension-title">Group Order</h1>
     </header>
@@ -27,7 +27,7 @@
 
       <step3 v-bind:step="steps[2]"
         v-on:next='nextStep' 
-        v-on:showAllOrders="isDisplay = !isDisplay">
+        v-on:showAllOrders="isDisplay = !isDisplay"
         v-bind:key="componentsId[2]">
       </step3>
 
