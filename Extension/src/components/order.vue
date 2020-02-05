@@ -29,7 +29,7 @@
 
                 <tbody>
                     <tr v-for="(product, prodId) in member.products" v-bind:key="prodId">
-                        <td >{{prodId}}</td>
+                        <td >{{prodId + 1}}</td>
                         <td>{{product.name}}</td>
                         <td >{{product.count}}</td>
                         <td >{{product.price}}</td>
