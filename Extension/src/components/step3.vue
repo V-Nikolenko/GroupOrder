@@ -11,13 +11,15 @@
     <div v-if="step.isActive" class="active-block">
 
         <div class="container">
+        
             <button class="show-items-btn" v-on:click="$emit('showAllOrders')">Показати</button>
-            <img src="/images/lock.png" class='img img-lock' alt="Заблокувати замовлення" title="Заблокувати замовлення">
+            <span v-bind:class="[{'unlocked': !step.data.isLocked}, 'lock']" v-on:click="changeLockState"></span>
+        
         </div>
         
         <div class="btn-container"> 
 
-            <button class="btn" v-on:click="formOrder()">Зібрати</button>
+            <button v-on:click="formOrder()" v-bind:class="[btn_disabled, 'btn']" v-bind:disabled="isDisabled">Зібрати</button>
              
             <progress
                 v-show="isSending" 
@@ -39,8 +41,8 @@
 </template>
 
 <script>
-import stepHeader from "./stepHeader";
-import { sendGetAllDishesRequest } from "./requests";
+import stepHeader from "./stepHeader.vue";
+import { sendGetAllDishesRequest, sendLockOrderRequest, sendOrderStateRequest } from "./requests.js";
 import { stepFactory } from './stepService.js';
 
 export default {
@@ -56,7 +58,8 @@ export default {
             showCheck: true,
             isSending: false,
             progressMax: null,
-            progressValue: 0
+            progressValue: 0,
+            isDisabled: false
         }
     },
 
@@ -64,10 +67,24 @@ export default {
     },
 
     methods: {
+        btn_disabled() {
+            return {
+                btn_disabled: this.isDisabled
+            }
+        },
         
+        changeLockState() {
+            sendOrderStateRequest(this.service.getCode(), this.step.data.isLocked).then((resp) => {
+                this.step.data.isLocked = !this.step.data.isLocked;
+                this.service.saveSteps();
+            })
+        },
+ 
         formOrder() {
-            // replace to getCode()
-            sendGetAllDishesRequest(this.service.steps[0].data.code)
+            
+            this.isDisabled = true;
+
+            sendGetAllDishesRequest(this.service.getCode())
             .then((resp)=> {
                 
                 if (resp.status === 200) {
@@ -76,7 +93,7 @@ export default {
 
             })
             .then((resp)=> {
-                console.log(this.step.data.progressValue)
+
                 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     if (request.type === 'quantity') {
                         this.progressMax = request.quantity;
@@ -97,22 +114,26 @@ export default {
                         if (response) {
                             
                             chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-                                chrome.tabs.sendMessage(tabs[0].id, {type: 'reload'})
+                                chrome.tabs.sendMessage(tabs[0].id, {type: 'reload'});
 
                                 this.step.data.fullPrice = resp.fullPrice;
+                                
                                 if (!this.showCheck) {
                                     this.showCheckBlock();
                                 }
+
                                 this.$emit('next', this.step);
-                                this.isSending = false;
-                                this.progressValue = 0;
-                                this.progressMax = null;        
+                            
+                                this.isDisabled = false;
                             });
                         }
                     })
                 })        
             })
-            .catch((error)=> { console.log(error) });
+            .catch((error)=> {
+                console.log(error);
+                this.isDisabled = false;
+            });
         }
     }
 }
@@ -136,6 +157,7 @@ export default {
     display: flex;  
     justify-content: space-between;
     align-items: center;
+    height: 40px;
 }
 
 .img-reset {
@@ -204,6 +226,78 @@ export default {
 
     border-radius: 2px; 
     background-size: 35px 20px, 100% 100%, 100% 100%;
+    }
 }
+
+.lock {
+    width: 15px;
+    height: 12px;
+    border: 3px solid $main-font-color;
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+    -webkit-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+    
+    &:after {
+        content: "";
+        display: block;
+        background: $main-font-color;
+        width: 3px;
+        height: 7px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -3.5px 0 0 -2px;
+        -webkit-transition: all 0.1s ease-in-out;
+        transition: all 0.1s ease-in-out;
+    }
+
+    &:before {
+        content: "";
+        display: block;
+        width: 7px;
+        height: 9px;
+        bottom: 100%;
+        position: absolute;
+        left: 60%;
+        margin-left: -8px;
+        border: 3px solid $main-font-color;
+        border-top-right-radius: 50%;
+        border-top-left-radius: 50%;
+        border-bottom: 0;
+        -webkit-transition: all 0.1s ease-in-out;
+        transition: all 0.1s ease-in-out;
+    }
+
+    &:hover:before {
+        height: 10px;
+    }
 }
+
+
+.unlocked {
+    &:before {
+        bottom: 120%;
+        left: 45%;
+        margin-left: -11.5px;
+        transform: rotate(-40deg);
+    }
+    
+    &:before {
+        border-color: $main-font-color;
+    }
+
+    &:after {
+        background: $main-font-color;
+    }
+
+    &:hover:before {
+        height: 9px;
+        left: 52%;
+        bottom: 120%;
+        transform: rotate(-30deg);
+    }
+}
+
 </style>

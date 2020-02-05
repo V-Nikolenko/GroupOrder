@@ -18,20 +18,13 @@ public class DataStorage {
 
     private static Map<String, GroupOrder> orders = new LinkedHashMap<>();
 
-    public static String addGroupOrder() {
+    public static String addGroupOrder(String restaurantName, String restaurantUrl) {
         String code = generateUniqueCode();
-        orders.put(code, new GroupOrder(code));
+
+        orders.put(code, new GroupOrder(code, restaurantName, restaurantUrl));
 
         return code;
     }
-
-//    public static void removeGroupOrder(String code) {
-//        if (code != null) {
-//            orders.remove(code);
-//        } else {
-//            throw new BadRequestException("Key is invalid");
-//        }
-//    }
 
     public static GroupOrder getGroupOrder(String code) {
         return Optional.ofNullable(orders.get(code)).orElseThrow(

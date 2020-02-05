@@ -24,7 +24,7 @@ public class SplitBillMapper {
                 .collect(Collectors.toList());
 
         destination.setFullPrice(source.getFullPrice());
-        destination.setInternetShopURL(source.getInternetShopURL());
+        destination.setCompanyId(source.getCompanyId());
         destination.setItems(items);
 
         return destination;

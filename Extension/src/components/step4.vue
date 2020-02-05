@@ -24,6 +24,7 @@ import stepHeader from "./stepHeader";
 import { sendGetAllDishesRequest, sendGetSplitBillData } from './requests';
 import { stepFactory } from "./stepService";
 import billsList from './bills';
+import { copyToClipboard } from './copy';
 
 export default {
     name: 'step4',
@@ -48,12 +49,7 @@ export default {
         },
 
         copy: function() {
-            let el = document.createElement('textarea');
-            el.value = JSON.stringify(this.data);
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
+            copyToClipboard(JSON.stringify(this.data));
         },
     },
 }

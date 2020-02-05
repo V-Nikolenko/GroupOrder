@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 public class OrderCheckDTO {
-    private String internetShopURL;
+    private int companyId;
     private int fullPrice;
     private List<MemberDTO> items;
 }

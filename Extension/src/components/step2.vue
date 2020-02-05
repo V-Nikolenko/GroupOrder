@@ -6,7 +6,7 @@
                 v-bind:isActive="step.isActive"
         ></step-header>
 
-        <div v-show="step.isActive" class="active-block">
+        <div v-if="step.isActive" class="active-block">
 
             <div class="nameContainer">
                 <input v-model="name" 
@@ -32,16 +32,21 @@
                 </p>
             </div>
 
-            <button 
-                v-bind:class="[btn_disabled, 'btn']" 
-                v-on:click="sendOrder()"
-                v-bind:disabled="(isEmailError || isNameError || !email || !name)">
-                Доповнити групове замовлення
-            </button>
+            <div class="btnContainer">
+                <button 
+                    v-bind:class="[btn_disabled, 'btn']" 
+                    v-on:click="sendOrder()"
+                    v-bind:disabled="(isEmailError || isNameError || !email || !name || isDisabled)">
+                    Доповнити групове замовлення
+                </button>
+
+                <p v-show="isSendingError" class="error">{{ sendingError }}</p>
+            </div>
 
         </div>
+
         
-        <div v-show="step.isDone" class="step step-result-container step-result">
+        <div v-else-if="step.isDone" class="step step-result-container step-result">
         
             <span>{{ service.steps[1].data.name }}</span>
             <span>{{ service.steps[1].data.userFullPrice}} грн.</span>
@@ -72,6 +77,9 @@ export default {
             fullPrice: null,
             isNameError: false,
             isEmailError: false,
+            isSendingError: false,
+            sendingError: null,
+            isDisabled: false
         }
     },
 
@@ -102,37 +110,35 @@ export default {
 
 
         sendOrder: function() {
-
+            this.isDisabled = true;
             chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
                 chrome.tabs.sendMessage(tabs[0].id, {type: 'getOrders'}, (response) => {
-                        // Object.assign(result.user, {'name': this.name, 'email': this.email})
-                        // chrome.storage.sync.set({'user': result.user});
 
                     response.email = this.email;
                     response.name = this.name;
                     
-                    // this.fullPrice = response.fullPrice;
-
-                    //change this.service.steps[0].data.code to getCode();
-                    sendMemberOrder(this.service.steps[0].data.code, response).then((resp)=> {
+                    sendMemberOrder(this.service.getCode(), response).then((resp)=> {
                         
                         if (resp.status === 200) {
                             this.step.data.userFullPrice = response.fullPrice;
                             this.step.data.email = this.email;
                             this.step.data.name = this.name;
 
-
-                            this.name = '',
-                            this.email = '',
-                            this.fullPrice = null,
-                            this.isNameError = false,
-                            this.isEmailError = false,
                             this.$emit('next', this.step);
-                        } else {
-                            throw new Error();
-                        }
 
-                    }).catch((error)=> {console.log(error)})
+                        } else {
+                            this.isSendingError = true; 
+                            
+                            if (resp.status === 423){
+                                this.sendingError = 'Замовлення заблоковано';    
+                            }
+                        }
+                        this.isDisabled = false;
+                    }).catch((error)=> {
+                        this.isDisabled = false;
+                        this.isSendingError = true;
+                        this.sendingError = 'Спробуйте ще раз';
+                    })
                 })
             })
         }
@@ -182,7 +188,8 @@ export default {
 }
 
 .nameContainer,
-.emailContainer {
+.emailContainer,
+.btnContainer{
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -194,6 +201,10 @@ export default {
  
 .emailContainer {
     min-height: 75px;
+}
+
+.btnContainer {
+    min-height: 70px;
 }
 
 .error {

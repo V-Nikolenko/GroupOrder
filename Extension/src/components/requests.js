@@ -1,9 +1,16 @@
-let path = 'http://localhost:8080/orders'
+let path = 'http://localhost:8080/orders';
 
-export async function sendCreateNewOrderRequest(data) {
+export async function sendCreateNewOrderRequest(obj) {
     return await fetch(path, {
         method: 'POST',
-        body: JSON.stringify(data)
+        headers: {
+            'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({
+            restaurantUrl: obj.url,
+            restaurantName: obj.name,
+            restaurantId: obj.companyId
+        })
     });
 }
 
@@ -53,4 +60,16 @@ export async function sendLockOrderRequest() {
 
 export async function sendGetSplitBillData(code) {
     return fetch (path + '/' + code + '/group-order-debt');
+}
+
+export async function sendOrderStateRequest(code, isLocked) {
+    let method;
+    
+
+    if (isLocked) method = 'DELETE';
+    else method = 'PUT';
+
+    return fetch(path + '/' + code + '/' + 'lock-group-order', {
+        method: method
+    });
 }

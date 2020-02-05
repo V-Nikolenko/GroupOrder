@@ -4,29 +4,34 @@ class StepService {
     }
 
     nextStep(step) {
-        console.log(this.steps)
+        // console.log(this.steps)
         let currentId = this.steps.indexOf(step)
 
         if (currentId === (this.steps.length-1)) {
-          return
+          return;
         } else {
           step.isActive = !step.isActive;
           step.isDone = !step.isDone;
           this.steps[currentId+1].isActive = true;
         }
+
+        this.saveSteps();
+    }
+
+    saveSteps() {
         this.notify(this.steps);
     }
 
     getCode() {
-        this.steps[0].data.code;
+        return this.steps[0].data.code;
     }
 
     getName() {
-        this.steps[1].data.name;
+        return this.steps[1].data.name;
     }
 
-    getName() {
-        this.steps[1].data.email;
+    getEmail() {
+        return this.steps[1].data.email;
     }
 
     setData(data) {

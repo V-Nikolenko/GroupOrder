@@ -8,7 +8,7 @@
     </step-header>
 
 
-    <section v-show="step.isActive" class="active-block">
+    <section v-if="step.isActive" class="active-block">
         
         <ol class="list">
             <li v-for="(subStep, index) in subSteps" class="list-item" v-bind:key="index">{{ '1.' + (index + 1) + ". " + subStep }}</li>
@@ -18,7 +18,7 @@
         <div class="container">
 
             <div class="newOrderContainer">
-                <button class="btn" v-on:click="newOrder()">Створити замовлення</button>
+                <button class="btn" v-on:click="newOrder()" v-bind:disabled="isDisabled">Створити замовлення</button>
                 <p class="error">{{ newOrderError }}</p>
             </div>
 
@@ -32,11 +32,11 @@
                     placeholder="Код замовлення"
                     v-on:focus="isConnectionError = false"
                     >
-                    <!-- v-show="isConnectionError" -->
+                    
                 <p  class="error">{{ newConnectionError }}</p>
             </div>
 
-            <button class="btn" v-on:click="connectWithCode()">
+            <button class="btn" v-on:click="connectWithCode(inputCode)" v-bind:disabled="isDisabled">
                 Приєднатися до існуючого замовлення
             </button>
         
@@ -45,10 +45,10 @@
     </section>
 
     
-    <section v-show="step.isDone" class="step step-result-container">
+    <section v-else-if="step.isDone" class="step step-result-container">
 
-        <a href="#" class="link">Код замовлення: {{ step.data.code }}</a>
-        <!-- TODO: add restaurat -->
+        <p class="restaurant">{{ step.data.restaurant }}({{ service.getCode()}}) </p>
+        
         <div>
             <img src="/images/copy.png" alt="Копіювати" title="Копіювати" class="img copy-img" v-on:click="copy">
             <img src="/images/logout.png" alt="Вийти" title="Вийти" class="img logout-img" v-on:click="logOut"> 
@@ -62,7 +62,8 @@
 <script>
 import {sendConnectWithCodeRequest, sendCreateNewOrderRequest} from './requests.js';
 import stepHeader from './stepHeader.vue';
-import {stepFactory} from './stepService.js';
+import { stepFactory } from './stepService.js';
+import { copyToClipboard } from './copy.js'
 
 export default {
     name: 'step1',
@@ -77,7 +78,8 @@ export default {
             inputCode: '',
             subSteps: ['Додати страви', 'Перевірити всі страви'],
             isNewOrderError: false,
-            isConnectionError: false
+            isConnectionError: false,
+            isDisabled: false
         }
     },
 
@@ -97,12 +99,7 @@ export default {
 
     methods: {
         copy: function() {
-            let el = document.createElement('textarea');
-            el.value = this.service.steps[0].data.code;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
+            copyToClipboard(this.step.data.url);
         },
 
         logOut: function() {
@@ -110,46 +107,59 @@ export default {
         },
 
         newOrder: function() {
-            sendCreateNewOrderRequest()
-            .then((resp) => {
-                // console.log(resp)
-                if(resp.status === 200) {
-                    return resp.text()
-                } else {
-                    throw new Error(resp.text)
-                }
-            }).then((resp) => {
-                this.step.data.code = resp;
+            this.isDisabled = true;
+            chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+                chrome.tabs.sendMessage(tabs[0].id, {type: 'restaurant'}, (response) => {
+                    // console.log(response)
+                    sendCreateNewOrderRequest(response)
+                    .then((resp) => {
+                        // console.log(resp)
+                        if(resp.status === 200) {
+                            return resp.text();
+                        } else {
+                            throw new Error(resp)
+                        }
+                    }).then((resp) => {
+                        this.step.data.url = response.url + '?code=' + resp;
+                        this.step.data.restaurant = response.name;
+                        this.step.data.code = resp;
+                        
+                        this.$emit('next', this.step); 
+                        this.isDisabled = false;
+                    })
+                    .catch((error)=> {
+                        this.isDisabled = false;
 
-                this.inputCode = '';
-                this.isNewOrderError =  false;
-                this.isConnectionError = false;
-                this.$emit('next', this.step); 
-            })
-            .catch((error)=> {
-                this.isNewOrderError = true;
-                console.log(error)
-            })
+                        this.isNewOrderError = true;
+                        console.log(error)
+                    });
+                });                
+            });    
         },
 
-        connectWithCode: function() {
-            sendConnectWithCodeRequest(this.inputCode)
+        connectWithCode: function(code) {
+            this.isDisabled = true;
+
+            sendConnectWithCodeRequest(code)
             .then((resp) => {
                 if(resp.status === 200) {
                     this.step.data.code = this.inputCode;
+                    return resp.json();
 
-                    this.inputCode = '';
-                    this.isNewOrderError =  false;
-                    this.isConnectionError = false;
+                } else throw new Error(resp);
+            })
+            .then((resp) => {
+                    this.step.data.restaurant = resp.restaurantName;
+                    this.step.data.url = resp.restaurantUrl;
 
                     this.$emit('next', this.step);
-                } else throw new Error(resp)
+                    this.isDisabled = false;
             })
             .catch((error) => {
+                this.isDisabled = false;
                 this.isConnectionError = true;
                 console.log(error)
             })
-            // this.inputCode = null;
         }
     }
 }
@@ -174,6 +184,7 @@ export default {
     padding-left: 3px;
     color: $color3;
 }
+
 .container {
     display: flex;
     flex-direction: column;
@@ -216,10 +227,11 @@ export default {
     min-height: 35px;
 }
 
-.link {
+.restaurant {
     text-decoration: none;
     color: $color2;
     cursor: default;
+    margin: 0;
 }
 
 

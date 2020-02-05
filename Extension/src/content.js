@@ -1,14 +1,32 @@
+let url = new URL (window.location.href);
+
+if (url.searchParams.get('code')) {
+    localStorage.setItem('connectCode', url.searchParams.get('code'))
+}
+
 chrome.runtime.onMessage.addListener(
     function(message, sender, sendResponse) {
         switch(message.type) {
             case 'getOrders':
-                SendGetOrdersRequest().then(sendResponse);  
+                sendGetOrdersRequest().then(sendResponse);  
                 break;
+
             case 'formOrder':
-                FormOrder(message.resp.items).then(sendResponse);
+                formOrder(message.resp.items).then(sendResponse);
                 break;
+
             case 'reload': 
                 window.location.reload();
+                break;
+
+            case 'restaurant': 
+                getRestaurant().then(sendResponse);
+                break;
+
+            case 'getURLcode':
+                let code = localStorage.connectCode;
+                localStorage.connectCode = "";
+                sendResponse(code);
                 break;
         }
         return true;
@@ -17,7 +35,7 @@ chrome.runtime.onMessage.addListener(
 
 let misteramPath = 'https://misteram.com.ua';
 
-async function SendGetOrdersRequest() {
+async function sendGetOrdersRequest() {
     return await fetch(misteramPath + '/api/cart/get?lang=ua')
     .then((resp) => {
         if (resp.status === 200) {
@@ -32,7 +50,7 @@ async function SendGetOrdersRequest() {
 };
 
 
-async function SendAddDishRequest(dish) {
+async function sendAddDishRequest(dish) {
     let bodyoObj = {
         action: "add",
         dishId: dish.id
@@ -47,7 +65,7 @@ async function SendAddDishRequest(dish) {
     });
 }
 
-async function SendRemoveDishRequest(dish) {
+async function sendRemoveDishRequest(dish) {
     let obj = {
         action: "remove",
         dishId: dish.id,
@@ -70,20 +88,20 @@ async function SendRemoveDishRequest(dish) {
     .catch((error)=> { console.log(error) })
 }
 
-async function ClearCurrentOrder() {
-    let order = await SendGetOrdersRequest()
+async function clearCurrentOrder() {
+    let order = await sendGetOrdersRequest()
     for (let i = 0; i < order.items.length; i++) {
         let item = order.items[i];
         for(let j = 0; j < item.count; j++) {
-            await SendRemoveDishRequest(item);
+            await sendRemoveDishRequest(item);
         }
     }
 }
 
-async function FormOrder(items) {
+async function formOrder(items) {
     try {
 
-        await ClearCurrentOrder()
+        await clearCurrentOrder()
 
         //do this at backend
         let quantity = 0;
@@ -98,7 +116,7 @@ async function FormOrder(items) {
             let item = items[i];
 
             for (let j = 0; j < item.count; j++) {
-                await SendAddDishRequest(item);
+                await sendAddDishRequest(item);
                 chrome.runtime.sendMessage({type: "added"})
             }
         }
@@ -110,3 +128,19 @@ async function FormOrder(items) {
     }
 }
 
+async function getRestaurant() {
+    let order = await sendGetOrdersRequest();
+
+    let url = window.location.href.split('?')[0];
+    let companyContainer = document.getElementsByClassName('company-name')[0];
+    let name;
+
+    if (url.includes('cart')) {
+        name = companyContainer.getElementsByTagName("a")[0].textContent;
+        url = companyContainer.getElementsByTagName('a')[0].href;
+    } else {
+        name = companyContainer.getElementsByTagName('p')[0].textContent;
+    }
+    
+    return {url: url, name: name, companyId: order.companyId}
+}

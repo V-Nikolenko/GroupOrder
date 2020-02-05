@@ -1,7 +1,7 @@
 <template>
 
 <div class="container">
-<!-- v-bind:class="[isDisplay ? 'receipt' : 'receipt_none']" -->
+
   <div v-if="isLoaded">
     <order
       v-on:showAllOrders="isDisplay = !isDisplay"
@@ -12,25 +12,26 @@
     </order>
   </div>
   
-  <div class='extension' v-show="!isDisplay">
+  <div class='extension'>
+
     <header>
       <h1 class="extension-title">Group Order</h1>
     </header>
 
-  <!-- <div>{{stepService}}</div> -->
 
     <div v-if="isLoaded">
 
-      <step1 v-bind:step="steps[0]" v-on:next="nextStep" v-on:logOut="logOut"></step1>    
+      <step1 v-bind:step="steps[0]" v-on:next="nextStep" v-on:logOut="logOut" v-bind:key="componentsId[0]"></step1>    
       
-      <step2 v-bind:step="steps[1]" v-on:next="nextStep"></step2> 
+      <step2 v-bind:step="steps[1]" v-on:next="nextStep" v-bind:key="componentsId[1]"></step2> 
 
       <step3 v-bind:step="steps[2]"
         v-on:next='nextStep' 
         v-on:showAllOrders="isDisplay = !isDisplay">
+        v-bind:key="componentsId[2]">
       </step3>
 
-      <step4 v-bind:step="steps[3]" v-on:next="nextStep"></step4>
+      <step4 v-bind:step="steps[3]" v-on:next="nextStep" v-bind:key="componentsId[3]"></step4>
       
     </div>
 
@@ -48,7 +49,7 @@ import step4 from '../components/step4';
 import order from '../components/order';
 import listItem from '../components/list-item';
 import { stepFactory } from '../components/stepService';
-import { sendGetOrdersListRequest } from '../components/requests';
+import { sendGetOrdersListRequest, sendConnectWithCodeRequest } from '../components/requests';
 
 const STEPS = [
   {
@@ -56,7 +57,9 @@ const STEPS = [
     isDone: false,
     title: '1. Обрати заклад',
     data: {
-      code: null
+      code: null,
+      restaurant: null,
+      url: null 
     }
   },
   
@@ -77,8 +80,7 @@ const STEPS = [
     title: '3. Зібрати замовлення',
     data: {
       fullPrice: null,
-      // progressMax: null,
-      // progressValue: 0
+      isLocked: false
     }
   },
 
@@ -87,7 +89,7 @@ const STEPS = [
     isDone: false,
     title: '4. Показати борги',
     data: {
-    
+      
     }
   }
 
@@ -108,7 +110,13 @@ export default {
     return {
       isDisplay: false,
       stepService: null,
-      members: null
+      members: null,
+      componentsId: [
+        'comp1:',
+        'comp2:',
+        'comp3:',
+        'comp4:'
+      ]
     }
   },
 
@@ -116,13 +124,12 @@ export default {
     isLoaded() {
       return !!this.stepService;
     },
-
+    
     steps() {
       if (this.isLoaded) {
         return this.stepService.steps;
       } else return [];  
     }
-    
   },
 
   watch: {
@@ -145,22 +152,60 @@ export default {
     },
 
     logOut: function() {
-      let copy =  STEPS.map((elem) => Object.assign({}, elem));
-      this.stepService.setData(copy);
+      this.componentsId.forEach((el, id) => {
+        this.componentsId[id] += 1;
+      });
+      this.stepService.setData( JSON.parse(JSON.stringify(STEPS)) );
     }
   },
 
   created() {
-    chrome.storage.sync.get('steps', (result) => {
-      let copy = STEPS.map((elem) => Object.assign({}, elem))
-      this.stepService = result.steps !== undefined
-                        ? stepFactory.create(result.steps) 
-                        : stepFactory.create(copy);
-      
-      // stepService.subscribe( function(steps) {
-      //   chrome.storage.sync.set({steps});
-      // });
+    chrome.storage.sync.get('steps', (chromeStorage) => {
+
+      chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, {type: 'getURLcode'}, (response) => {
+          console.log(response)
+
+          
+          if (response) {
+            if (chromeStorage.steps && chromeStorage.steps[0].data.code !== response) {
+              this.stepService = stepFactory.create(JSON.parse(JSON.stringify(STEPS)));
+            
+          
+
+              sendConnectWithCodeRequest(response)
+              .then((resp) => {
+                if (resp.status === 200) {
+                
+                  return resp.json();
+                } else throw new Error();
+              })
+              .then((resp)=> {
+
+                  this.stepService.steps[0].data.code = response;
+                  this.stepService.steps[0].data.restaurant = resp.restaurantName;
+                  this.stepService.steps[0].data.url = resp.restaurantUrl;
+
+                  this.nextStep(this.stepService.steps[0]);
+
+              }).catch((error) => {{ console.log(error) }});
+
+              } else {
+          
+                this.stepService = chromeStorage.steps !== undefined
+                        ? stepFactory.create(chromeStorage.steps) 
+                        : stepFactory.create(JSON.parse(JSON.stringify(STEPS)));
+            }
+          } else {
+            this.stepService = chromeStorage.steps !== undefined
+                        ? stepFactory.create(chromeStorage.steps) 
+                        : stepFactory.create(JSON.parse(JSON.stringify(STEPS)));
+          }
+
+        });
+      });
     });
+
   }
 
 }

@@ -7,6 +7,7 @@ import org.interlink.grouporder.misteram.entity.FullOrderItemsDTO;
 import org.interlink.grouporder.misteram.entity.ItemDTO;
 
 import org.interlink.grouporder.misteram.entity.MemberOrderDTO;
+import org.interlink.grouporder.misteram.entity.OrderLinkDTO;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class MisterAmMapper {
         destination.setEmail(source.getEmail());
         destination.setProducts(products);
         destination.setUrl(source.getUrl());
+        destination.setCompanyId(source.getCompanyId());
         destination.setFullPrice(source.getFullPrice());
 
         return destination;
@@ -45,6 +47,13 @@ public class MisterAmMapper {
         destination.setFullPrice(source.getFullPrice());
         destination.setItems(items);
 
+        return destination;
+    }
+
+    public static OrderLinkDTO map(GroupOrder source, OrderLinkDTO destination) {
+        String orderLink = source.getRestaurantUrl() + "?code=" + source.getCode();
+        destination.setRestaurantUrl(orderLink);
+        destination.setRestaurantName(source.getRestaurantName());
         return destination;
     }
 }
