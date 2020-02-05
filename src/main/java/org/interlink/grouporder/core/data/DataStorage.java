@@ -27,6 +27,8 @@ public class DataStorage {
     }
 
     public static GroupOrder getGroupOrder(String code) {
+        orders.keySet().forEach(System.out::println);
+        System.out.println("\nandrew pidor\n");
         return Optional.ofNullable(orders.get(code)).orElseThrow(
                 () -> new IllegalArgumentException("No such key in the database [" + code + "]"));
     }

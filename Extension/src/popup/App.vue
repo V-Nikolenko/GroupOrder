@@ -142,7 +142,7 @@ export default {
       .then((resp)=> {
         this.members = Object.values(resp.members)
       })
-
+      
     }
   },
 
@@ -166,8 +166,9 @@ export default {
         chrome.tabs.sendMessage(tabs[0].id, {type: 'getURLcode'}, (response) => {
           console.log(response)
 
-          
+          console.log(!!chromeStorage.steps + ' - ' + chromeStorage.steps[0].data.code + ' - ' + response)
           if (response) {
+            // console.log(!!chromeStorage.steps + ' - ' + chromeStorage.steps[0].data.code + ' - ' + response)
             if (chromeStorage.steps && chromeStorage.steps[0].data.code !== response) {
               this.stepService = stepFactory.create(JSON.parse(JSON.stringify(STEPS)));
             

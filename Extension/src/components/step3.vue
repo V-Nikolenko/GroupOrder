@@ -64,15 +64,15 @@ export default {
     },
 
     computed: {
-    },
-
-    methods: {
         btn_disabled() {
             return {
                 btn_disabled: this.isDisabled
             }
         },
-        
+    
+    },
+
+    methods: {
         changeLockState() {
             sendOrderStateRequest(this.service.getCode(), this.step.data.isLocked).then((resp) => {
                 this.step.data.isLocked = !this.step.data.isLocked;
