@@ -12,7 +12,7 @@
     </order>
   </div>
   
-  <div class='extension'>
+  <div class='extension' v-show="!isDisplay">
 
     <header>
       <h1 class="extension-title">Group Order</h1>
