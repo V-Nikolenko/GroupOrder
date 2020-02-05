@@ -6,9 +6,20 @@ import lombok.Getter;
 import lombok.Setter;
 import org.interlink.grouporder.core.entity.view.GroupOrderView;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "group_order")
 @Getter
 @Setter
 public class GroupOrder {
+
+    @Id
+    @GeneratedValue
+    private Integer id;
 
     @JsonView(GroupOrderView.Basic.class)
     private String code;
@@ -21,9 +32,6 @@ public class GroupOrder {
     @JsonIgnore
     private boolean isLocked = false;
 
-    public GroupOrder(String code, String restaurantName, String restaurantUrl) {
-        this.code = code;
-        this.restaurantName = restaurantName;
-        this.restaurantUrl = restaurantUrl;
+    public GroupOrder() {
     }
 }

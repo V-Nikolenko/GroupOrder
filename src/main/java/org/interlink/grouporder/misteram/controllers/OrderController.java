@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -41,7 +42,7 @@ public class OrderController {
             String restaurantName = newGroupOrderDTO.getRestaurantName();
             String restaurantUrl = newGroupOrderDTO.getRestaurantUrl();
 
-            groupOrderService.addGroupOrder(code, restaurantId, restaurantName, restaurantUrl);
+//            groupOrderService.addGroupOrder(code, restaurantId, restaurantName, restaurantUrl);
 
             return ResponseEntity.ok(code);
         } catch (Exception e) {
@@ -52,7 +53,9 @@ public class OrderController {
     @PostMapping("{code}/connect")
     public ResponseEntity connectToGroupOrder(@PathVariable("code") String code) {
         try {
-            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
+
+            GroupOrder groupOrder = new GroupOrder();
+//            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
             String orderLink = groupOrder.getRestaurantUrl() + "?code=" + code;
 
             return ResponseEntity.ok(MisterAmMapper.map(orderLink, new StringResultDTO()));
@@ -73,7 +76,7 @@ public class OrderController {
             int companyId = newMemberOrderDTO.getCompanyId();
             int fullPrice = newMemberOrderDTO.getFullPrice();
 
-            memberOrderService.addMemberToGroupOrder(name, email, url, items, companyId, fullPrice);
+//            memberOrderService.addMemberToGroupOrder(name, email, url, items, companyId, fullPrice);
 
             return ResponseEntity.ok("Success");
         } catch (Exception e) {
@@ -84,7 +87,9 @@ public class OrderController {
     @GetMapping("/{code}/show-group-order")
     public ResponseEntity showGroupOrder(@PathVariable("code") String code) {
         try {
-            List<MemberOrder> members = memberOrderService.findAllMembers(code);
+//            List<MemberOrder> members = memberOrderService.findAllMembers(code);
+
+                List<MemberOrder> members = new LinkedList<>();
 
             return ResponseEntity.ok(members);
         } catch (Exception e) {
@@ -95,7 +100,10 @@ public class OrderController {
     @GetMapping("/{code}/form-group-order")
     public ResponseEntity formGroupOrder(@PathVariable("code") String code) {
         try {
-            List<MemberOrder> members = memberOrderService.findAllMembers(code);
+//            List<MemberOrder> members = memberOrderService.findAllMembers(code);
+
+            List<MemberOrder> members = new LinkedList<>();
+
 
             return ResponseEntity.ok(members);
         } catch (Exception e) {
@@ -108,7 +116,7 @@ public class OrderController {
         try {
             String email = newMemberOrderDTO.getEmail();
 
-            memberOrderService.removeMemberFromOrder(code, email);
+//            memberOrderService.removeMemberFromOrder(code, email);
 
             return ResponseEntity.ok("Success");
         } catch (Exception e) {
@@ -119,9 +127,9 @@ public class OrderController {
     @PutMapping("/{code}/lock-group-order")
     public ResponseEntity lockGroupOrder(@PathVariable("code") String code) {
         try {
-            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
-
-            groupOrderService.unlock(groupOrder);
+//            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
+//
+//            groupOrderService.unlock(groupOrder);
 
             return ResponseEntity.ok("Order " + code + " is unlocked!");
         } catch (Exception e) {
@@ -132,9 +140,9 @@ public class OrderController {
     @DeleteMapping("/{code}/lock-group-order")
     public ResponseEntity unlockGroupOrder(@PathVariable("code") String code) {
         try {
-            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
-
-            groupOrderService.lock(groupOrder);
+//            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
+//
+//            groupOrderService.lock(groupOrder);
 
             return ResponseEntity.ok("Order " + code + " is locked!");
         } catch (Exception e) {

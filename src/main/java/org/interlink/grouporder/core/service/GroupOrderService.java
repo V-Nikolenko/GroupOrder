@@ -17,24 +17,24 @@ public class GroupOrderService {
         this.groupOrderRepository = groupOrderRepository;
     }
 
-    public void addGroupOrder(String code, String restaurantId, String restaurantName, String restaurantUrl){
-
-        this.groupOrderRepository.addGroupOrder(code, restaurantId, restaurantName, restaurantUrl);
-    }
-
-    public GroupOrder getGroupOrder(String code) {
-        return this.groupOrderRepository.getGroupOrder(code);
-    }
-
-    public List<String> findAllCodes() {
-        return this.groupOrderRepository.findAllCodes();
-    }
+//    public void addGroupOrder(String code, String restaurantId, String restaurantName, String restaurantUrl){
+//
+//        this.groupOrderRepository.addGroupOrder(code, restaurantId, restaurantName, restaurantUrl);
+//    }
+//
+//    public GroupOrder getGroupOrder(String code) {
+//        return this.groupOrderRepository.getGroupOrder(code);
+//    }
+//
+//    public List<String> findAllCodes() {
+//        return this.groupOrderRepository.findAllCodes();
+//    }
 
     public String generateUniqueCode() {
         String code;
-        do {
+//        do {
             code = OrderCodeGenerator.generateCode();
-        } while (findAllCodes().contains(code));
+//        } while (findAllCodes().contains(code));
 
         return code;
     }
