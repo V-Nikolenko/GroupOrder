@@ -13,7 +13,7 @@
   </div>
   
   <div class='extension' v-show="!isDisplay">
-    
+
     <header>
       <h1 class="extension-title">Group Order</h1>
     </header>
@@ -58,7 +58,7 @@ const STEPS = [
     data: {
       code: null,
       restaurant: null,
-      url: null 
+      url: null
     }
   },
   

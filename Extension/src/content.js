@@ -16,7 +16,7 @@ chrome.runtime.onMessage.addListener(
                 break;
 
             case 'reload': 
-                window.location.reload();
+                window.location.href =  window.location.href.split('?')[0];
                 break;
 
             case 'restaurant': 
