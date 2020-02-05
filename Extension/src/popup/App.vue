@@ -10,12 +10,12 @@
   </div>
   
   <div class='extension'>
+    
     <header>
       <h1 class="extension-title">Group Order</h1>
     </header>
 
-  <div>{{stepService}}</div>
-    <p>{{componentsId}}</p>
+
     <div v-if="isLoaded">
 
       <step1 v-bind:step="steps[0]" v-on:next="nextStep" v-on:logOut="logOut" v-bind:key="componentsId[0]"></step1>    
@@ -163,16 +163,12 @@ export default {
         chrome.tabs.sendMessage(tabs[0].id, {type: 'getURLcode'}, (response) => {
           console.log(response)
 
-          // if (chromeStorage.steps && response && response !== chromeStorage.steps[0].data.code) {
+          
           if (response) {
-            // console.log(chromeStorage.steps)
-            // console.log(chromeStorage.steps[0].data.code)
-            // console.log(response)
             if (chromeStorage.steps && chromeStorage.steps[0].data.code !== response) {
               this.stepService = stepFactory.create(JSON.parse(JSON.stringify(STEPS)));
             
-              // console.log(this.stepService)
-
+          
 
               sendConnectWithCodeRequest(response)
               .then((resp) => {
@@ -192,13 +188,12 @@ export default {
               }).catch((error) => {{ console.log(error) }});
 
               } else {
-                // console.log('localstorage match')
+          
                 this.stepService = chromeStorage.steps !== undefined
                         ? stepFactory.create(chromeStorage.steps) 
                         : stepFactory.create(JSON.parse(JSON.stringify(STEPS)));
             }
           } else {
-            // console.log('no url code')
             this.stepService = chromeStorage.steps !== undefined
                         ? stepFactory.create(chromeStorage.steps) 
                         : stepFactory.create(JSON.parse(JSON.stringify(STEPS)));

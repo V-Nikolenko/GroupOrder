@@ -32,7 +32,7 @@
                     placeholder="Код замовлення"
                     v-on:focus="isConnectionError = false"
                     >
-                    <!-- v-show="isConnectionError" -->
+                    
                 <p  class="error">{{ newConnectionError }}</p>
             </div>
 
@@ -47,7 +47,7 @@
     
     <section v-else-if="step.isDone" class="step step-result-container">
 
-        <p class="restaurant">{{ step.data.restaurant }}({{ step.data.code}}) </p>
+        <p class="restaurant">{{ step.data.restaurant }}({{ service.getCode()}}) </p>
         
         <div>
             <img src="/images/copy.png" alt="Копіювати" title="Копіювати" class="img copy-img" v-on:click="copy">
@@ -160,7 +160,6 @@ export default {
                 this.isConnectionError = true;
                 console.log(error)
             })
-            // this.inputCode = null;
         }
     }
 }

@@ -117,8 +117,7 @@ export default {
                     response.email = this.email;
                     response.name = this.name;
                     
-                    //change this.service.steps[0].data.code to getCode();
-                    sendMemberOrder(this.service.steps[0].data.code, response).then((resp)=> {
+                    sendMemberOrder(this.service.getCode(), response).then((resp)=> {
                         
                         if (resp.status === 200) {
                             this.step.data.userFullPrice = response.fullPrice;

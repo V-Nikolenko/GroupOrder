@@ -89,12 +89,8 @@ export default {
         
         formOrder() {
             
-            console.log(this.isDisabled + 'before');
             this.isDisabled = true;
-            // replace to getCode()
-            console.log(this.isDisabled + 'after');
 
-            console.log('start sending');
             sendGetAllDishesRequest(this.service.getCode())
             .then((resp)=> {
                 
@@ -128,6 +124,7 @@ export default {
                                 chrome.tabs.sendMessage(tabs[0].id, {type: 'reload'});
 
                                 this.step.data.fullPrice = resp.fullPrice;
+                                
                                 if (!this.showCheck) {
                                     this.showCheckBlock();
                                 }
@@ -135,7 +132,6 @@ export default {
                                 this.$emit('next', this.step);
                             
                                 this.isDisabled = false;
-                                console.log('sent' + 'state' + this.isDisabled)
                             });
                         }
                     })
