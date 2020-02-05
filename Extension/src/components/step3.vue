@@ -11,9 +11,10 @@
     <div v-if="step.isActive" class="active-block">
 
         <div class="container">
-            <button class="show-items-btn" v-on:click="showCheckBlock">{{ showCheckText }}</button>
-            <!-- <img src="/images/lock.png" class='img img-lock' alt="Заблокувати замовлення" title="Заблокувати замовлення"> -->
+        
+            <button class="show-items-btn" v-on:click="$emit('showAllOrders')">Показати</button>
             <span v-bind:class="[{'unlocked': !step.data.isLocked}, 'lock']" v-on:click="changeLockState"></span>
+        
         </div>
         
         <div class="btn-container"> 
@@ -63,30 +64,22 @@ export default {
     },
 
     computed: {
-        showCheckText: function () {
-            return this.showCheck ? 'Показати' : 'Сховати';
-        },
+    },
 
+    methods: {
         btn_disabled() {
             return {
                 btn_disabled: this.isDisabled
             }
-        }
-    },
-
-    methods: {
-        showCheckBlock() {
-            this.showCheck = !this.showCheck;
-            this.$emit('display');
         },
-
+        
         changeLockState() {
             sendOrderStateRequest(this.service.getCode(), this.step.data.isLocked).then((resp) => {
                 this.step.data.isLocked = !this.step.data.isLocked;
                 this.service.saveSteps();
             })
         },
-        
+ 
         formOrder() {
             
             this.isDisabled = true;
