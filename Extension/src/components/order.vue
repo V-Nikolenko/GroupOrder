@@ -1,7 +1,7 @@
 <template>
 <div>
     
-    <h1 class="receipt-heading">Чек № {{code}} <span class="exit" v-on:click="$emit('showAllOrders')">&#10006;</span> </h1>
+    <h1 class="receipt-heading">Чек № {{code}} <span class="exit" v-on:click="$emit('showAllOrders')">&#10140;</span> </h1>
 
     <ul class="list">
     
@@ -87,7 +87,10 @@ export default {
 
     &:hover {
         transform: scale(1.1);
+    }
 
+    &:active {
+        transform: translateX(5px)
     }
 }
 
