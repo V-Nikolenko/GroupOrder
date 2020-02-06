@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GroupOrderDTO {
+    private int restaurantId;
     private String restaurantName;
     private String restaurantUrl;
 }

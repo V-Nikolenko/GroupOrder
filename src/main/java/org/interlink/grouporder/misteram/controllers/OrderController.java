@@ -2,25 +2,46 @@ package org.interlink.grouporder.misteram.controllers;
 
 
 import com.fasterxml.jackson.annotation.JsonView;
+import org.interlink.grouporder.core.entity.GroupOrder;
+import org.interlink.grouporder.core.entity.MemberOrder;
 import org.interlink.grouporder.core.entity.view.GroupOrderView;
 import org.interlink.grouporder.core.handler.ExceptionsHandler;
+import org.interlink.grouporder.core.service.GroupOrderService;
+import org.interlink.grouporder.core.service.MemberOrderService;
+import org.interlink.grouporder.misteram.MisterAmMapper;
 import org.interlink.grouporder.misteram.entity.GroupOrderDTO;
 import org.interlink.grouporder.misteram.entity.MemberOrderDTO;
+import org.interlink.grouporder.misteram.entity.ShowOrderDTO;
+import org.interlink.grouporder.misteram.entity.StringResultDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.LinkedList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
 
+    private GroupOrderService groupOrderService;
+    private MemberOrderService memberOrderService;
+
+    @Autowired
+    public OrderController(GroupOrderService groupOrderService, MemberOrderService memberOrderService) {
+        this.groupOrderService = groupOrderService;
+        this.memberOrderService = memberOrderService;
+    }
+
     @PostMapping
     @JsonView(GroupOrderView.Basic.class)
     public ResponseEntity createGroupOrder(@RequestBody GroupOrderDTO newGroupOrderDTO) {
         try {
-            String restaurantName = newGroupOrderDTO.getRestaurantName();
-            String restaurantUrl = newGroupOrderDTO.getRestaurantUrl();
+            String code = groupOrderService.generateUniqueCode();
+            GroupOrder groupOrder = MisterAmMapper.map(code, new GroupOrder(), newGroupOrderDTO);
+            groupOrderService.saveGroupOrder(groupOrder);
 
-            return ResponseEntity.ok("Death end!");
+            return ResponseEntity.ok(code);
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
@@ -29,8 +50,11 @@ public class OrderController {
     @PostMapping("{code}/connect")
     public ResponseEntity connectToGroupOrder(@PathVariable("code") String code) {
         try {
-            String orderLink = "someUrl" + "?code=" + "someCode";
-            return ResponseEntity.ok(orderLink);
+
+            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
+            String orderLink = groupOrder.getRestaurantUrl() + "?code=" + code;
+
+            return ResponseEntity.ok(MisterAmMapper.map(orderLink, new StringResultDTO()));
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
@@ -40,6 +64,11 @@ public class OrderController {
     @PostMapping("/{code}/add-member-order")
     public ResponseEntity addMemberToOrder(@PathVariable("code") String code, @RequestBody MemberOrderDTO newMemberOrderDTO) {
         try {
+            MemberOrder memberOrder = MisterAmMapper.map(new MemberOrder(), newMemberOrderDTO);
+            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
+            memberOrder.setGroupOrder(groupOrder);
+
+            memberOrderService.saveMemberToGroupOrder(memberOrder);
             return ResponseEntity.ok("Success");
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
@@ -49,7 +78,14 @@ public class OrderController {
     @GetMapping("/{code}/show-group-order")
     public ResponseEntity showGroupOrder(@PathVariable("code") String code) {
         try {
-            return ResponseEntity.ok("Success");
+            List<MemberOrder> members = memberOrderService.findAllMembers(code);
+            int fullPrice = groupOrderService.getGroupOrder(code).getFullPrice();
+
+            ShowOrderDTO newShowOrderDTO = new ShowOrderDTO();
+            newShowOrderDTO.setFullPrice(fullPrice);
+            newShowOrderDTO.setMembers(members);
+
+            return ResponseEntity.ok(newShowOrderDTO);
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
@@ -58,7 +94,14 @@ public class OrderController {
     @GetMapping("/{code}/form-group-order")
     public ResponseEntity formGroupOrder(@PathVariable("code") String code) {
         try {
-            return ResponseEntity.ok("Success");
+            List<MemberOrder> members = memberOrderService.findAllMembers(code);
+            int fullPrice = groupOrderService.getGroupOrder(code).getFullPrice();
+
+            ShowOrderDTO newShowOrderDTO = new ShowOrderDTO();
+            newShowOrderDTO.setFullPrice(fullPrice);
+            newShowOrderDTO.setMembers(members);
+
+            return ResponseEntity.ok(newShowOrderDTO);
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
@@ -67,6 +110,9 @@ public class OrderController {
     @PostMapping("/{code}/remove-from-order")
     public ResponseEntity removeMemberFromOrder(@PathVariable("code") String code, @RequestBody MemberOrderDTO newMemberOrderDTO) {
         try {
+            MemberOrder memberOrder = MisterAmMapper.map(new MemberOrder(), newMemberOrderDTO);
+            memberOrderService.deleteMemberFromOrder(memberOrder);
+
             return ResponseEntity.ok("Success");
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
@@ -76,7 +122,11 @@ public class OrderController {
     @PutMapping("/{code}/lock-group-order")
     public ResponseEntity lockGroupOrder(@PathVariable("code") String code) {
         try {
-            return ResponseEntity.ok("Order " + code + " is locked!");
+//            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
+
+//            groupOrderService.unlock(groupOrder);
+
+            return ResponseEntity.ok("Order " + code + " is unlocked!");
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
@@ -85,7 +135,11 @@ public class OrderController {
     @DeleteMapping("/{code}/lock-group-order")
     public ResponseEntity unlockGroupOrder(@PathVariable("code") String code) {
         try {
-            return ResponseEntity.ok("Order " + code + " is unlocked!");
+//            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
+//
+//            groupOrderService.lock(groupOrder);
+
+            return ResponseEntity.ok("Order " + code + " is locked!");
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
