@@ -13,17 +13,18 @@ import javax.persistence.*;
 public class MemberOrder {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @ManyToOne
     @JoinColumn(name = "group_order_id")
     private GroupOrder groupOrder;
     private String name;
     private String email;
+    @Column(columnDefinition = "TEXT")
     private String products;
     private int restaurantId;
     private int orderPrice;
 
-    public MemberOrder() {
-    }
+
 }

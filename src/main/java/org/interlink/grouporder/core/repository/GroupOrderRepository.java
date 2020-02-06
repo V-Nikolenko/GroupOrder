@@ -6,22 +6,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+import javax.transaction.Transactional;
 
 public interface GroupOrderRepository extends JpaRepository<GroupOrder, Integer> {
 
-//    @Modifying
-//    @Query(value = "INSERT INTO group_order (code, restaurant_id, restaurant_name, restaurant_url) " +
-//                   "VALUES  (:code, :restaurantId, :restaurantName, :restaurantUrl)", nativeQuery = true)
-//    void addGroupOrder(@Param("groupOrderCode") String code,
-//                       @Param("restaurantId") String restaurantId,
-//                       @Param("restaurantName") String restaurantName,
-//                       @Param("restaurantUrl") String restaurantUrl);
-//
-//    @Query("SELECT g FROM group_order g" +
-//            "WHERE g.code = :code")
-//    GroupOrder getGroupOrder(@Param("code") String code);
-//
-//    @Query("select All from  group_order.code")
-//    List<String> findAllCodes();
+    @Query("SELECT g FROM GroupOrder g WHERE g.code = :code")
+    GroupOrder getGroupOrder(@Param("code") String code);
+
+    @Query("SELECT CASE WHEN COUNT(g) > 0 THEN true ELSE false END FROM GroupOrder g WHERE g.code = :code" )
+    boolean isContainsCode(@Param("code") String code);
 }

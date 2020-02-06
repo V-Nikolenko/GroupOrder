@@ -17,20 +17,20 @@ public class MemberOrderService {
     public MemberOrderService(MemberOrderRepository memberOrderRepository) {
         this.memberOrderRepository = memberOrderRepository;
     }
-//
-//    public void addMemberToGroupOrder(String code, String name, String email, String products, int restaurantID, int orderPrice) {
-//        this.memberOrderRepository.addMemberToGroupOrder(code, name, email, products, restaurantID, orderPrice);
-//    }
-//
-//    public void removeMemberFromOrder(String code, String email){
-//        this.memberOrderRepository.removeMemberFromOrder(code, email);
-//    }
-//
-//    public List<String> findAllProducts(String code) {
-//        return this.memberOrderRepository.findAllProducts(code);
-//    }
-//
-//    public List<MemberOrder> findAllMembers(String code) {
-//        return this.memberOrderRepository.findAllMembers(code);
-//    }
+
+    public void saveMemberToGroupOrder(MemberOrder memberOrder) {
+        this.memberOrderRepository.save(memberOrder);
+    }
+
+    public void deleteMemberFromOrder(MemberOrder memberOrder){
+        this.memberOrderRepository.delete(memberOrder);
+    }
+
+    public List<String> findAllProducts(String code) {
+        return this.memberOrderRepository.findAllProducts(code);
+    }
+
+    public List<MemberOrder> findAllMembers(String code) {
+        return this.memberOrderRepository.findAllMembers(code);
+    }
 }

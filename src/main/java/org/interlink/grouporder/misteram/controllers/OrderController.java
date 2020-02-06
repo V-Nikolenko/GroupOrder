@@ -37,12 +37,8 @@ public class OrderController {
     public ResponseEntity createGroupOrder(@RequestBody GroupOrderDTO newGroupOrderDTO) {
         try {
             String code = groupOrderService.generateUniqueCode();
-
-            String restaurantId = newGroupOrderDTO.getRestaurantId();
-            String restaurantName = newGroupOrderDTO.getRestaurantName();
-            String restaurantUrl = newGroupOrderDTO.getRestaurantUrl();
-
-//            groupOrderService.addGroupOrder(code, restaurantId, restaurantName, restaurantUrl);
+            GroupOrder groupOrder = MisterAmMapper.map(code, new GroupOrder(), newGroupOrderDTO);
+            groupOrderService.saveGroupOrder(groupOrder);
 
             return ResponseEntity.ok(code);
         } catch (Exception e) {
@@ -54,8 +50,7 @@ public class OrderController {
     public ResponseEntity connectToGroupOrder(@PathVariable("code") String code) {
         try {
 
-            GroupOrder groupOrder = new GroupOrder();
-//            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
+            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
             String orderLink = groupOrder.getRestaurantUrl() + "?code=" + code;
 
             return ResponseEntity.ok(MisterAmMapper.map(orderLink, new StringResultDTO()));
@@ -68,18 +63,15 @@ public class OrderController {
     @PostMapping("/{code}/add-member-order")
     public ResponseEntity addMemberToOrder(@PathVariable("code") String code, @RequestBody MemberOrderDTO newMemberOrderDTO) {
         try {
+            MemberOrder memberOrder = MisterAmMapper.map(new MemberOrder(), newMemberOrderDTO);
+            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
+            System.out.println(memberOrder.getProducts());
 
-            String name = newMemberOrderDTO.getName();
-            String email = newMemberOrderDTO.getEmail();
-            String url = newMemberOrderDTO.getUrl();
-            String items = newMemberOrderDTO.getItems();
-            int companyId = newMemberOrderDTO.getCompanyId();
-            int fullPrice = newMemberOrderDTO.getFullPrice();
-
-//            memberOrderService.addMemberToGroupOrder(name, email, url, items, companyId, fullPrice);
-
+            memberOrder.setGroupOrder(groupOrder);
+            memberOrderService.saveMemberToGroupOrder(memberOrder);
             return ResponseEntity.ok("Success");
         } catch (Exception e) {
+            e.printStackTrace();
             return ExceptionsHandler.handleException(e);
         }
     }
@@ -87,9 +79,7 @@ public class OrderController {
     @GetMapping("/{code}/show-group-order")
     public ResponseEntity showGroupOrder(@PathVariable("code") String code) {
         try {
-//            List<MemberOrder> members = memberOrderService.findAllMembers(code);
-
-                List<MemberOrder> members = new LinkedList<>();
+            List<MemberOrder> members = memberOrderService.findAllMembers(code);
 
             return ResponseEntity.ok(members);
         } catch (Exception e) {
@@ -100,10 +90,7 @@ public class OrderController {
     @GetMapping("/{code}/form-group-order")
     public ResponseEntity formGroupOrder(@PathVariable("code") String code) {
         try {
-//            List<MemberOrder> members = memberOrderService.findAllMembers(code);
-
-            List<MemberOrder> members = new LinkedList<>();
-
+            List<MemberOrder> members = memberOrderService.findAllMembers(code);
 
             return ResponseEntity.ok(members);
         } catch (Exception e) {
@@ -114,9 +101,6 @@ public class OrderController {
     @PostMapping("/{code}/remove-from-order")
     public ResponseEntity removeMemberFromOrder(@PathVariable("code") String code, @RequestBody MemberOrderDTO newMemberOrderDTO) {
         try {
-            String email = newMemberOrderDTO.getEmail();
-
-//            memberOrderService.removeMemberFromOrder(code, email);
 
             return ResponseEntity.ok("Success");
         } catch (Exception e) {
