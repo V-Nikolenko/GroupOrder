@@ -76,6 +76,9 @@ export default {
 <style lang="scss" scoped>
 @import '../styles/colors.scss';
 
+$skip-space-price: 8%;
+$width-price: 20%;
+
 .receipt {
     padding: 10px;
 }
@@ -93,7 +96,8 @@ export default {
 
     &-price {
         position: absolute;
-        right: 15%;
+        right: $skip-space-price;
+        width: $width-price;
 
         text-align: center;
     }
@@ -212,8 +216,7 @@ td:nth-child(1) {
 }
 
 td:nth-child(2) {
-    // text-align: left;
-    width: 44%;
+    width: 47%;
 }
 
 td:nth-child(3) {
@@ -221,12 +224,11 @@ td:nth-child(3) {
 }
 
 td:nth-child(4) {
-  width: 20%;
+  width: $width-price;
 }
 
 td:nth-child(5) {
-    width: 11%;
+    width: $skip-space-price;
 }
-
 
 </style>

@@ -16,7 +16,7 @@
                     placeholder="Ваше ім'я"
                     v-on:input="nameError">
                 <p v-show="isNameError" class="error" >
-                    Ім'я має бути більше  3 символів
+                    Ім'я має бути більше  3 символів та менше 30!
                 </p>
             </div>
 
@@ -24,11 +24,11 @@
                 <input v-model="email" 
                     type="text" 
                     name="email" v-bind:class="[{'input_error': isEmailError}, 'input']" 
-                    placeholder="Ваша пошта"
+                    placeholder="Ваш email"
                     v-on:input="emailError">
                 <p v-show="isEmailError" class="error">
-                    Мінімальна довжина пошти повинна бути 6 символів, 
-                    а також містити символ '@'.;
+                    Довжина email повинна бути не меншою ніж 6 символів, 
+                    а також містити символ '@'!;
                 </p>
             </div>
 
@@ -48,7 +48,7 @@
         
         <div v-else-if="step.isDone" class="step step-result-container step-result">
         
-            <span>{{ service.steps[1].data.name }}</span>
+            <span class="done-name">{{ service.steps[1].data.name }}</span>
             <span>{{ service.steps[1].data.userFullPrice}} грн.</span>
             <img src="/images/delete.png" alt="Видалити замовлення" title="Видалити замовлення" class="img img-reset">
         
@@ -93,7 +93,7 @@ export default {
 
     methods: {
         nameError() {
-            if (this.name.length < 3) {
+            if ( !(3 < this.name.length && this.name.length < 30) ) {
                 this.isNameError = true;
             } else this.isNameError = false;
         },
@@ -216,6 +216,11 @@ export default {
 
 .error {
     margin: 0;
+}
+
+.done-name {
+    max-width: 50%;
+    word-break: break-all;
 }
 
 </style>
