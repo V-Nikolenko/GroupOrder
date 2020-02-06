@@ -3,7 +3,7 @@
     
     <h1 class="receipt-heading">Чек № {{code}} <span class="exit" v-on:click="$emit('showAllOrders')">&#10140;</span> </h1>
 
-    <ul class="list">
+    <ul class="list scroll">
     
         <li v-for="(member, id) in members" class="list-item"  v-bind:key='id'>
 
@@ -67,6 +67,36 @@ export default {
 <style lang="scss" scoped>
 @import '../styles/colors.scss';
 
+
+.head {
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    background-color: $color1;
+    border: 1px solid $color4;
+    border-top: none;
+    position: relative;
+
+    &-title {
+        width: 30%;
+    }
+    &-price {
+        position: absolute;
+        right: 15%;
+
+        text-align: center;
+    }
+}
+
+
+.list {
+    max-height: 360px;
+    overflow: auto;
+}
+
 .receipt-heading {
     overflow-x: hidden;
     min-height: 40px;
@@ -77,6 +107,7 @@ export default {
     padding: 5px;
     box-sizing: border-box;
     position: relative;
+    border-bottom: 1px solid $color4;
 }
 
 .exit {
@@ -94,27 +125,6 @@ export default {
     }
 }
 
-.head {
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px;
-    background-color: $color1;
-    border: 1px solid $color4;
-    border-right: none;
-    position: relative;
-
-    &-title {
-        width: 30%;
-    }
-    &-price {
-        position: absolute;
-        right: 15%;
-
-        text-align: center;
-    }
-}
 
 .item-ico {
     cursor: pointer;
@@ -160,6 +170,7 @@ thead {
 
 thead th {
     height: 30px;
+    color: $color3
 }
 
 th, tr {
@@ -176,7 +187,8 @@ td:nth-child(1) {
 }
 
 td:nth-child(2) {
-    width: 40%;
+    // text-align: left;
+    width: 44%;
 }
 
 td:nth-child(3) {
@@ -188,7 +200,8 @@ td:nth-child(4) {
 }
 
 td:nth-child(5) {
-    width: 15%;
+    width: 11%;
 }
+
 
 </style>

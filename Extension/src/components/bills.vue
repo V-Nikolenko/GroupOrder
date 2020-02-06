@@ -43,9 +43,10 @@ export default{
 @import '../styles/colors.scss';
 .list{
     &-item {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        padding-right: 5px;
     }
 }
 </style>

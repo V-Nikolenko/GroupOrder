@@ -8,12 +8,16 @@
 
     <div v-if="step.isActive" class="active-block">
         <div class="container">
-            <div class="title"><span>Борги</span>
-            <img src="/images/export.png" alt="export" title="Експортувати" class="img" v-on:click="copy">
-        </div>
+            
+            <div class="title">
+                <span>Борги</span>
+                <img src="/images/export.png" alt="export" title="Експортувати" class="img" v-on:click="copy">
+            </div>
         
-            <bills-list v-on:bills="saveBills"></bills-list>
-        
+            <div class="bills-container scroll"> 
+                <bills-list v-on:bills="saveBills"></bills-list>
+            </div>
+
         </div>
     </div>
 </div>
@@ -75,5 +79,10 @@ export default {
     display: flex;
     flex-direction: column;
     min-height: 120px;
+}
+
+.bills-container {
+    overflow: auto;
+    max-height: 105px;
 }
 </style>

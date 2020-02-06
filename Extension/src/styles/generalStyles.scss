@@ -109,3 +109,19 @@ body {
     color:  $error;
     text-align: center;
 }
+
+.scroll {
+    
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 1px $main-font-color; 
+        border-radius: 3px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: $color2; 
+        border-radius: 10px;
+    }
+}

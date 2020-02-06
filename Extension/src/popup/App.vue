@@ -217,6 +217,7 @@ export default {
   display: flex;
   flex-direction: column;
   min-width: 300px;
+  height: 400px;
 
   &-title {
     margin: 0;
@@ -237,15 +238,15 @@ export default {
 
 .receipt {
   overflow-y: auto;
-  width: 300px;
-  height: 400px;
+  width: 350px;
+  // height: 400px;
   overflow-x: hidden;
 }
 
 .container {
   display: flex;
   justify-content: space-between;
-  height: 400px;
+  // height: 400px;
 }
 </style>
 
