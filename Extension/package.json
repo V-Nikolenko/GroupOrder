@@ -16,6 +16,7 @@
     "watch:dev": "cross-env HMR=true npm run build:dev -- --watch"
   },
   "dependencies": {
+    "pure-md5": "^0.1.9",
     "vue": "^2.6.10"
   },
   "devDependencies": {

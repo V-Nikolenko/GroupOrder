@@ -164,7 +164,7 @@ export default {
         chrome.tabs.sendMessage(tabs[0].id, {type: 'getURLcode'}, (response) => {
           console.log(response)
 
-          console.log(!!chromeStorage.steps + ' - ' + chromeStorage.steps[0].data.code + ' - ' + response)
+          // console.log(!!chromeStorage.steps + ' - ' + chromeStorage.steps[0].data.code + ' - ' + response)
           if (response) {
             // console.log(!!chromeStorage.steps + ' - ' + chromeStorage.steps[0].data.code + ' - ' + response)
             if (chromeStorage.steps && chromeStorage.steps[0].data.code !== response) {

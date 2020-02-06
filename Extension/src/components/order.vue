@@ -2,13 +2,19 @@
 <div>
     
     <h1 class="receipt-heading">Чек № {{code}} <span class="exit" v-on:click="$emit('showAllOrders')">&#10140;</span> </h1>
-
+    
     <ul class="list scroll">
     
         <li v-for="(member, id) in members" class="list-item"  v-bind:key='id'>
 
             <div class="head" v-on:click="showBody(id)">
-                <span class="head-title">{{member.name}}</span> 
+                <div class="user-info">
+                    <img v-bind:src="'https://www.gravatar.com/avatar/' + getHash(member.email) + '?s=20&d=mp'" 
+                    v-bind:alt="member.name"
+                    class="user-img">
+                    <span>{{member.name}}</span> 
+                </div>
+
                 <span class="head-price">{{member.fullPrice}} грн.</span>
                 <span v-bind:class="[ {'anime': !selected.includes(id)},'item-ico']"></span>
             </div>
@@ -26,7 +32,7 @@
 
                 <tbody>
                     <tr v-for="(product, prodId) in member.products" v-bind:key="prodId">
-                        <td >{{prodId + 1}}</td>
+                        <td >{{prodId + 1 + '.'}}</td>
                         <td>{{product.name}}</td>
                         <td >{{product.count}}</td>
                         <td >{{product.price}}</td>
@@ -44,7 +50,7 @@
 </template>
 
 <script>
-
+import { MD5 } from './md5.js';
 export default {
     name: 'order',
     props: ['members', 'code'],
@@ -59,7 +65,10 @@ export default {
             if (!this.selected.includes(el)) {
                 this.selected.push(el);
             } else this.selected.splice(this.selected.indexOf(el), 1)
-        }
+        },
+        getHash: function(str) {
+            return MD5(str);
+        } 
     }
 }
 </script>
@@ -80,9 +89,6 @@ export default {
     border-top: none;
     position: relative;
 
-    &-title {
-        width: 30%;
-    }
     &-price {
         position: absolute;
         right: 15%;
@@ -93,7 +99,7 @@ export default {
 
 
 .list {
-    max-height: 360px;
+    height: 360px;
     overflow: auto;
 }
 
@@ -125,6 +131,19 @@ export default {
     }
 }
 
+.user {
+    width: 40%;
+
+    &-info {
+        display: flex;
+        align-items: center;
+    }
+
+    &-img {
+        border-radius: 50%;
+        margin-right: 10px; 
+    }
+}
 
 .item-ico {
     cursor: pointer;
