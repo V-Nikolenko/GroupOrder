@@ -114,6 +114,13 @@ export default {
             chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
                 chrome.tabs.sendMessage(tabs[0].id, {type: 'getOrders'}, (response) => {
 
+                    if (!response.items.length) {
+                        this.isDisabled = false;
+                        this.isSendingError = true;
+                        this.sendingError = 'Замовлення не повинно бути пусте!';
+                        return;
+                    }
+
                     response.email = this.email;
                     response.name = this.name;
                     
