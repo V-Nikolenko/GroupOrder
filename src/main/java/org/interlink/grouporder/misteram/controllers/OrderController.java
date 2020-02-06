@@ -122,9 +122,9 @@ public class OrderController {
     @PutMapping("/{code}/lock-group-order")
     public ResponseEntity lockGroupOrder(@PathVariable("code") String code) {
         try {
-//            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
+            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
 
-//            groupOrderService.unlock(groupOrder);
+            groupOrderService.lock(groupOrder);
 
             return ResponseEntity.ok("Order " + code + " is unlocked!");
         } catch (Exception e) {
@@ -135,9 +135,9 @@ public class OrderController {
     @DeleteMapping("/{code}/lock-group-order")
     public ResponseEntity unlockGroupOrder(@PathVariable("code") String code) {
         try {
-//            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
-//
-//            groupOrderService.lock(groupOrder);
+            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
+
+            groupOrderService.unlock(groupOrder);
 
             return ResponseEntity.ok("Order " + code + " is locked!");
         } catch (Exception e) {
