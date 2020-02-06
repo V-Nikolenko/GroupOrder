@@ -10,13 +10,14 @@
 
             <div class="nameContainer">
                 <input v-model="name" 
+                    maxlength="30"
                     type="text" 
                     name="name" 
                     v-bind:class="[{'input_error': isNameError}, 'input']" 
                     placeholder="Ваше ім'я"
                     v-on:input="nameError">
-                <p v-show="isNameError" class="error" >
-                    Ім'я має бути більше  3 символів та менше 30!
+                <p v-show="isNameError" class="error">
+                    Ім'я має бути більше 3  та менше 30 символів!
                 </p>
             </div>
 
