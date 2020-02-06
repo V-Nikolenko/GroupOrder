@@ -11,6 +11,7 @@ import org.interlink.grouporder.core.service.MemberOrderService;
 import org.interlink.grouporder.misteram.MisterAmMapper;
 import org.interlink.grouporder.misteram.entity.GroupOrderDTO;
 import org.interlink.grouporder.misteram.entity.MemberOrderDTO;
+import org.interlink.grouporder.misteram.entity.ShowOrderDTO;
 import org.interlink.grouporder.misteram.entity.StringResultDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -65,13 +66,11 @@ public class OrderController {
         try {
             MemberOrder memberOrder = MisterAmMapper.map(new MemberOrder(), newMemberOrderDTO);
             GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
-            System.out.println(memberOrder.getProducts());
-
             memberOrder.setGroupOrder(groupOrder);
+
             memberOrderService.saveMemberToGroupOrder(memberOrder);
             return ResponseEntity.ok("Success");
         } catch (Exception e) {
-            e.printStackTrace();
             return ExceptionsHandler.handleException(e);
         }
     }
@@ -80,8 +79,13 @@ public class OrderController {
     public ResponseEntity showGroupOrder(@PathVariable("code") String code) {
         try {
             List<MemberOrder> members = memberOrderService.findAllMembers(code);
+            int fullPrice = groupOrderService.getGroupOrder(code).getFullPrice();
 
-            return ResponseEntity.ok(members);
+            ShowOrderDTO newShowOrderDTO = new ShowOrderDTO();
+            newShowOrderDTO.setFullPrice(fullPrice);
+            newShowOrderDTO.setMembers(members);
+
+            return ResponseEntity.ok(newShowOrderDTO);
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
@@ -91,8 +95,13 @@ public class OrderController {
     public ResponseEntity formGroupOrder(@PathVariable("code") String code) {
         try {
             List<MemberOrder> members = memberOrderService.findAllMembers(code);
+            int fullPrice = groupOrderService.getGroupOrder(code).getFullPrice();
 
-            return ResponseEntity.ok(members);
+            ShowOrderDTO newShowOrderDTO = new ShowOrderDTO();
+            newShowOrderDTO.setFullPrice(fullPrice);
+            newShowOrderDTO.setMembers(members);
+
+            return ResponseEntity.ok(newShowOrderDTO);
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
@@ -101,6 +110,8 @@ public class OrderController {
     @PostMapping("/{code}/remove-from-order")
     public ResponseEntity removeMemberFromOrder(@PathVariable("code") String code, @RequestBody MemberOrderDTO newMemberOrderDTO) {
         try {
+            MemberOrder memberOrder = MisterAmMapper.map(new MemberOrder(), newMemberOrderDTO);
+            memberOrderService.deleteMemberFromOrder(memberOrder);
 
             return ResponseEntity.ok("Success");
         } catch (Exception e) {
@@ -112,7 +123,7 @@ public class OrderController {
     public ResponseEntity lockGroupOrder(@PathVariable("code") String code) {
         try {
 //            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
-//
+
 //            groupOrderService.unlock(groupOrder);
 
             return ResponseEntity.ok("Order " + code + " is unlocked!");
