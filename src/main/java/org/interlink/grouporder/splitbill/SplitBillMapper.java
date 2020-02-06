@@ -18,7 +18,15 @@ public class SplitBillMapper {
     private SplitBillMapper() {
     }
 
-    public static OrderCheckDTO map(GroupOrder source, OrderCheckDTO destination) {
+    public static OrderCheckDTO map(GroupOrder source, List<MemberOrder> members, OrderCheckDTO destination) {
+        List<MemberDTO> items = members.stream()
+                .map(member -> map(member, new MemberDTO()))
+                .collect(Collectors.toList());
+
+        destination.setCompanyId(source.getRestaurantId());
+        destination.setFullPrice(source.getFullPrice());
+        destination.setItems(items);
+
         return destination;
     }
 
