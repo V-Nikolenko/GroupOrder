@@ -1,51 +1,37 @@
 package org.interlink.grouporder.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.interlink.grouporder.core.entity.view.GroupOrderView;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "group_order")
+@Getter
+@Setter
 public class GroupOrder {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     @JsonView(GroupOrderView.Basic.class)
     private String code;
-    @JsonView(GroupOrderView.Extended.class)
-    private String internetShopURL;
-    @JsonView(GroupOrderView.Extended.class)
-    private List<MemberOrder> members = new ArrayList<>();
+    private String restaurantName;
+    private String restaurantUrl;
+    private int restaurantId;
 
-    public GroupOrder(String code) {
-        this.code = code;
-    }
+    @ColumnDefault(value = "0")
+    private int fullPrice;
 
+    @JsonIgnore
+    @ColumnDefault(value = "false")
+    private boolean isLocked;
 
-    public void addMemberToGroupOrder(MemberOrder member) {
-        if (member != null) {
-            members.add(member);
-        }
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getInternetShopURL() {
-        return internetShopURL;
-    }
-
-    public void setInternetShopURL(String internetShopURL) {
-        this.internetShopURL = internetShopURL;
-    }
-
-    public List<MemberOrder> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<MemberOrder> members) {
-        this.members = members;
+    public GroupOrder() {
     }
 }
