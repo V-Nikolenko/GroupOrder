@@ -1,6 +1,5 @@
 package org.interlink.grouporder.misteram;
 
-import javafx.scene.Group;
 import org.interlink.grouporder.core.entity.GroupOrder;
 import org.interlink.grouporder.core.entity.MemberOrder;
 import org.interlink.grouporder.misteram.entity.GroupOrderDTO;
