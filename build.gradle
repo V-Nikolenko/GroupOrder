@@ -5,6 +5,10 @@ plugins {
     id 'java'
 }
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '6.1.1'
+}
+
 repositories {
     mavenCentral()
 }
