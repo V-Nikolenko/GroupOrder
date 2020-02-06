@@ -1,16 +1,16 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/grouporder
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/grouporder}
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: admin
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD :admin}
+
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
-    hibernate.ddl-auto: create
+    hibernate:
+      ddl-auto: validate
+    generate-ddl: false
 
-#  flyway:
-#    baseline-on-migrate: true
-#    locations: classpath:db/migration
 server.port: 8080
