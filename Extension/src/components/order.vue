@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="receipt">
     
     <h1 class="receipt-heading">Чек № {{code}} <span class="exit" v-on:click="$emit('showAllOrders')">&#10140;</span> </h1>
     
@@ -76,7 +76,9 @@ export default {
 <style lang="scss" scoped>
 @import '../styles/colors.scss';
 
-
+.receipt {
+    padding: 10px;
+}
 .head {
     font-weight: 600;
     cursor: pointer;
@@ -181,19 +183,23 @@ export default {
 
 table {
     border-collapse: collapse;
+    text-align: center;
+}
+
+thead, tbody {
+    border-right: 1px solid $color4;
+    border-left: 1px solid $color4; 
 }
 
 thead {
     border-bottom: 1px solid $color4;
 }
 
+
+
 thead th {
     height: 30px;
     color: $color3
-}
-
-th, tr {
-    text-align: center;
 }
 
 tr {
