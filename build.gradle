@@ -5,10 +5,6 @@ plugins {
     id 'java'
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '6.1.1'
-}
-
 repositories {
     mavenCentral()
 }
@@ -33,6 +29,7 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     testCompile 'com.jayway.jsonpath:json-path'
+
 
     testImplementation("org.testng:testng:7.0.0")
     testImplementation("org.mockito:mockito-core:3.2.0")
