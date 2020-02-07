@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 @Setter
 public class MemberDTO {
     private String name;
-    private String email;
     private BigDecimal price;
     private int count = 1;
 }
