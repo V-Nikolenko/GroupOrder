@@ -110,7 +110,7 @@ public class OrderController {
     public ResponseEntity formGroupOrder(@PathVariable("code") String code) {
         try {
             List<MemberOrder> members = memberOrderService.findAllMembers(code);
-            int fullPrice = groupOrderService.getGroupOrder(code).getFullPrice();
+            BigDecimal fullPrice = memberOrderService.sumFullPrice(code);
 
             ShowOrderDTO newShowOrderDTO = new ShowOrderDTO();
             newShowOrderDTO.setFullPrice(fullPrice);
