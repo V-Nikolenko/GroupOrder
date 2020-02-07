@@ -2,10 +2,14 @@ package org.interlink.grouporder.misteram;
 
 import org.interlink.grouporder.core.entity.GroupOrder;
 import org.interlink.grouporder.core.entity.MemberOrder;
+import org.interlink.grouporder.core.entity.Product;
 import org.interlink.grouporder.misteram.entity.GroupOrderDTO;
 import org.interlink.grouporder.misteram.entity.MemberOrderDTO;
 import org.interlink.grouporder.misteram.entity.StringResultDTO;
 import org.modelmapper.ModelMapper;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MisterAmMapper {
 
@@ -30,15 +34,20 @@ public class MisterAmMapper {
         destination.setRestaurantName(source.getRestaurantName());
         destination.setRestaurantUrl(source.getRestaurantUrl());
         destination.setLocked(false);
-        destination.setFullPrice(0);
+//        destination.setFullPrice(0);
 
         return destination;
     }
 
     public static MemberOrder map(MemberOrder destination, MemberOrderDTO source) {
+        List<Product> products = source.getItems().stream()
+                .map(item -> map(item, Product.class))
+                .collect(Collectors.toList());
+
+
         destination.setName(source.getName());
         destination.setEmail(source.getEmail());
-        destination.setProducts(source.getItems().toString());
+        destination.setProducts(products);
         destination.setRestaurantId(source.getCompanyId());
         destination.setOrderPrice(source.getFullPrice());
 

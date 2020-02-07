@@ -4,6 +4,7 @@ package org.interlink.grouporder.misteram.controllers;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.interlink.grouporder.core.entity.GroupOrder;
 import org.interlink.grouporder.core.entity.MemberOrder;
+import org.interlink.grouporder.core.entity.Product;
 import org.interlink.grouporder.core.entity.view.GroupOrderView;
 import org.interlink.grouporder.core.handler.ExceptionsHandler;
 import org.interlink.grouporder.core.service.GroupOrderService;
@@ -18,8 +19,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/orders")
@@ -80,7 +86,6 @@ public class OrderController {
                 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Unable to add new member because order is locked");
             }
         } catch (Exception e) {
-            e.printStackTrace();
             return ExceptionsHandler.handleException(e);
         }
     }
@@ -89,7 +94,7 @@ public class OrderController {
     public ResponseEntity showGroupOrder(@PathVariable("code") String code) {
         try {
             List<MemberOrder> members = memberOrderService.findAllMembers(code);
-            int fullPrice = groupOrderService.getGroupOrder(code).getFullPrice();
+            BigDecimal fullPrice = memberOrderService.sumFullPrice(code);
 
             ShowOrderDTO newShowOrderDTO = new ShowOrderDTO();
             newShowOrderDTO.setFullPrice(fullPrice);
@@ -104,16 +109,20 @@ public class OrderController {
     @GetMapping("/{code}/form-group-order")
     public ResponseEntity formGroupOrder(@PathVariable("code") String code) {
         try {
-            Object items = memberOrderService.findAllProducts(code);
+            List<MemberOrder> members = memberOrderService.findAllMembers(code);
+            List<Product> products = members.stream()
+                    .map(MemberOrder::getProducts)
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList());
 
-            return ResponseEntity.ok(items);
+            return ResponseEntity.ok(products);
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
     }
 
-    @PostMapping("/{code}/remove-from-order")
-    public ResponseEntity removeMemberFromOrder(@PathVariable("code") String code, @RequestParam Integer id) {
+    @DeleteMapping("/{code}/{id}")
+    public ResponseEntity removeMemberFromOrder(@PathVariable("code") String code, @PathVariable("id") Integer id) {
         try {
             if (!groupOrderService.getGroupOrder(code).isLocked()) {
                 memberOrderService.deleteMemberFromOrder(id);

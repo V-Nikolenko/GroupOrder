@@ -1,4 +1,5 @@
-package org.interlink.grouporder.splitbill.entity;
+package org.interlink.grouporder.core.entity;
+
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,9 +8,9 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class MemberDTO {
+public class Product {
+    private int id;
     private String name;
-    private String email;
     private BigDecimal price;
-    private int count = 1;
+    private int count;
 }
