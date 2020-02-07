@@ -114,7 +114,7 @@ export default {
             this.isDisabled = true;
             chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
                 chrome.tabs.sendMessage(tabs[0].id, {type: 'getOrders'}, (response) => {
-
+                    console.log(response.items.length + ''+ !response.items.length)
                     if (!response.items.length) {
                         this.isDisabled = false;
                         this.isSendingError = true;

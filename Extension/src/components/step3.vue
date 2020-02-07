@@ -21,9 +21,12 @@
 
             <button v-on:click="formOrder()" v-bind:class="[btn_disabled, 'btn']" v-bind:disabled="isDisabled">Зібрати</button>
              
+            
+            <loading size="0.3" v-show="(isSending && !isCleared)"></loading>
+
             <progress
-                v-show="isSending" 
-                v-bind:value="progressValue" 
+                v-show="(isSending && isCleared)" 
+                v-bind:value="progressValue"
                 v-bind:max="progressMax"
                 class="progress">
             </progress>
@@ -37,6 +40,7 @@
         <span>Загальна сума: {{ step.data.fullPrice }} грн.</span>
         <button class="show-items-btn" v-on:click="$emit('showAllOrders')">Показати</button>
     </div>
+
 </div>
 </template>
 
@@ -44,18 +48,21 @@
 import stepHeader from "./stepHeader.vue";
 import { sendGetAllDishesRequest, sendLockOrderRequest, sendOrderStateRequest } from "./requests.js";
 import { stepFactory } from './stepService.js';
+import loading from './loading.vue'
 
 export default {
     name: 'step3',
     props: ['step'],
     components: {
-        stepHeader
+        stepHeader, 
+        loading
     },
 
     data() {
         return {
             service: stepFactory.service,
             showCheck: true,
+            isCleared: false,
             isSending: false,
             progressMax: null,
             progressValue: 0,
@@ -81,7 +88,7 @@ export default {
         },
  
         formOrder() {
-            
+
             this.isDisabled = true;
 
             sendGetAllDishesRequest(this.service.getCode())
@@ -102,7 +109,10 @@ export default {
                     if (request.type === 'added') {
                         this.progressValue++;
                     }
-
+                    
+                    if (request.type === 'cleared') {
+                        this.isCleared = true;
+                    }
                 });
  
                 
@@ -192,15 +202,15 @@ export default {
     }
 }
 
-.btn-container {
-    display: flex;
-    flex: 1;
-    align-items: center;
-    flex-direction: column;
-}
-
 .btn {
-    margin: 20px;
+    margin: 10px;
+
+    &-container {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        flex-direction: column;
+    }
 }
 
 .progress {

@@ -103,7 +103,9 @@ async function formOrder(items) {
 
         await clearCurrentOrder()
 
-        //do this at backend
+        chrome.runtime.sendMessage({type: "cleared", quantity: quantity})
+                
+
         let quantity = 0;
         for (let i = 0; i < items.length; i++) {
             quantity += items[i].count;

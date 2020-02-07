@@ -51,6 +51,7 @@
 
 <script>
 import { MD5 } from './md5.js';
+
 export default {
     name: 'order',
     props: ['members', 'code'],
