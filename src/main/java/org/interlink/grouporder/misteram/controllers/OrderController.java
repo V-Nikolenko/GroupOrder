@@ -52,9 +52,9 @@ public class OrderController {
         try {
 
             GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
-            String orderLink = groupOrder.getRestaurantUrl() + "?code=" + code;
-
-            return ResponseEntity.ok(MisterAmMapper.map(orderLink, new StringResultDTO()));
+            String url = groupOrder.getRestaurantUrl() + "?code=" + code;
+            String name = groupOrder.getRestaurantName();
+            return ResponseEntity.ok(MisterAmMapper.map(url, name, new StringResultDTO()));
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }

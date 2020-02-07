@@ -6,5 +6,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class StringResultDTO {
-    private String result;
+    private String restaurantUrl;
+    private String restaurantName;
 }

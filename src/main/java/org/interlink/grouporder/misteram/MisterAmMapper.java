@@ -18,9 +18,9 @@ public class MisterAmMapper {
         return mapper.map(object, objectClass);
     }
 
-    public static StringResultDTO map(String result, StringResultDTO destination) {
-        destination.setResult(result);
-
+    public static StringResultDTO map(String url, String name, StringResultDTO destination) {
+        destination.setRestaurantUrl(url);
+        destination.setRestaurantName(name);
         return destination;
     }
 
