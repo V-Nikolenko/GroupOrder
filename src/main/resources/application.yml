@@ -5,6 +5,10 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD :admin}
 
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -14,3 +18,4 @@ spring:
     generate-ddl: false
 
 server.port: 8080
+
