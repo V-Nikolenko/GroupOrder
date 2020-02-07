@@ -110,13 +110,12 @@ public class OrderController {
     public ResponseEntity formGroupOrder(@PathVariable("code") String code) {
         try {
             List<MemberOrder> members = memberOrderService.findAllMembers(code);
-            BigDecimal fullPrice = memberOrderService.sumFullPrice(code);
+            List<Product> products = members.stream()
+                    .map(MemberOrder::getProducts)
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList());
 
-            ShowOrderDTO newShowOrderDTO = new ShowOrderDTO();
-            newShowOrderDTO.setFullPrice(fullPrice);
-            newShowOrderDTO.setMembers(members);
-
-            return ResponseEntity.ok(newShowOrderDTO);
+            return ResponseEntity.ok(products);
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
