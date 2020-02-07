@@ -16,7 +16,7 @@ node{
 dependencies {
 
     implementation 'org.modelmapper:modelmapper:2.3.2'
-
+    implementation 'com.vladmihalcea:hibernate-types-52:2.9.3'
 
     compileOnly 'org.projectlombok:lombok:1.18.8'
     annotationProcessor 'org.projectlombok:lombok:1.18.8'

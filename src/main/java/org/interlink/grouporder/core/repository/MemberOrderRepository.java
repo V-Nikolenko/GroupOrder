@@ -13,8 +13,9 @@ public interface MemberOrderRepository extends JpaRepository<MemberOrder, Intege
 
     @Query("SELECT m.products FROM MemberOrder m WHERE m.groupOrder.id IN (" +
             "SELECT g.id FROM GroupOrder g WHERE g.code = :code)")
-    List<String> findAllProducts(@Param("code") String code);
+    String findAllProducts(@Param("code") String code);
 
-    @Query("SELECT m FROM MemberOrder m WHERE m.groupOrder.id = :groupOrderCode")
-    List<MemberOrder> findAllMembers(@Param("groupOrderCode") String groupOrderCode);
+    @Query("SELECT m FROM MemberOrder m WHERE m.groupOrder.id IN (" +
+            "SELECT g.id FROM GroupOrder g WHERE g.code = :code)")
+    List<MemberOrder> findAllMembers(@Param("code") String code);
 }

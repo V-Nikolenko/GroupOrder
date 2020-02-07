@@ -14,6 +14,7 @@ import org.interlink.grouporder.misteram.entity.MemberOrderDTO;
 import org.interlink.grouporder.misteram.entity.ShowOrderDTO;
 import org.interlink.grouporder.misteram.entity.StringResultDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,11 +51,14 @@ public class OrderController {
     @PostMapping("{code}/connect")
     public ResponseEntity connectToGroupOrder(@PathVariable("code") String code) {
         try {
-
-            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
-            String url = groupOrder.getRestaurantUrl() + "?code=" + code;
-            String name = groupOrder.getRestaurantName();
-            return ResponseEntity.ok(MisterAmMapper.map(url, name, new StringResultDTO()));
+            if (!groupOrderService.getGroupOrder(code).isLocked()) {
+                GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
+                String url = groupOrder.getRestaurantUrl() + "?code=" + code;
+                String name = groupOrder.getRestaurantName();
+                return ResponseEntity.ok(MisterAmMapper.map(url, name, new StringResultDTO()));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Unable connect to group order because order is locked");
+            }
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
@@ -64,13 +68,19 @@ public class OrderController {
     @PostMapping("/{code}/add-member-order")
     public ResponseEntity addMemberToOrder(@PathVariable("code") String code, @RequestBody MemberOrderDTO newMemberOrderDTO) {
         try {
-            MemberOrder memberOrder = MisterAmMapper.map(new MemberOrder(), newMemberOrderDTO);
-            GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
-            memberOrder.setGroupOrder(groupOrder);
+            if (!groupOrderService.getGroupOrder(code).isLocked()) {
+                MemberOrder memberOrder = MisterAmMapper.map(new MemberOrder(), newMemberOrderDTO);
+                GroupOrder groupOrder = groupOrderService.getGroupOrder(code);
+                memberOrder.setGroupOrder(groupOrder);
 
-            memberOrderService.saveMemberToGroupOrder(memberOrder);
-            return ResponseEntity.ok("Success");
+                memberOrderService.saveMemberToGroupOrder(memberOrder);
+
+                return ResponseEntity.ok(memberOrder.getId());
+            } else {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Unable to add new member because order is locked");
+            }
         } catch (Exception e) {
+            e.printStackTrace();
             return ExceptionsHandler.handleException(e);
         }
     }
@@ -94,7 +104,7 @@ public class OrderController {
     @GetMapping("/{code}/form-group-order")
     public ResponseEntity formGroupOrder(@PathVariable("code") String code) {
         try {
-            List<String> items = memberOrderService.findAllProducts(code);
+            Object items = memberOrderService.findAllProducts(code);
 
             return ResponseEntity.ok(items);
         } catch (Exception e) {
@@ -103,12 +113,14 @@ public class OrderController {
     }
 
     @PostMapping("/{code}/remove-from-order")
-    public ResponseEntity removeMemberFromOrder(@PathVariable("code") String code, @RequestBody MemberOrderDTO newMemberOrderDTO) {
+    public ResponseEntity removeMemberFromOrder(@PathVariable("code") String code, @RequestParam Integer id) {
         try {
-            MemberOrder memberOrder = MisterAmMapper.map(new MemberOrder(), newMemberOrderDTO);
-            memberOrderService.deleteMemberFromOrder(memberOrder);
-
-            return ResponseEntity.ok("Success");
+            if (!groupOrderService.getGroupOrder(code).isLocked()) {
+                memberOrderService.deleteMemberFromOrder(id);
+                return ResponseEntity.ok("Success");
+            } else {
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Cannot delete member because order is locked");
+            }
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
@@ -121,7 +133,7 @@ public class OrderController {
 
             groupOrderService.lock(groupOrder);
 
-            return ResponseEntity.ok("Order " + code + " is unlocked!");
+            return ResponseEntity.ok("Order " + code + " is locked!");
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
@@ -134,7 +146,7 @@ public class OrderController {
 
             groupOrderService.unlock(groupOrder);
 
-            return ResponseEntity.ok("Order " + code + " is locked!");
+            return ResponseEntity.ok("Order " + code + " is unlocked!");
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
