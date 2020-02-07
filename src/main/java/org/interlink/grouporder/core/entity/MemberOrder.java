@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 
 @Entity
@@ -24,7 +25,7 @@ public class MemberOrder {
     @Column(columnDefinition = "TEXT")
     private String products;
     private int restaurantId;
-    private int orderPrice;
+    private BigDecimal orderPrice;
 
 
 }

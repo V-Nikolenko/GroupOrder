@@ -8,6 +8,7 @@ import org.interlink.grouporder.misteram.entity.StringResultDTO;
 import org.interlink.grouporder.splitbill.entity.MemberDTO;
 import org.interlink.grouporder.splitbill.entity.OrderCheckDTO;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,13 +19,13 @@ public class SplitBillMapper {
     private SplitBillMapper() {
     }
 
-    public static OrderCheckDTO map(GroupOrder source, List<MemberOrder> members, OrderCheckDTO destination) {
+    public static OrderCheckDTO map(GroupOrder source, List<MemberOrder> members, OrderCheckDTO destination, BigDecimal fullPrice) {
         List<MemberDTO> items = members.stream()
                 .map(member -> map(member, new MemberDTO()))
                 .collect(Collectors.toList());
 
         destination.setCompanyId(source.getRestaurantId());
-        destination.setFullPrice(source.getFullPrice());
+        destination.setFullPrice(fullPrice);
         destination.setItems(items);
 
         return destination;
