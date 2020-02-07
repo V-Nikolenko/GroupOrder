@@ -51,7 +51,7 @@
         
             <span class="done-name">{{ service.steps[1].data.name }}</span>
             <span>{{ service.steps[1].data.userFullPrice}} грн.</span>
-            <img src="/images/delete.png" alt="Видалити замовлення" title="Видалити замовлення" class="img img-reset">
+            <img src="/images/delete.png" alt="Видалити замовлення" title="Видалити замовлення" class="img img-reset" v-on:click="removeMember()">
         
         </div>
 
@@ -60,7 +60,7 @@
 
 <script>
 import stepHeader from './stepHeader.vue';
-import {sendMemberOrder} from './requests.js';
+import {sendMemberOrder, sendRemoveMemberFromOrder} from './requests.js';
 import {stepFactory} from './stepService.js';
 
 export default {
@@ -114,7 +114,7 @@ export default {
             this.isDisabled = true;
             chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
                 chrome.tabs.sendMessage(tabs[0].id, {type: 'getOrders'}, (response) => {
-                    console.log(response.items.length + ''+ !response.items.length)
+                    
                     if (!response.items.length) {
                         this.isDisabled = false;
                         this.isSendingError = true;
@@ -124,15 +124,21 @@ export default {
 
                     response.email = this.email;
                     response.name = this.name;
+                    if (!!response.optionValue) {
+                        response.optionValue = 'NEMAYE';
+                    }
                     
-                    sendMemberOrder(this.service.getCode(), response).then((resp)=> {
+                    sendMemberOrder(this.service.getCode(), response)
+                    .then((resp)=> {
                         
                         if (resp.status === 200) {
                             this.step.data.userFullPrice = response.fullPrice;
                             this.step.data.email = this.email;
                             this.step.data.name = this.name;
+                            
+                            this.isDisabled = false;
 
-                            this.$emit('next', this.step);
+                            return resp.text() // make it json
 
                         } else {
                             this.isSendingError = true; 
@@ -141,16 +147,38 @@ export default {
                                 this.sendingError = 'Замовлення заблоковано';    
                             }
                         }
-                        this.isDisabled = false;
+
+                    })
+                    .then((resp) => {
+                    
+                    console.log(resp);
+                        // console.log(this.step.data.id);
+                        this.step.data.id = resp// id
+                    
+                        // console.log(this.step.data.id);
+
+                        this.$emit('next', this.step);
                     }).catch((error)=> {
+                        console.log(error);
                         this.isDisabled = false;
                         this.isSendingError = true;
                         this.sendingError = 'Спробуйте ще раз';
                     })
                 })
             })
+        },
+        
+        removeMember: function() {
+            sendRemoveMemberFromOrder(this.service.getCode(), this.service.getId())
+            .then((resp) => {
+                if (resp.status === 200) {
+                    this.$emit('remove');
+                }
+                // add smth to show result if error
+            })
         }
-    }
+    } 
+
 }
 </script>
 

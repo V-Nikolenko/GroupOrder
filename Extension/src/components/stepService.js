@@ -18,12 +18,21 @@ class StepService {
         this.saveSteps();
     }
 
+    setData(data) {
+        this.steps = data
+        this.notify(this.steps);
+    }
+
     saveSteps() {
         this.notify(this.steps);
     }
 
     getCode() {
         return this.steps[0].data.code;
+    }
+
+    getId() {
+        return this.steps[1].data.id;
     }
 
     getName() {
@@ -34,10 +43,6 @@ class StepService {
         return this.steps[1].data.email;
     }
 
-    setData(data) {
-        this.steps = data
-        this.notify(this.steps);
-    }
 
     subscribe(listener) {
         this.listener = listener;

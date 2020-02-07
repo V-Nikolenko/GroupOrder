@@ -1,5 +1,5 @@
-let path = 'http://localhost:8080';
-// let path = 'https://group-order.herokuapp.com';
+// let path = 'http://localhost:8080';
+let path = 'https://group-order.herokuapp.com';
 
 export async function sendCreateNewOrderRequest(obj) {
     return await fetch(path + '/orders', {
@@ -44,10 +44,9 @@ export async function sendGetAllDishesRequest(code) {
 }
 
 
-export async function sendRemoveMemberFromOrder(code) {
-    return fetch (path + '/orders/' + code + '/remove-from-order', {
-        method: 'POST',
-        body: {} //Name, email, url
+export async function sendRemoveMemberFromOrder(code, id) {
+    return fetch (path + '/orders/' + code + '/' +id, {
+        method: 'DELETE',
     });
 }
 
@@ -63,11 +62,13 @@ export async function sendGetSplitBillData(code) {
     return fetch (path + '/orders/' + code + '/group-order-debt');
 }
 
-export async function sendOrderStateRequest(code, isLocked) {
-    let method;
-    
-    if (isLocked) method = 'DELETE';
-    else method = 'PUT';
+export async function sendOrderStateRequest(code, isLocked, method = null) {
+    console.log(method)
+    if(method === null) {
+        // let method;
+        if (isLocked) method = 'DELETE';
+        else method = 'PUT';
+    }
 
     return fetch(path + '/orders/' + code + '/lock-group-order', {
         method: method

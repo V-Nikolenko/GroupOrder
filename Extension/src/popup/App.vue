@@ -13,17 +13,16 @@
   </div>
   
   <div class='extension' v-show="!isDisplay">
-
+  
     <header>
       <h1 class="extension-title">Group Order</h1>
     </header>
-
 
     <div v-if="isLoaded">
 
       <step1 v-bind:step="steps[0]" v-on:next="nextStep" v-on:logOut="logOut" v-bind:key="componentsId[0]"></step1>    
       
-      <step2 v-bind:step="steps[1]" v-on:next="nextStep" v-bind:key="componentsId[1]"></step2> 
+      <step2 v-bind:step="steps[1]" v-on:next="nextStep" v-on:remove="remove" v-bind:key="componentsId[1]"></step2> 
 
       <step3 v-bind:step="steps[2]"
         v-on:next='nextStep' 
@@ -69,7 +68,8 @@ const STEPS = [
     data: {
       name: null,
       email: null,
-      userFullPrice: null
+      userFullPrice: null,
+      id: null
     }
   },
   
@@ -79,7 +79,7 @@ const STEPS = [
     title: '3. Зібрати замовлення',
     data: {
       fullPrice: null,
-      isLocked: false
+      isLocked: false,
     }
   },
 
@@ -154,6 +154,34 @@ export default {
         this.componentsId[id] += 1;
       });
       this.stepService.setData( JSON.parse(JSON.stringify(STEPS)) );
+    },
+
+    remove: function() {
+      this.steps.forEach((el, id) => {
+        if (id > 0) {
+          console.log(this.steps[id])
+          
+          this.steps[id] = JSON.parse(JSON.stringify(STEPS[id])); 
+        
+          console.log(this.steps[id])
+        }
+
+        if (id === 1) {
+          this.steps[id].isActive = true; 
+        }
+      });
+    
+      this.componentsId.forEach((el, id) => {
+        if (id > 0) {
+          console.log(this.componentsId[id]);
+          this.componentsId[id] += 1;
+          console.log(this.componentsId[id]);
+        }
+      });
+
+      // console.log('------');
+      
+      this.stepService.setData( JSON.parse(JSON.stringify(this.steps)) );
     }
   },
 

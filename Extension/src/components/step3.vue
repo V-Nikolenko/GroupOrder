@@ -13,7 +13,7 @@
         <div class="container">
         
             <button class="show-items-btn" v-on:click="$emit('showAllOrders')">Показати</button>
-            <span v-bind:class="[{'unlocked': !step.data.isLocked}, 'lock']" v-on:click="changeLockState"></span>
+            <span v-bind:class="[{'unlocked': !step.data.isLocked}, 'lock']" v-on:click="changeLockState(null)"></span>
         
         </div>
         
@@ -80,16 +80,31 @@ export default {
     },
 
     methods: {
-        changeLockState() {
-            sendOrderStateRequest(this.service.getCode(), this.step.data.isLocked).then((resp) => {
-                this.step.data.isLocked = !this.step.data.isLocked;
-                this.service.saveSteps();
-            })
+        changeLockState(method) {
+            console.log(method);
+            return sendOrderStateRequest(this.service.getCode(), this.step.data.isLocked, method)
+            .then((resp) => {
+                if (resp.status === 200) {
+                    this.step.data.isLocked = !this.step.data.isLocked;
+                    this.service.saveSteps();
+                } else {
+                    throw new Error('cant lock/unclock');
+                }
+                // show result to user;
+            }).catch((error) => {
+                console.log(error)
+            }) 
         },
  
         formOrder() {
 
             this.isDisabled = true;
+
+            this.changeLockState("PUT")
+            .then((resp) => {
+                this.step.data.isLocked = true;
+            });
+
 
             sendGetAllDishesRequest(this.service.getCode())
             .then((resp)=> {
@@ -100,7 +115,7 @@ export default {
 
             })
             .then((resp)=> {
-
+      
                 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     if (request.type === 'quantity') {
                         this.progressMax = request.quantity;

@@ -12,7 +12,7 @@ chrome.runtime.onMessage.addListener(
                 break;
 
             case 'formOrder':
-                formOrder(message.resp.items).then(sendResponse);
+                formOrder(message.resp).then(sendResponse);
                 break;
 
             case 'reload': 
@@ -99,6 +99,7 @@ async function clearCurrentOrder() {
 }
 
 async function formOrder(items) {
+    console.log(items);
     try {
 
         await clearCurrentOrder()

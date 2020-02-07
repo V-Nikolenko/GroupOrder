@@ -15,7 +15,7 @@
                     <span>{{member.name}}</span> 
                 </div>
 
-                <span class="head-price">{{member.fullPrice}} грн.</span>
+                <span class="head-price">{{member.orderPrice}} грн.</span>
                 <span v-bind:class="[ {'anime': !selected.includes(id)},'item-ico']"></span>
             </div>
 
