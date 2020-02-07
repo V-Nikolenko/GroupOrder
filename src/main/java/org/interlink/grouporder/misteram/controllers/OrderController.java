@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -93,7 +94,7 @@ public class OrderController {
     public ResponseEntity showGroupOrder(@PathVariable("code") String code) {
         try {
             List<MemberOrder> members = memberOrderService.findAllMembers(code);
-            int fullPrice = groupOrderService.getGroupOrder(code).getFullPrice();
+            BigDecimal fullPrice = memberOrderService.sumFullPrice(code);
 
             ShowOrderDTO newShowOrderDTO = new ShowOrderDTO();
             newShowOrderDTO.setFullPrice(fullPrice);
@@ -117,7 +118,6 @@ public class OrderController {
 
             return ResponseEntity.ok(newShowOrderDTO);
         } catch (Exception e) {
-            e.printStackTrace();
             return ExceptionsHandler.handleException(e);
         }
     }

@@ -8,6 +8,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.interlink.grouporder.core.entity.view.GroupOrderView;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "group_order")
@@ -25,8 +26,8 @@ public class GroupOrder {
     private String restaurantUrl;
     private int restaurantId;
 
-    @ColumnDefault(value = "0")
-    private int fullPrice;
+//    @ColumnDefault(value = "0")
+//    private BigDecimal fullPrice;
 
     @JsonIgnore
     @ColumnDefault(value = "false")

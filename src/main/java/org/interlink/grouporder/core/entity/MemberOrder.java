@@ -7,6 +7,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class MemberOrder {
     @Column(columnDefinition = "jsonb")
     private List<Product> products = new ArrayList<>();
     private int restaurantId;
-    private int orderPrice;
+    private BigDecimal orderPrice;
 
 
 }

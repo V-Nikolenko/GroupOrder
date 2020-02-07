@@ -34,7 +34,7 @@ public class MisterAmMapper {
         destination.setRestaurantName(source.getRestaurantName());
         destination.setRestaurantUrl(source.getRestaurantUrl());
         destination.setLocked(false);
-        destination.setFullPrice(0);
+//        destination.setFullPrice(0);
 
         return destination;
     }

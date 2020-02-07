@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface MemberOrderRepository extends JpaRepository<MemberOrder, Integer> {
@@ -15,4 +16,7 @@ public interface MemberOrderRepository extends JpaRepository<MemberOrder, Intege
     @Query("SELECT m FROM MemberOrder m WHERE m.groupOrder.id IN (" +
             "SELECT g.id FROM GroupOrder g WHERE g.code = :code)")
     List<MemberOrder> findAllMembers(@Param("code") String code);
+
+    @Query("SELECT SUM(m.orderPrice) FROM MemberOrder m WHERE m.groupOrder.code = :code")
+    BigDecimal sumAllOrderPricesFromAllMembers(@Param("code") String code);
 }

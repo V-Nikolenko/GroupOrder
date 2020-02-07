@@ -6,6 +6,7 @@ import org.interlink.grouporder.core.repository.MemberOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -29,4 +30,6 @@ public class MemberOrderService {
     public List<MemberOrder> findAllMembers(String code) {
         return this.memberOrderRepository.findAllMembers(code);
     }
+
+    public BigDecimal sumFullPrice(String code){return this.memberOrderRepository.sumAllOrderPricesFromAllMembers(code);}
 }
