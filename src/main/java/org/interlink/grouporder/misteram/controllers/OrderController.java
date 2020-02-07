@@ -94,14 +94,9 @@ public class OrderController {
     @GetMapping("/{code}/form-group-order")
     public ResponseEntity formGroupOrder(@PathVariable("code") String code) {
         try {
-            List<MemberOrder> members = memberOrderService.findAllMembers(code);
-            int fullPrice = groupOrderService.getGroupOrder(code).getFullPrice();
+            List<String> items = memberOrderService.findAllProducts(code);
 
-            ShowOrderDTO newShowOrderDTO = new ShowOrderDTO();
-            newShowOrderDTO.setFullPrice(fullPrice);
-            newShowOrderDTO.setMembers(members);
-
-            return ResponseEntity.ok(newShowOrderDTO);
+            return ResponseEntity.ok(items);
         } catch (Exception e) {
             return ExceptionsHandler.handleException(e);
         }
