@@ -13,7 +13,7 @@ public class MemberOrderDTO {
     private String email;
     private String url;
 
-    private Object items; // По идее должен быть json строкой (с)Андрей
+    private List<ItemDTO> items; // По идее должен быть json строкой (с)Андрей
     private int companyId;
     private BigDecimal fullPrice;
 }
