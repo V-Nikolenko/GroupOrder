@@ -80,7 +80,6 @@ public class OrderController {
                 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Unable to add new member because order is locked");
             }
         } catch (Exception e) {
-            e.printStackTrace();
             return ExceptionsHandler.handleException(e);
         }
     }
@@ -112,8 +111,8 @@ public class OrderController {
         }
     }
 
-    @PostMapping("/{code}/remove-from-order")
-    public ResponseEntity removeMemberFromOrder(@PathVariable("code") String code, @RequestParam Integer id) {
+    @DeleteMapping("/{code}/{id}")
+    public ResponseEntity removeMemberFromOrder(@PathVariable("code") String code, @PathVariable("id") Integer id) {
         try {
             if (!groupOrderService.getGroupOrder(code).isLocked()) {
                 memberOrderService.deleteMemberFromOrder(id);
