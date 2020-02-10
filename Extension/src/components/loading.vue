@@ -38,8 +38,8 @@ export default {
   color: official;
   display: inline-block;
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 20px;
+  height: 20px;
 }
 
 .lds-spinner div {

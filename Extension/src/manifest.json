@@ -1,5 +1,5 @@
 {
-  "name": "Group Order-extension",
+  "name": "Group Order",
   "description": "Extension to make a group order",
   "version": null,
   "manifest_version": 2,
@@ -9,7 +9,7 @@
   },
 
   "page_action": {
-    "default_title": "Group Order extension",
+    "default_title": "Group Order",
     "default_popup": "popup/popup.html"
   },
 

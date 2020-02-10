@@ -201,9 +201,28 @@ export default {
     cursor: pointer;
     font-weight: 600;
     padding: 0;
+    position: relative;
 
     &:focus {
         outline: none;
+    }
+
+    &:before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 1px;
+        bottom: 0;
+        left: 0;
+        background-color: $color2;
+        visibility: hidden;
+        transform: scaleX(0);
+        transition: 0.2s ease-in-out;
+        }
+
+        &:hover:before {
+        visibility: visible;
+        transform: scaleX(1);
     }
 }
 
