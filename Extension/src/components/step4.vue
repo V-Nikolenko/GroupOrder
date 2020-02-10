@@ -10,8 +10,10 @@
         <div class="container">
             
             <div class="title">
+                
                 <span>Борги</span>
-                <img src="/images/export.png" alt="export" title="Експортувати" class="img" v-on:click="copy">
+                <font-awesome-icon icon="file-export" alt="Експортувати" title="Експортувати" class="img" v-on:click="copy" />
+        
             </div>
         
             <div class="bills-container scroll"> 

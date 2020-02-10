@@ -8,14 +8,22 @@ body {
 }
 
 .img {
-    width: 25px;
-    height: 25px;
+    font-size: 26px;
     cursor: pointer;
     
     &:active {
         position: relative;
         top: 1px;
         right: 1px;
+        
+        &:hover {
+            color: $color3;
+        }
+    }
+
+    &:hover {
+        transition: .1s;
+        color: $color2;
     }
 }
 

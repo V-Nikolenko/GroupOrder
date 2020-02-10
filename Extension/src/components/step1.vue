@@ -50,8 +50,8 @@
         <p class="restaurant">{{ step.data.restaurant }}({{ service.getCode()}}) </p>
         
         <div>
-            <img src="/images/copy.png" alt="Копіювати" title="Копіювати" class="img copy-img" v-on:click="copy">
-            <img src="/images/logout.png" alt="Вийти" title="Вийти" class="img logout-img" v-on:click="logOut"> 
+            <font-awesome-icon icon="copy" alt="Копіювати"  title="Копіювати" v-on:click="copy" class=" img mg_right_5"/>
+            <font-awesome-icon icon="sign-out-alt" alt="Вийти" title="Вийти" v-on:click="logOut" class="img"/>
         </div>
 
     </section>
@@ -220,7 +220,7 @@ export default {
 
 .btn {
     margin: 5px 0;
-    min-height: 40px;;
+    min-height: 40px;
 }
 
 .input {
@@ -228,6 +228,7 @@ export default {
 }
 
 .restaurant {
+    font-size: 14px; 
     text-decoration: none;
     color: $color2;
     cursor: default;
@@ -235,7 +236,7 @@ export default {
 }
 
 
-.copy-img {
+.mg_right_5 {
     margin-right: 5px;
 }
 

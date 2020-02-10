@@ -51,8 +51,8 @@
         
             <span class="done-name">{{ service.steps[1].data.name }}</span>
             <span>{{ service.steps[1].data.userFullPrice}} грн.</span>
-            <img src="/images/delete.png" alt="Видалити замовлення" title="Видалити замовлення" class="img img-reset" v-on:click="removeMember()">
-        
+            <font-awesome-icon icon="trash-alt" alt="Видалити замовлення" title="Вийти" class="img img-trash"  v-on:click="removeMember()"/>
+
         </div>
 
     </div>
@@ -241,6 +241,12 @@ export default {
 
 .btnContainer {
     min-height: 70px;
+}
+
+.img {
+    &-trash {
+        color: $main-font-color;
+    }
 }
 
 .error {

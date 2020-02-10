@@ -1,7 +1,6 @@
 <template>
 
 <div class="container">
-
   <div v-if="isLoaded">
     <order
       v-on:showAllOrders="isDisplay = !isDisplay"
@@ -13,7 +12,7 @@
   </div>
   
   <div class='extension' v-show="!isDisplay">
-  
+  <!-- <p>{{stepService.steps}}</p> -->
     <header>
       <h1 class="extension-title">Group Order</h1>
     </header>

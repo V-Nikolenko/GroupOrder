@@ -8,6 +8,7 @@
         <li v-for="(member, id) in members" class="list-item"  v-bind:key='id'>
 
             <div class="head" v-on:click="showBody(id)">
+                
                 <div class="user-info">
                     <img v-bind:src="'https://www.gravatar.com/avatar/' + getHash(member.email) + '?s=20&d=mp'" 
                     v-bind:alt="member.name"
@@ -17,6 +18,8 @@
 
                 <span class="head-price">{{member.orderPrice}} грн.</span>
                 <span v-bind:class="[ {'anime': !selected.includes(id)},'item-ico']"></span>
+                <font-awesome-icon icon="chevron-circle-down" title="Вийти" v-bind:class="[ {'anime': !selected.includes(id)},'img']"/>
+
             </div>
 
             <table v-bind:class="[{body_none: !selected.includes(id)},'body']">
@@ -61,12 +64,14 @@ export default {
             selected: []
         }
     },
+
     methods: {
         showBody: function(el) {
             if (!this.selected.includes(el)) {
                 this.selected.push(el);
             } else this.selected.splice(this.selected.indexOf(el), 1)
         },
+
         getHash: function(str) {
             return MD5(str);
         } 
@@ -152,15 +157,8 @@ $width-price: 20%;
     }
 }
 
-.item-ico {
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
-    background-image: url('/images/listItem.png');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 18px;
-    transition: 0.3s;
+.img {
+    transition: 0.2s;
     transform: rotate(0deg);
 }
 
